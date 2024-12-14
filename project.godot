@@ -1,0 +1,24 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Marauder"
+config/description="Yet another spacecraft experience"
+run/main_scene="res://menu/MainMenu.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Util="*res://Util.gd"
+Server="*res://Server.gd"
+Client="*res://Client.gd"
+Data="*res://Data.gd"
