@@ -35,7 +35,12 @@ fit_content = true
 
 [node name="HostName" type="LineEdit" parent="VBoxContainer"]
 layout_mode = 2
+text = "localhost"
 placeholder_text = "Host"
+
+[node name="Alias" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Alias"
 
 [node name="Join" type="Button" parent="VBoxContainer"]
 layout_mode = 2
