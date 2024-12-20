@@ -1,10 +1,50 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3nv740euw7op"]
+[gd_scene load_steps=9 format=3 uid="uid://c3nv740euw7op"]
 
 [ext_resource type="Script" path="res://universe.gd" id="1_2xk0u"]
 [ext_resource type="Script" path="res://system.gd" id="2_so72h"]
+[ext_resource type="Shader" path="res://env/starfield.gdshader" id="3_4q1wc"]
+[ext_resource type="Script" path="res://env/starfield.gd" id="3_lucws"]
+[ext_resource type="Texture2D" uid="uid://vanijpnw2gv6" path="res://assets/ScreamingBrain_cc0/SBS - Seamless Space Backgrounds - Large 1024x1024/Large 1024x1024/Starfields/Starfield_03-1024x1024.png" id="4_86yn0"]
+[ext_resource type="Texture2D" uid="uid://bamaexmsyujpj" path="res://assets/ScreamingBrain_cc0/SBS - Seamless Space Backgrounds - Large 1024x1024/Large 1024x1024/Blue Nebula/Blue_Nebula_07-1024x1024.png" id="5_u6wla"]
 
-[node name="Universe" type="Node3D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1mqx7"]
+shader = ExtResource("3_4q1wc")
+shader_parameter/position = Vector2(0, 0)
+shader_parameter/warp_factor = 0.0
+shader_parameter/warp_factor_scale = 20.0
+shader_parameter/warp_angle = null
+shader_parameter/nebula = ExtResource("4_86yn0")
+
+[sub_resource type="Environment" id="Environment_vfll2"]
+background_mode = 3
+background_canvas_max_layer = -1
+
+[node name="Universe" type="Node"]
 script = ExtResource("1_2xk0u")
 
-[node name="System" type="Node3D" parent="."]
+[node name="System" type="Node" parent="."]
 script = ExtResource("2_so72h")
+
+[node name="Background" type="CanvasLayer" parent="System"]
+layer = -1
+
+[node name="Starfield" type="TextureRect" parent="System/Background"]
+process_mode = 3
+material = SubResource("ShaderMaterial_1mqx7")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u6wla")
+stretch_mode = 1
+script = ExtResource("3_lucws")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="System"]
+environment = SubResource("Environment_vfll2")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Node3D"]
+projection = 1
+current = true
