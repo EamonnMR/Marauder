@@ -2,3 +2,4 @@
 .godot/
 /android/
 *.blend1
+*.import
