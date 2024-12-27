@@ -43,8 +43,9 @@ script = ExtResource("3_lucws")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="System"]
 environment = SubResource("Environment_vfll2")
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="Node3D" type="Node3D" parent="System"]
 
-[node name="Camera3D" type="Camera3D" parent="Node3D"]
+[node name="Camera3D" type="Camera3D" parent="System/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1, 1)
 projection = 1
 current = true

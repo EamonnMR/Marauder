@@ -1,6 +1,11 @@
 extends Node
 
 @onready var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	
+func system() -> StarSystem:
+	# Client only cares about one system - the one the player is in
+	return get_tree().get_root().get_node("Universe/System")
+
 
 func init(host: String, alias: String):
 	var error = peer.create_client(host, Util.PORT)
@@ -13,6 +18,6 @@ func init(host: String, alias: String):
 	)
 
 @rpc("reliable", "any_peer")
-func server_handshake(players):
+func server_handshake(players, state):
 	print("Server Handshake", players)
-	get_tree().quit()
+	system().unmarshall_network_state(state)

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://be43jijlowemf"]
+
+[ext_resource type="Script" path="res://components/mesh_graphics.gd" id="1_33326"]
+
+[node name="MeshGraphics" type="MeshInstance3D"]
+script = ExtResource("1_33326")
