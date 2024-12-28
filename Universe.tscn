@@ -18,6 +18,9 @@ shader_parameter/nebula = ExtResource("4_86yn0")
 [sub_resource type="Environment" id="Environment_vfll2"]
 background_mode = 3
 background_canvas_max_layer = -1
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.05
 
 [node name="Universe" type="Node"]
 script = ExtResource("1_2xk0u")
@@ -45,7 +48,15 @@ environment = SubResource("Environment_vfll2")
 
 [node name="Node3D" type="Node3D" parent="System"]
 
-[node name="Camera3D" type="Camera3D" parent="System/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1, 1)
+[node name="CameraOffset" type="Node3D" parent="System/Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="System/Node3D/CameraOffset"]
+transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, -45, 63.5, 45)
 projection = 1
 current = true
+size = 10.0
+near = 0.01
+far = 50000.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="System"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 0, 0, 0)
