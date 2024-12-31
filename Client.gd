@@ -28,7 +28,5 @@ func server_handshake(players, state):
 	system().unmarshal_network_state(state)
 
 @rpc("reliable")
-func spawn_ship(state):
-	var ship_ent = load(state["#path"]).instantiate()
-	ship_ent.unmarshal_spawn_state(state)
-	system().add_child(ship_ent)
+func spawn_ship(state: Dictionary):
+	system().spawn_entity(state)
