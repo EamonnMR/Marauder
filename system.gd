@@ -2,8 +2,8 @@ extends Node
 
 class_name StarSystem
 
-func marshall_network_state() -> Dictionary:
+func marshal_network_state() -> Dictionary:
 	return {}
 
-func unmarshall_network_state(state: Dictionary):
+func unmarshal_network_state(state: Dictionary):
 	pass

@@ -8,16 +8,27 @@ func system() -> StarSystem:
 
 
 func init(host: String, alias: String):
+	print("Client init")
 	var error = peer.create_client(host, Util.PORT)
 	if error:
 		print(error)
 		breakpoint
 	get_tree().get_root().multiplayer.multiplayer_peer = peer
+	#get_tree().get_root().set_multiplayer_authority(0)
 	get_tree().get_root().multiplayer.connected_to_server.connect(func _on_connected():
-		Server.client_handshake(alias)
+		var mpe = get_multiplayer_authority()
+		Server.client_handshake.rpc(alias)
 	)
+	
+	DisplayServer.window_set_title("Marauder - Client") 
 
-@rpc("reliable", "any_peer")
+@rpc("reliable")
 func server_handshake(players, state):
 	print("Server Handshake", players)
-	system().unmarshall_network_state(state)
+	system().unmarshal_network_state(state)
+
+@rpc("reliable")
+func spawn_ship(state):
+	var ship_ent = load(state["#path"]).instantiate()
+	ship_ent.unmarshal_spawn_state(state)
+	system().add_child(ship_ent)

@@ -200,3 +200,11 @@ func receive_impact(impact: Vector2):
 	#var reference_dim = 10.0
 	#var re_scale = camera_scale * reference_dim * max_dim
 	#return re_scale
+
+func marshal_spawn_state() -> Dictionary:
+	return {
+		"#path": get_scene_file_path()
+	}
+
+func unmarshal_spawn_state(state):
+	pass
