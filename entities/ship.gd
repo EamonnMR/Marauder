@@ -203,8 +203,11 @@ func receive_impact(impact: Vector2):
 
 func marshal_spawn_state() -> Dictionary:
 	return {
+		"name": name,
+		"origin": transform.origin,
 		"#path": get_scene_file_path()
 	}
 
 func unmarshal_spawn_state(state):
-	pass
+	name = state.name
+	transform.origin = state["origin"]

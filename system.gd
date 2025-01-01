@@ -11,7 +11,7 @@ func marshal_network_state() -> Dictionary:
 
 func unmarshal_network_state(state: Dictionary):
 	for node_id in state:
-		spawn_entity(state)
+		spawn_entity(state[node_id])
 
 func spawn_entity(state: Dictionary):
 	var entity = load(state["#path"]).instantiate()
