@@ -42,7 +42,10 @@ func _ready():
 	# TODO: Better way to determine if it's the player
 	add_to_group("radar")
 	add_to_group("ships")
-	return 
+	
+	ready_player_controller()
+	
+	return
 	if self == Client.player:
 		add_to_group("players")
 		faction = "player_owned"
@@ -75,7 +78,6 @@ func _ready():
 	##return weapon_slots
 
 func _physics_process(delta):
-	return
 	linear_velocity = get_limited_velocity_with_thrust(delta)
 	var rotation_impulse = $Controller.rotation_impulse
 	rotation.y += rotation_impulse
@@ -85,15 +87,15 @@ func _physics_process(delta):
 		decrease_bank(delta)
 	
 	# warning-ignore:return_value_discarded
-	set_velocity(Util.raise_25d(linear_velocity))
+	set_velocity(U25d.raise(linear_velocity))
 	move_and_slide()
-	handle_shooting()
-	if not warping:
-		if warping_in:
-			if Util.out_of_system_radius(self, Util.PLAY_AREA_RADIUS / 2):
-				warping_in = false
-		else:
-			Util.wrap_to_play_radius(self)
+	#handle_shooting()
+	#if not warping:
+		#if warping_in:
+			#if Util.out_of_system_radius(self, Util.PLAY_AREA_RADIUS / 2):
+				#warping_in = false
+		#else:
+			#Util.wrap_to_play_radius(self)
 
 func handle_shooting():
 	if $Controller.shooting:
@@ -108,7 +110,6 @@ func handle_shooting():
 			weapon.try_shoot()
 
 func get_limited_velocity_with_thrust(delta):
-	return linear_velocity
 	if $Controller.thrusting:
 		linear_velocity += Vector2(accel * delta * 100, 0).rotated(-rotation.y)
 		$Graphics.thrusting = true
@@ -205,9 +206,15 @@ func marshal_spawn_state() -> Dictionary:
 	return {
 		"name": name,
 		"origin": transform.origin,
-		"#path": get_scene_file_path()
+		"#path": get_scene_file_path(),
+		"player_owner": player_owner
 	}
 
 func unmarshal_spawn_state(state):
 	name = state.name
-	transform.origin = state["origin"]
+	transform.origin = state.origin
+	player_owner = player_owner
+	
+func ready_player_controller():
+	if player_owner >= 0:
+		add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
