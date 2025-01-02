@@ -3,13 +3,8 @@ extends Controller
 # var warp_autopilot = false
 
 @onready var ui = get_tree().get_root().get_node("Main/UI/")
-@onready var is_current_player: bool = get_tree().get_network_unique_id() == parent.player_owner
-@onready var is_remote: get_tree().get_network_unique_id()
-
-func _ready():
-	if get_tree().get_network_unique_id() == parent.player_owner:
-		
-
+@onready var is_current_player: bool = decide_if_is_current_player()
+@onready var is_remote: bool = decide_if_is_remote()
 
 func get_rotation_impulse() -> int:
 	var dc = 0
@@ -18,8 +13,39 @@ func get_rotation_impulse() -> int:
 	if Input.is_action_pressed("turn_right"):
 		dc -= 1
 	return dc
+	
+func _ready():
+	set_multiplayer_authority(parent.player_owner)
+
+class InputFrame:
+	var thrusting: bool
+	var braking: bool
+	var shooting: bool
+	var rotation_impulse: float
+
+
+@rpc("unreliable", "authority")
+func send_input(frame: Dictionary):
+	thrusting = frame.thrusting
+	braking = frame.braking
+	shooting = frame.shooting
+	rotation_impulse = frame.rotation_impulse
 
 func _physics_process(delta):
+	# I'd love if this could be a fast serialized object instead
+	var frame: Dictionary
+	
+	frame.thrusting = Input.is_action_pressed("thrust")
+	frame.braking = Input.is_action_pressed("brake")
+	frame.shooting = shooting
+	frame.rotation_impulse = get_rotation_impulse()
+	
+	if is_remote:
+		send_input.rpc_id(1, frame)
+	else:
+		send_input(frame) # Intentional non-rpc call
+
+#func _physics_process(delta):
 	# if not Client.typing:
 		# toggle_pause()
 		# toggle_map()
@@ -34,11 +60,11 @@ func _physics_process(delta):
 	#if Client.typing:
 	#	return
 	
-	thrusting = Input.is_action_pressed("thrust")
-	braking = Input.is_action_pressed("brake")
+	#thrusting = Input.is_action_pressed("thrust")
+	#braking = Input.is_action_pressed("brake")
 	# shooting = Input.is_action_pressed("shoot")
 	# shooting_secondary = Input.is_action_pressed("shoot_secondary")
-	rotation_impulse = get_rotation_impulse() * delta * parent.turn
+	#rotation_impulse = get_rotation_impulse() * delta * parent.turn
 	# check_jumped()
 	# select_nearest_target()
 	# cycle_targets()
@@ -47,6 +73,7 @@ func _physics_process(delta):
 	# handle_cheat_modal()
 	# handle_zoom()
 	# handle_spob_selection()
+	
 	
 func toggle_map():
 	if Input.is_action_just_released("toggle_map"):
@@ -148,3 +175,9 @@ func handle_spob_selection():
 
 func get_target():
 	return Client.target_ship
+
+func decide_if_is_current_player():
+	return multiplayer.get_unique_id() == parent.player_owner
+
+func decide_if_is_remote():
+	return multiplayer.get_unique_id() != 1

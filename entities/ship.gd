@@ -79,7 +79,7 @@ func _ready():
 
 func _physics_process(delta):
 	linear_velocity = get_limited_velocity_with_thrust(delta)
-	var rotation_impulse = $Controller.rotation_impulse
+	var rotation_impulse = $Controller.rotation_impulse * delta * turn
 	rotation.y += rotation_impulse
 	if rotation_impulse:
 		increase_bank(rotation_impulse)
