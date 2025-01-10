@@ -44,12 +44,16 @@ func client_handshake(alias: String):
 	spawn_player(sender) # TODO: Player options
 	print("RPC Sent")
 
-func spawn_player(player_id):
+func spawn_player(player_id: int):
 	var player_ent = preload("res://entities/ships/Warship.tscn").instantiate()
 	player_ent.player_owner = player_id
+	player_ent.name = "player_ship" + str(player_id)
 	player_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
 	universe().get_node("System").add_child(player_ent)
 	# Sync
 	var player_state = player_ent.marshal_spawn_state()
 	for player in players:
 		Client.spawn_ship.rpc_id(player, player_state)
+
+func time() -> float:
+	return Util.system_time()

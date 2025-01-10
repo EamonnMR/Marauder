@@ -6,6 +6,7 @@ var faction
 var type: String
 
 var skin: String
+@onready var parent: StarSystem = get_node("../")
 
 var player_owner: int
 
@@ -19,12 +20,13 @@ var standoff: bool = false
 var mass: float
 @export var bank_factor = 1
 @export var bank_axis = "x"
+
 var screen_box_side_length: int
 
 var chain_fire_mode = true
 var lock_turrets = false
 
-var linear_velocity = Vector2()
+var linear_velocity = Vector2(0,0)
 var primary_weapons = []
 var secondary_weapons = []
 
@@ -78,24 +80,30 @@ func _ready():
 	##return weapon_slots
 
 func _physics_process(delta):
-	linear_velocity = get_limited_velocity_with_thrust(delta)
-	var rotation_impulse = $Controller.rotation_impulse * delta * turn
-	rotation.y += rotation_impulse
-	if rotation_impulse:
-		increase_bank(rotation_impulse)
+	if Util.is_server():
+		linear_velocity = get_limited_velocity_with_thrust(delta)
+		var rotation_impulse = $Controller.rotation_impulse * delta * turn
+		rotation.y += rotation_impulse
+		if rotation_impulse:
+			increase_bank(rotation_impulse)
+		else:
+			decrease_bank(delta)
+		
+		# warning-ignore:return_value_discarded
+		set_velocity(U25d.raise(linear_velocity))
+		move_and_slide()
+		#handle_shooting()
+		#if not warping:
+			#if warping_in:
+				#if Util.out_of_system_radius(self, Util.PLAY_AREA_RADIUS / 2):
+					#warping_in = false
+			#else:
+				#Util.wrap_to_play_radius(self)
 	else:
-		decrease_bank(delta)
-	
-	# warning-ignore:return_value_discarded
-	set_velocity(U25d.raise(linear_velocity))
-	move_and_slide()
-	#handle_shooting()
-	#if not warping:
-		#if warping_in:
-			#if Util.out_of_system_radius(self, Util.PLAY_AREA_RADIUS / 2):
-				#warping_in = false
-		#else:
-			#Util.wrap_to_play_radius(self)
+		var frame: StarSystem.NetFrame = parent.get_net_frame(name, 0)
+		if frame:
+			transform.origin = frame.state.origin
+			rotation.y = frame.state.rotation
 
 func handle_shooting():
 	if $Controller.shooting:
@@ -213,7 +221,13 @@ func marshal_spawn_state() -> Dictionary:
 func unmarshal_spawn_state(state):
 	name = state.name
 	transform.origin = state.origin
-	player_owner = player_owner
+	player_owner = state.player_owner
+	
+func marshal_frame_state() -> Dictionary:
+	return {
+		"origin": transform.origin,
+		"rotation": rotation.y
+	}
 	
 func ready_player_controller():
 	if player_owner >= 0:

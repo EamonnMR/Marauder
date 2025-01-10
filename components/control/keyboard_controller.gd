@@ -2,7 +2,7 @@ extends Controller
 
 # var warp_autopilot = false
 
-@onready var ui = get_tree().get_root().get_node("Main/UI/")
+#@onready var ui = get_tree().get_root().get_node("Main/UI/")
 @onready var is_current_player: bool = decide_if_is_current_player()
 @onready var is_remote: bool = decide_if_is_remote()
 
@@ -33,17 +33,19 @@ func send_input(frame: Dictionary):
 
 func _physics_process(delta):
 	# I'd love if this could be a fast serialized object instead
-	var frame: Dictionary
-	
-	frame.thrusting = Input.is_action_pressed("thrust")
-	frame.braking = Input.is_action_pressed("brake")
-	frame.shooting = shooting
-	frame.rotation_impulse = get_rotation_impulse()
-	
-	if is_remote:
-		send_input.rpc_id(1, frame)
-	else:
-		send_input(frame) # Intentional non-rpc call
+	if is_current_player:
+		# I'd love if this could be a fast serialized object instead
+		var frame: Dictionary
+		
+		frame.thrusting = Input.is_action_pressed("thrust")
+		frame.braking = Input.is_action_pressed("brake")
+		frame.shooting = shooting
+		frame.rotation_impulse = get_rotation_impulse()
+		
+		if is_remote:
+			send_input.rpc_id(1, frame)
+		else:
+			send_input(frame) # Intentional non-rpc call
 
 #func _physics_process(delta):
 	# if not Client.typing:
@@ -74,19 +76,19 @@ func _physics_process(delta):
 	# handle_zoom()
 	# handle_spob_selection()
 	
-	
-func toggle_map():
-	if Input.is_action_just_released("toggle_map"):
-		ui.toggle_map()
-
-func toggle_codex():
-	if Input.is_action_just_released("toggle_codex"):
-		ui.toggle_codex()
-		
-func toggle_inventory():
-	if Input.is_action_just_released("toggle_inventory"):
-		ui.toggle_inventory(["Inventory", "Crafting", "Equipment"])
-		
+	#
+#func toggle_map():
+	#if Input.is_action_just_released("toggle_map"):
+		#ui.toggle_map()
+#
+#func toggle_codex():
+	#if Input.is_action_just_released("toggle_codex"):
+		#ui.toggle_codex()
+		#
+#func toggle_inventory():
+	#if Input.is_action_just_released("toggle_inventory"):
+		#ui.toggle_inventory(["Inventory", "Crafting", "Equipment"])
+		#
 func check_jumped():
 	if Input.is_action_just_released("jump"):
 		jumping = true

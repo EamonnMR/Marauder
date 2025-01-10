@@ -30,3 +30,14 @@ func server_handshake(players, state):
 @rpc("reliable", "authority")
 func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
+
+var latency = 0.1
+
+var _time: float
+
+func time() -> float:
+	return _time
+
+func time_update() -> float:
+	_time = Util.system_time() - latency
+	return _time
