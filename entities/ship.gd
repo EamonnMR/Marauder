@@ -80,14 +80,11 @@ func _ready():
 	##return weapon_slots
 
 func _physics_process(delta):
+	var previous_rotation = rotation.y
 	if Util.is_server():
 		linear_velocity = get_limited_velocity_with_thrust(delta)
 		var rotation_impulse = $Controller.rotation_impulse * delta * turn
 		rotation.y += rotation_impulse
-		if rotation_impulse:
-			increase_bank(rotation_impulse)
-		else:
-			decrease_bank(delta)
 		
 		# warning-ignore:return_value_discarded
 		set_velocity(U25d.raise(linear_velocity))
@@ -100,10 +97,24 @@ func _physics_process(delta):
 			#else:
 				#Util.wrap_to_play_radius(self)
 	else:
+		# TODO: Lerp between last two frames, extrapolate if frames are in past
 		var frame: StarSystem.NetFrame = parent.get_net_frame(name, 0)
 		if frame:
 			transform.origin = frame.state.origin
 			rotation.y = frame.state.rotation
+	var rotation_diff = 0
+	if previous_rotation != rotation.y:
+		rotation_diff = rotation.y - previous_rotation
+		if rotation_diff <= -PI:
+			rotation_diff += 2 * PI
+
+		if rotation_diff >= PI:
+			rotation_diff -=  2 * PI
+
+		increase_bank(rotation_diff)
+	else:
+		decrease_bank(delta)
+	
 
 func handle_shooting():
 	if $Controller.shooting:
