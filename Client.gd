@@ -22,11 +22,22 @@ func init(host: String, alias: String):
 	
 	DisplayServer.window_set_title("Marauder - Client") 
 
-@rpc("reliable")
+@rpc("reliable", "authority")
 func server_handshake(players, state):
 	print("Server Handshake", players)
 	system().unmarshal_network_state(state)
 
-@rpc("reliable")
+@rpc("reliable", "authority")
 func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
+
+var latency = 0.1
+
+var _time: float
+
+func time() -> float:
+	return _time
+
+func time_update() -> float:
+	_time = Util.system_time() - latency
+	return _time
