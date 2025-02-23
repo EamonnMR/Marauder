@@ -179,7 +179,10 @@ func get_target():
 	return Client.target_ship
 
 func decide_if_is_current_player():
-	return multiplayer.get_unique_id() == parent.player_owner
+	var uid = multiplayer.get_unique_id()
+	var owner = parent.player_owner
+	return uid == owner
 
 func decide_if_is_remote():
+	var uid = multiplayer.get_unique_id()
 	return multiplayer.get_unique_id() != 1

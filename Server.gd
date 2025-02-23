@@ -2,6 +2,9 @@ extends Node
 
 @onready var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 var players = {}
+var server_started: bool = false
+var online = false
+signal universe_loaded
 
 func universe() -> Universe:
 	return get_tree().get_root().get_node("Universe")
@@ -25,14 +28,22 @@ func init():
 	var error = peer.create_server(Util.PORT)
 	if error:
 		print(error)
-		breakpoint
 	get_tree().get_root().multiplayer.multiplayer_peer = peer
 	
-	DisplayServer.window_set_title("Marauder - Server") 
+	DisplayServer.window_set_title("Marauder - Server")
+	
+	server_started = true
+	online = true
 
+func init_local(alias):
+	print("Server init local")
+	DisplayServer.window_set_title("Marauder - Local")
+	
+	server_started = true
+	
 @rpc("reliable", "any_peer", "call_remote")
-func client_handshake(alias: String):
-	var sender = multiplayer.get_remote_sender_id()
+func client_handshake(alias):
+	var sender = get_sender()
 	print("Client Handshake from: ", sender)
 	
 	players[sender] = PlayerRecord.new(sender, alias)
@@ -57,3 +68,9 @@ func spawn_player(player_id: int):
 
 func time() -> float:
 	return Util.system_time()
+
+func get_sender() -> int:
+	var rid = multiplayer.get_remote_sender_id()
+	if rid == 0:
+		return 1
+	return rid

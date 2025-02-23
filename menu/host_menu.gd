@@ -6,3 +6,4 @@ func _on_cancel_pressed():
 func _on_start_pressed():
 	Server.init()
 	get_tree().change_scene_to_file("res://Universe.tscn")
+	

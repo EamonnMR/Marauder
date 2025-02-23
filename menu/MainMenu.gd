@@ -6,7 +6,7 @@ func _ready():
 	pass # Replace with function body.
 
 func _on_singleplayer_pressed():
-	get_tree().change_scene_to_file("res://Universe.tscn")
+	get_tree().change_scene_to_file("res://menu/LocalMenu.tscn")
 
 func _on_host_pressed():
 	get_tree().change_scene_to_file("res://menu/HostMenu.tscn")
