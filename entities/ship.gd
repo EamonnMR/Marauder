@@ -97,11 +97,9 @@ func _physics_process(delta):
 			#else:
 				#Util.wrap_to_play_radius(self)
 	else:
-		# TODO: Lerp between last two frames, extrapolate if frames are in past
-		var frame: StarSystem.NetFrame = parent.get_net_frame(name, 0)
-		if frame:
-			transform.origin = frame.state.origin
-			rotation.y = frame.state.rotation
+		do_lerp_update()
+	
+	
 	var rotation_diff = 0
 	if previous_rotation != rotation.y:
 		rotation_diff = rotation.y - previous_rotation
@@ -236,10 +234,17 @@ func unmarshal_spawn_state(state):
 	
 func marshal_frame_state() -> Dictionary:
 	return {
-		"origin": transform.origin,
+		"origin": Util.flatten_25d(transform.origin),
 		"rotation": rotation.y
 	}
 	
 func ready_player_controller():
 	if player_owner >= 0:
 		add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
+
+func do_lerp_update():
+	var lerp_helper = StarSystem.LerpHelper.new(self, parent)
+	if lerp_helper.can_lerp:
+		transform.origin = Util.raise_25d(lerp_helper.calc_vector("origin"))
+		rotation.y = lerp_helper.calc_angle("rotation")
+	
