@@ -11,6 +11,9 @@ func _on_singleplayer_pressed():
 func _on_host_pressed():
 	get_tree().change_scene_to_file("res://menu/HostMenu.tscn")
 
+func _on_host_co_op_pressed():
+	get_tree().change_scene_to_file("res://menu/CoOpMenu.tscn")
+
 func _on_join_pressed():
 	get_tree().change_scene_to_file("res://menu/JoinMenu.tscn")
 
