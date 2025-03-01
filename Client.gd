@@ -38,6 +38,12 @@ func server_handshake(players, state):
 func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
 
+@rpc("reliable", "authority")
+func vanish_ship(player_id):
+	print("Player left: ", player_id)
+	var ship = Server.player_ship_name(player_id)
+	system().remove_child(ship)
+
 # var latency = - 0.1
 var latency = 0.1
 

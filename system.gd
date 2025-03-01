@@ -34,6 +34,8 @@ func dispatch_net_frame():
 	var net_frame = marshal_frame_state()
 	var server_time = Server.time()
 	for player in get_player_ids():
+		if player < 10:
+			breakpoint
 		receive_net_frame.rpc_id(player, server_time, net_frame)
 
 
@@ -82,7 +84,8 @@ func get_net_frame(entity_name, offset):
 
 func get_player_ids():
 	# TODO: only players in-system
-	return Server.players.keys()
+	return Server.get_rpc_player_ids()
+
 
 class LerpHelper:
 	# Calculates lerp/extrapolation results

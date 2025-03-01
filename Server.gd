@@ -25,12 +25,20 @@ class PlayerRecord:
 
 func init():
 	print("Server init")
+
+	DisplayServer.window_set_title("Marauder - Server")
+	
 	var error = peer.create_server(Util.PORT)
 	if error:
 		print(error)
-	get_tree().get_root().multiplayer.multiplayer_peer = peer
+		
+	peer.peer_connected.connect(func peer_connected(peer_id):
+		print("Peer Connected: ", peer_id, ", awaiting handshake")
+	)
 	
-	DisplayServer.window_set_title("Marauder - Server")
+	peer.peer_disconnected.connect(peer_disconnected)
+		
+	get_tree().get_root().multiplayer.multiplayer_peer = peer
 	
 	server_started = true
 	online = true
@@ -58,12 +66,12 @@ func client_handshake(alias):
 func spawn_player(player_id: int):
 	var player_ent = preload("res://entities/ships/Warship.tscn").instantiate()
 	player_ent.player_owner = player_id
-	player_ent.name = "player_ship" + str(player_id)
+	player_ent.name = player_ship_name(player_id)
 	player_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
 	universe().get_node("System").add_child(player_ent)
 	# Sync
 	var player_state = player_ent.marshal_spawn_state()
-	for player in players:
+	for player in get_rpc_player_ids():
 		Client.spawn_ship.rpc_id(player, player_state)
 
 func time() -> float:
@@ -74,3 +82,24 @@ func get_sender() -> int:
 	if rid == 0:
 		return 1
 	return rid
+	
+func peer_disconnected(peer_id):
+	if players[peer_id]:
+		var removed_player = players[peer_id]
+		print("Player Disconnected: ", removed_player.alias, " (", removed_player.id, ")")
+		players.erase(peer_id)
+		var player_ship_name = player_ship_name(peer_id)
+		var ship = universe().get_node("System").get_node(player_ship_name)
+		universe().get_node("System").remove_child(ship)
+		for player in get_rpc_player_ids():
+			Client.vanish_ship.rpc_id(peer_id)
+	else:
+		print("Unknown Player disconnected: ", peer_id)
+
+func player_ship_name(player_id):
+	return "player_ship" + str(player_id)
+
+func get_rpc_player_ids():
+	var keys = Server.players.keys()
+	keys.erase(1)
+	return keys
