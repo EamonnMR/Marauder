@@ -13,7 +13,7 @@ config_version=5
 config/name="Marauder"
 config/description="Yet another spacecraft experience"
 run/main_scene="res://menu/MainMenu.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]

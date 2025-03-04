@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://j002g8qmqpxr"]
 
-[ext_resource type="Script" path="res://entities/ship.gd" id="1_udskb"]
+[ext_resource type="Script" uid="uid://csk4gjwxjdot1" path="res://entities/ship.gd" id="1_udskb"]
 [ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="2_mi7wl"]
 
 [node name="Ship" type="CharacterBody3D"]
