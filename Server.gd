@@ -91,8 +91,9 @@ func peer_disconnected(peer_id):
 		var player_ship_name = player_ship_name(peer_id)
 		var ship = universe().get_node("System").get_node(player_ship_name)
 		universe().get_node("System").remove_child(ship)
+		var appointed_time = time()
 		for player in get_rpc_player_ids():
-			Client.vanish_ship.rpc_id(peer_id)
+			Client.vanish_ship.rpc_id(player, peer_id, appointed_time)
 	else:
 		print("Unknown Player disconnected: ", peer_id)
 

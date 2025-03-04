@@ -39,10 +39,15 @@ func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
 
 @rpc("reliable", "authority")
-func vanish_ship(player_id):
+func vanish_ship(player_id, appointed_time):
+	#delay_until(appointed_time)
 	print("Player left: ", player_id)
-	var ship = Server.player_ship_name(player_id)
-	system().remove_child(ship)
+	var ship_name = Server.player_ship_name(player_id)
+	var ship = system().get_node(ship_name)
+	var children = system().get_children()
+	breakpoint
+	if ship:
+		system().remove_child(ship)
 
 # var latency = - 0.1
 var latency = 0.1
@@ -55,3 +60,13 @@ func time() -> float:
 func time_update() -> float:
 	_time = Util.system_time() - latency
 	return _time
+
+func delay_until(appointed_time):
+	# https://godotengine.org/qa/1660/execute-a-function-after-a-time-delay
+	var delay = appointed_time - time()
+	if delay > 0:
+		var before = Util.system_time()
+		await get_tree().create_timer(delay).timeout
+		var actual_delay = Util.system_time()- before
+	else:
+		print("Arrived late!")
