@@ -44,8 +44,6 @@ func vanish_ship(player_id, appointed_time):
 	print("Player left: ", player_id)
 	var ship_name = Server.player_ship_name(player_id)
 	var ship = system().get_node(ship_name)
-	var children = system().get_children()
-	breakpoint
 	if ship:
 		system().remove_child(ship)
 
