@@ -40,7 +40,7 @@ func spawn_ship(state: Dictionary):
 
 @rpc("reliable", "authority")
 func vanish_ship(player_id, appointed_time):
-	#delay_until(appointed_time)
+	delay_until(appointed_time)
 	print("Player left: ", player_id)
 	var ship_name = Server.player_ship_name(player_id)
 	var ship = system().get_node(ship_name)
@@ -66,5 +66,6 @@ func delay_until(appointed_time):
 		var before = Util.system_time()
 		await get_tree().create_timer(delay).timeout
 		var actual_delay = Util.system_time()- before
+		print("Actual Delay: ", actual_delay)
 	else:
 		print("Arrived late!")
