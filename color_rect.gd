@@ -10,5 +10,5 @@ func _process(_delta):
 			enabled = false
 		else:
 			material.set_shader_parameter("blur_sharp", -5)
-			material.set_shader_parameter("pixel", 2)
+			material.set_shader_parameter("pixel", 1)
 			enabled = true
