@@ -44,8 +44,12 @@ func _ready():
 	# TODO: Better way to determine if it's the player
 	add_to_group("radar")
 	add_to_group("ships")
-	
-	ready_player_controller()
+	if player_owner:
+		add_to_group("players")
+		ready_player_controller()
+	else:
+		add_to_group("npcs")
+		ready_npc_controller()
 	
 	return
 	if self == Client.player:
@@ -239,8 +243,10 @@ func marshal_frame_state() -> Dictionary:
 	}
 	
 func ready_player_controller():
-	if player_owner >= 0:
-		add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
+	add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
+
+func ready_npc_controller():
+	add_child(preload("res://components/control/AIController.tscn").instantiate())
 
 func do_lerp_update():
 	var lerp_helper = StarSystem.LerpHelper.new(self, parent)

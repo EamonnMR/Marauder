@@ -2,6 +2,9 @@ extends Node
 
 var PORT = 2600
 
+func anglemod(angle: float) -> float:
+	return fmod(angle, PI * 2)
+
 func system_time() -> float:
 	return Time.get_unix_time_from_system()
 	#return Time.get_unix_time_from_datetime_string(Time.get_time_string_from_system())
@@ -27,3 +30,41 @@ func flatten_25d(three_d_vec: Vector3) -> Vector2:
 	
 func flatten_rotation(object: Node3D) -> float:
 	return object.global_transform.basis.get_rotation_quaternion().get_euler().y
+
+func closest(choices, position: Vector2) -> Node3D:
+	return distance_ordered(choices, position)[0]
+	
+func distance_ordered(choices, position: Vector2) -> Array:
+	# Warning: side effects
+	choices.sort_custom(
+		func distance_comparitor(lval: Node3D, rval: Node3D):
+			# For sorting other nodes by how close they are
+			
+			var ldist =  Util.flatten_25d(lval.global_transform.origin).distance_to(position)
+			var rdist = Util.flatten_25d(rval.global_transform.origin).distance_to(position)
+			return ldist < rdist
+	)
+	return choices
+
+func constrained_point(source_position: Vector2, current_rotation: float,
+		max_turn: float, target_position: Vector2) -> Array:
+	# For finding the right direction and amount to turn when your rotation speed is limited
+	var ideal_face = (target_position - source_position).angle()
+	ideal_face = PI * 2 - ideal_face
+	var ideal_turn = get_ideal_turn_for_ideal_face(ideal_face, current_rotation, max_turn)
+	return [ideal_turn, ideal_face]
+	
+func get_ideal_turn_for_ideal_face(ideal_face, current_rotation, max_turn) -> float:
+	var ideal_turn = anglemod(ideal_face - current_rotation)
+	if(ideal_turn > PI):
+		ideal_turn = anglemod(ideal_turn - 2 * PI)
+
+	elif(ideal_turn < -1 * PI):
+		ideal_turn = anglemod(ideal_turn + 2 * PI)
+	
+	max_turn = sign(ideal_turn) * max_turn  # Ideal turn in the right direction
+	
+	if(abs(ideal_turn) > abs(max_turn)):
+		return max_turn
+	else:
+		return ideal_turn

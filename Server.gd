@@ -1,9 +1,9 @@
 extends Node
 
 @onready var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-var players = {}
 var server_started: bool = false
 var online = false
+var npc_counter = 0
 signal universe_loaded
 
 func universe() -> Universe:
@@ -21,7 +21,8 @@ class PlayerRecord:
 	func _init(id, alias):
 		self.id = id
 		self.alias = alias
-	
+
+var players: Dictionary[int, PlayerRecord] = {}
 
 func init():
 	print("Server init")
@@ -42,12 +43,14 @@ func init():
 	
 	server_started = true
 	online = true
+	universe().system().show()
 
 func init_local(alias):
 	print("Server init local")
 	DisplayServer.window_set_title("Marauder - Local")
 	
 	server_started = true
+	#universe().system().show()
 	
 @rpc("reliable", "any_peer", "call_remote")
 func client_handshake(alias):
@@ -73,6 +76,18 @@ func spawn_player(player_id: int):
 	var player_state = player_ent.marshal_spawn_state()
 	for player in get_rpc_player_ids():
 		Client.spawn_ship.rpc_id(player, player_state)
+		
+func spawn_npc():
+	var npc_ent = preload("res://entities/ships/WarshipNpc.tscn").instantiate()
+	npc_ent.faction = 1
+	npc_ent.name = "npc_" + str(npc_counter)
+	npc_counter += 1
+	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
+	universe().get_node("System").add_child(npc_ent)
+	# Sync
+	var state = npc_ent.marshal_spawn_state()
+	for player in get_rpc_player_ids():
+		Client.spawn_ship.rpc_id(player, state)
 
 func time() -> float:
 	return Util.system_time()

@@ -30,9 +30,11 @@ func init_local(alias: String):
 
 	
 @rpc("reliable", "authority")
-func server_handshake(players, state):
+func server_handshake(players, state, appointed_time):
 	print("Server Handshake", players)
 	system().unmarshal_network_state(state)
+	delay_until(appointed_time)
+	system().show()
 
 @rpc("reliable", "authority")
 func spawn_ship(state: Dictionary):
