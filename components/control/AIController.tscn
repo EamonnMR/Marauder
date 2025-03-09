@@ -9,6 +9,7 @@ radius = 10.0
 script = ExtResource("1_6u2p1")
 
 [node name="EngagementRange" type="Area3D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EngagementRange"]
 shape = SubResource("CylinderShape3D_6u2p1")
@@ -17,4 +18,6 @@ shape = SubResource("CylinderShape3D_6u2p1")
 wait_time = 5.0
 autostart = true
 
+[connection signal="body_entered" from="EngagementRange" to="." method="_on_engagement_range_body_entered"]
+[connection signal="body_exited" from="EngagementRange" to="." method="_on_engagement_range_body_exited"]
 [connection signal="timeout" from="Rethink" to="." method="_on_rethink_timeout"]

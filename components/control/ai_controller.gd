@@ -60,8 +60,9 @@ func _verify_path_target():
 
 func _physics_process(delta):
 	if get_tree().debug_collisions_hint:
-		$LeadIndicator.hide()
-		$Label.text = STATES.keys()[state] + "\n"
+		pass
+		#$LeadIndicator.hide()
+		#$Label.text = STATES.keys()[state] + "\n"
 	#	+ "My faction: " + Data.factions[parent.faction].name + "\n" \
 	#	+ str(target) + " (" + Data.factions[target.faction].name + ")" if is_instance_valid(target) else "" + "\n"
 	match state:
@@ -234,7 +235,7 @@ func _get_target_lead_position(lead_velocity, target):
 	return lead_position
 
 # Somewhat questioning the need for a whole node setup for this.
-func _on_EngagementRange_body_entered(body):
+func _on_engagement_range_body_entered(body):
 	
 	bodies_in_engagement_range.append(body)
 	
@@ -245,7 +246,7 @@ func _on_EngagementRange_body_entered(body):
 	if body == path_target and state == STATES.PATH:
 		change_state_idle()
 
-func _on_EngagementRange_body_exited(body):
+func _on_engagement_range_body_exited(body):
 	
 	bodies_in_engagement_range.erase(body)
 	

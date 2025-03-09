@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://cc6snkwm8ev65"]
+[gd_scene load_steps=7 format=4 uid="uid://cc6snkwm8ev65"]
 
 [ext_resource type="PackedScene" uid="uid://j002g8qmqpxr" path="res://entities/Ship.tscn" id="1_ho2by"]
 [ext_resource type="Material" uid="uid://cbgs55wiyarwq" path="res://entities/ships/Warship.tres" id="2_n1hk4"]
@@ -28,8 +28,15 @@ albedo_color = Color(0.8, 0.8, 0.8, 1)
 albedo_texture = SubResource("CompressedTexture2D_n1hk4")
 metallic = 0.5
 
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_n1hk4"]
+points = PackedVector3Array(0.335522, 0.240281, 0.624585, -0.238426, -0.115884, -0.582777, -0.234954, 0.124271, -0.579571, 2.06518, -0.178838, -0.109263, -1.18462, -0.493295, 0.205138, -1.18462, 0.554738, -0.161478, 1.85534, 0.450077, -0.161601, 1.85534, -0.440905, 0.152799, 0.282979, -0.283617, -0.63351, -1.18462, -0.545684, -0.161478, 1.85534, 0.450077, 0.152676, -1.18462, 0.502349, 0.205138, 0.282979, -0.283617, 0.624585, 0.178549, 0.345179, -0.63351, 1.85534, -0.440905, -0.161478, 1.85534, 0.292671, -0.266402, 1.85534, -0.336125, 0.257599, -1.18462, 0.345179, 0.310061, -1.18462, -0.336125, -0.318863, 0.178549, 0.345179, 0.624585, -0.266884, -0.533277, 0.229374, -0.260266, 0.536894, 0.22701, -0.238426, -0.115884, 0.573852, -1.28971, 0.397569, -0.161478, -1.18462, -0.336125, 0.310061, -1.18462, 0.397569, -0.266402, -0.257023, -0.525176, -0.234669, -1.28971, -0.440905, 0.152799, 1.85534, 0.397569, 0.205138, 2.06518, 0.187891, 0.100338, 1.85534, -0.388515, -0.21394, -0.250404, 0.528792, -0.232306)
+
 [node name="Ship" instance=ExtResource("1_ho2by")]
+collision_mask = 0
 
 [node name="Graphics" parent="." index="0"]
 mesh = SubResource("ArrayMesh_wf5bb")
 surface_material_override/0 = SubResource("StandardMaterial3D_wf5bb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+shape = SubResource("ConvexPolygonShape3D_n1hk4")
