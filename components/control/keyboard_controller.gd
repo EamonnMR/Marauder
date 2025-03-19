@@ -39,7 +39,7 @@ func _physics_process(delta):
 		
 		frame.thrusting = Input.is_action_pressed("thrust")
 		frame.braking = Input.is_action_pressed("brake")
-		frame.shooting = shooting
+		frame.shooting = Input.is_action_pressed("shoot")
 		frame.rotation_impulse = get_rotation_impulse()
 		
 		if is_remote:

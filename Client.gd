@@ -3,6 +3,8 @@ extends Node
 @onready var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 signal universe_loaded
 
+var playing = false
+
 func system() -> StarSystem:
 	# Client only cares about one system - the one the player is in
 	return get_tree().get_root().get_node("Universe/System")
@@ -21,12 +23,14 @@ func init(host: String, alias: String):
 		Server.client_handshake.rpc(alias)
 	)
 	
-	DisplayServer.window_set_title("Marauder - Client") 
+	DisplayServer.window_set_title("Marauder - Client")
+	playing = true 
 
 func init_local(alias: String):
 	universe_loaded.connect(func handshake_closure():
 		Server.client_handshake(alias)
 	)
+	playing = true
 
 	
 @rpc("reliable", "authority")

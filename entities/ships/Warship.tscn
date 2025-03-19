@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://cc6snkwm8ev65"]
+[gd_scene load_steps=9 format=4 uid="uid://cc6snkwm8ev65"]
 
 [ext_resource type="PackedScene" uid="uid://j002g8qmqpxr" path="res://entities/Ship.tscn" id="1_ho2by"]
 [ext_resource type="Material" uid="uid://cbgs55wiyarwq" path="res://entities/ships/Warship.tres" id="2_n1hk4"]
+[ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="3_wf5bb"]
+[ext_resource type="PackedScene" uid="uid://cqpcp7mvknf5" path="res://components/Weapon.tscn" id="4_h2sfx"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_wf5bb"]
 _surfaces = [{
@@ -19,13 +21,13 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_n1hk4"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h2sfx"]
 load_path = "res://.godot/imported/albedo.png-6c275e6c7ce549033c8803a02626227b.s3tc.ctex"
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wf5bb"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gr875"]
 resource_name = "Material"
 albedo_color = Color(0.8, 0.8, 0.8, 1)
-albedo_texture = SubResource("CompressedTexture2D_n1hk4")
+albedo_texture = SubResource("CompressedTexture2D_h2sfx")
 metallic = 0.5
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_n1hk4"]
@@ -36,7 +38,13 @@ collision_mask = 0
 
 [node name="Graphics" parent="." index="0"]
 mesh = SubResource("ArrayMesh_wf5bb")
-surface_material_override/0 = SubResource("StandardMaterial3D_wf5bb")
+surface_material_override/0 = SubResource("StandardMaterial3D_gr875")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 shape = SubResource("ConvexPolygonShape3D_n1hk4")
+
+[node name="WeaponSlot" parent="." index="3" instance=ExtResource("3_wf5bb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1059, 0, 0)
+
+[node name="Weapon" parent="WeaponSlot" index="0" instance=ExtResource("4_h2sfx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1059, 0, 0)

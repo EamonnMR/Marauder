@@ -44,6 +44,9 @@ func _ready():
 	# TODO: Better way to determine if it's the player
 	add_to_group("radar")
 	add_to_group("ships")
+	
+	$WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
+	
 	if player_owner:
 		add_to_group("players")
 		ready_player_controller()
@@ -52,29 +55,27 @@ func _ready():
 		ready_npc_controller()
 	
 	return
-	if self == Client.player:
-		add_to_group("players")
-		faction = "player_owned"
-		# TODO: Check client for proper controller type?
-		# add_child(preload("res://component/controllers/KeyboardController.tscn").instantiate())
-		$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
-		Client.ui_inventory.assign($Inventory, "Your inventory")
-		# add_child(preload("res://component/InteractionRange.tscn").instantiate())
-		if skin != "":
-			$Graphics.set_skin_data(Data.skins[skin])
-	else:
-		input_event.connect(_on_input_event_npc)
-		add_to_group("faction-" + faction)
-		add_to_group("npcs")
-		# TODO: Select AI type?
-		# add_child(preload("res://component/controllers/ai/AIController.tscn").instantiate())
-		$Graphics.set_skin_data(Data.skins[Data.factions[faction].skin])
-		var weapon_config = Data.ships[type].weapon_config
-		for weapon_slot in weapon_config:
-			pass
-			#get_node(weapon_slot).add_weapon(WeaponData.instantiate(weapon_config[weapon_slot]))
-		
-	#
+	#if self == Client.player:
+		#add_to_group("players")
+		#faction = "player_owned"
+		## TODO: Check client for proper controller type?
+		## add_child(preload("res://component/controllers/KeyboardController.tscn").instantiate())
+		#$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
+		#Client.ui_inventory.assign($Inventory, "Your inventory")
+		## add_child(preload("res://component/InteractionRange.tscn").instantiate())
+		#if skin != "":
+			#$Graphics.set_skin_data(Data.skins[skin])
+	#else:
+		#input_event.connect(_on_input_event_npc)
+		#add_to_group("faction-" + faction)
+		#add_to_group("npcs")
+		#$Graphics.set_skin_data(Data.skins[Data.factions[faction].skin])
+		#var weapon_config = Data.ships[type].weapon_config
+		#for weapon_slot in weapon_config:
+			#pass
+			##get_node(weapon_slot).add_weapon(WeaponData.instantiate(weapon_config[weapon_slot]))
+		#
+	##
 #func get_weapon_slots() -> Array[WeaponSlot]:
 	#return []
 	##var weapon_slots: Array[WeaponSlot] = []
@@ -93,7 +94,7 @@ func _physics_process(delta):
 		# warning-ignore:return_value_discarded
 		set_velocity(U25d.raise(linear_velocity))
 		move_and_slide()
-		#handle_shooting()
+		handle_shooting()
 		#if not warping:
 			#if warping_in:
 				#if Util.out_of_system_radius(self, Util.PLAY_AREA_RADIUS / 2):
@@ -120,15 +121,16 @@ func _physics_process(delta):
 
 func handle_shooting():
 	if $Controller.shooting:
-		if chain_fire_mode:
-			$ChainFireManager.shoot_primary()
-		else:
-			for weapon in primary_weapons:
-				weapon.try_shoot()
-
-	if $Controller.shooting_secondary:
-		for weapon in secondary_weapons:
-			weapon.try_shoot()
+		$WeaponSlot/Weapon.try_shoot()
+		#if chain_fire_mode:
+			#$ChainFireManager.shoot_primary()
+		#else:
+			#for weapon in primary_weapons:
+				#weapon.try_shoot()
+#
+	#if $Controller.shooting_secondary:
+		#for weapon in secondary_weapons:
+			#weapon.try_shoot()
 
 func get_limited_velocity_with_thrust(delta):
 	if $Controller.thrusting:

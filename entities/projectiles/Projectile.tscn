@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7tdtoyj82g47"]
+
+[ext_resource type="Script" uid="uid://b34844wo075m3" path="res://entities/projectiles/projectile.gd" id="1_avawr"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_avawr"]
+
+[node name="Projectile" type="CharacterBody3D"]
+script = ExtResource("1_avawr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_avawr")

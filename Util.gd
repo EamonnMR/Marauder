@@ -17,6 +17,7 @@ func is_server():
 
 func is_local():
 	return is_server()
+
 #
 #func is_headless():
 	## TODO: How to determine this?

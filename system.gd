@@ -16,6 +16,7 @@ func unmarshal_network_state(state: Dictionary):
 		spawn_entity(state[node_id])
 
 func spawn_entity(state: Dictionary):
+	# TODO: Cache scenes, precache stuff
 	var entity = load(state["#path"]).instantiate()
 	entity.unmarshal_spawn_state(state)
 	add_child(entity)
