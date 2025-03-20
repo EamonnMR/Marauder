@@ -97,7 +97,10 @@ func process_state_attack(delta):
 		return
 	
 	populate_rotation_impulse_and_ideal_face(
-		_get_target_lead_position(lead_velocity, target), delta)
+		#_get_target_lead_position(lead_velocity, target),
+		Util.flatten_25d(target.global_transform.origin),
+		delta
+	)
 	shooting = _facing_within_margin(shoot_margin)
 	thrusting = not parent.standoff and _facing_within_margin(accel_margin)
 	braking = parent.standoff
@@ -229,9 +232,10 @@ func _compute_weapon_velocity():
 
 func _get_target_lead_position(lead_velocity, target):
 	var lead_position = super(lead_velocity, target)
-	if get_tree().debug_collisions_hint:
-		$LeadIndicator.global_transform.origin = Util.raise_25d(lead_position)
-		$LeadIndicator.show()
+	#if get_tree().debug_collisions_hint:
+		#$LeadIndicator.global_transform.origin = Util.raise_25d(lead_position)
+		#$LeadIndicator.show()
+	#	pass
 	return lead_position
 
 # Somewhat questioning the need for a whole node setup for this.

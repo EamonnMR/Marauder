@@ -33,3 +33,7 @@ metallic = 0.5
 [node name="Graphics" parent="." index="0"]
 mesh = SubResource("ArrayMesh_0ybei")
 surface_material_override/0 = SubResource("StandardMaterial3D_0ybei")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="." index="2"]
+update_rotation = false
+update_scale = false

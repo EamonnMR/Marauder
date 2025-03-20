@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 class_name Spaceship
 
-var faction
+var faction = "terran"
 var type: String
 
 var skin: String
@@ -48,27 +48,28 @@ func _ready():
 	$WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
 	
 	if player_owner:
+		var player_id = multiplayer.get_unique_id()
+		faction = "player_owned"
+		if player_owner == multiplayer.get_unique_id():
+			$CameraFollower.remote_path = Client.system().camera_offset().get_path()
+			#$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
+			#Client.ui_inventory.assign($Inventory, "Your inventory")
+
 		add_to_group("players")
 		ready_player_controller()
+		
 	else:
 		add_to_group("npcs")
+		add_to_group("faction-" + str(faction))
 		ready_npc_controller()
 	
 	return
 	#if self == Client.player:
-		#add_to_group("players")
-		#faction = "player_owned"
-		## TODO: Check client for proper controller type?
-		## add_child(preload("res://component/controllers/KeyboardController.tscn").instantiate())
-		#$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
-		#Client.ui_inventory.assign($Inventory, "Your inventory")
 		## add_child(preload("res://component/InteractionRange.tscn").instantiate())
 		#if skin != "":
 			#$Graphics.set_skin_data(Data.skins[skin])
 	#else:
 		#input_event.connect(_on_input_event_npc)
-		#add_to_group("faction-" + faction)
-		#add_to_group("npcs")
 		#$Graphics.set_skin_data(Data.skins[Data.factions[faction].skin])
 		#var weapon_config = Data.ships[type].weapon_config
 		#for weapon_slot in weapon_config:

@@ -43,6 +43,8 @@ func server_handshake(players, state, appointed_time):
 @rpc("reliable", "authority")
 func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
+	if state.player_owner == multiplayer.get_unique_id():
+		breakpoint
 
 @rpc("reliable", "authority")
 func vanish_ship(player_id, appointed_time):

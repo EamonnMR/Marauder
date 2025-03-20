@@ -8,6 +8,6 @@ script = ExtResource("1_udskb")
 
 [node name="Graphics" parent="." instance=ExtResource("2_mi7wl")]
 
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]
+[node name="CameraFollower" type="RemoteTransform3D" parent="."]
 update_rotation = false
 update_scale = false

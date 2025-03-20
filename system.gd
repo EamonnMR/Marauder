@@ -15,11 +15,12 @@ func unmarshal_network_state(state: Dictionary):
 	for node_id in state:
 		spawn_entity(state[node_id])
 
-func spawn_entity(state: Dictionary):
+func spawn_entity(state: Dictionary) -> Node:
 	# TODO: Cache scenes, precache stuff
 	var entity = load(state["#path"]).instantiate()
 	entity.unmarshal_spawn_state(state)
 	add_child(entity)
+	return entity
 	
 ### Frame Functions
 
@@ -86,6 +87,12 @@ func get_net_frame(entity_name, offset):
 func get_player_ids():
 	# TODO: only players in-system
 	return Server.get_rpc_player_ids()
+
+func camera_offset():
+	return $Node3D/CameraOffset
+
+func camera():
+	return $Node3D/CameraOffset/Camera3D
 
 
 class LerpHelper:
