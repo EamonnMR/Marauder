@@ -38,13 +38,13 @@ func server_handshake(players, state, appointed_time):
 	print("Server Handshake", players)
 	system().unmarshal_network_state(state)
 	delay_until(appointed_time)
-	system().show()
+	#system().show()
 
 @rpc("reliable", "authority")
 func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
-	if state.player_owner == multiplayer.get_unique_id():
-		breakpoint
+	#if state.player_owner == multiplayer.get_unique_id():
+	#	breakpoint
 
 @rpc("reliable", "authority")
 func vanish_ship(player_id, appointed_time):

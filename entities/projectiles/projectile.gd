@@ -83,6 +83,7 @@ func marshal_spawn_state() -> Dictionary:
 		"name": name,
 		"origin": transform.origin,
 		"velocity": velocity,
+		"#path": get_scene_file_path()
 	}
 
 func unmarshal_spawn_state(state):

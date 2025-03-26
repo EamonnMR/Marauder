@@ -38,12 +38,12 @@ func init():
 	)
 	
 	peer.peer_disconnected.connect(peer_disconnected)
-		
+	
 	get_tree().get_root().multiplayer.multiplayer_peer = peer
 	
 	server_started = true
 	online = true
-	universe().system().show()
+	# universe().system().show()
 
 func init_local(alias):
 	print("Server init local")
@@ -61,8 +61,8 @@ func client_handshake(alias):
 	# maybe don't set this 
 	#players[sender].entity = 
 	print(players)
-	Client.server_handshake.rpc_id(sender, players, system().marshal_network_state())
-	
+	var net_state = system().marshal_network_state()
+	Client.server_handshake.rpc_id(sender, players, net_state, time())
 	spawn_player(sender) # TODO: Player options
 	print("RPC Sent")
 
