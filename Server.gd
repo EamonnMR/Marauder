@@ -70,6 +70,7 @@ func spawn_player(player_id: int):
 	var player_ent = preload("res://entities/ships/Warship.tscn").instantiate()
 	player_ent.player_owner = player_id
 	player_ent.name = player_ship_name(player_id)
+	player_ent.faction = "pirate"
 	player_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
 	universe().get_node("System").add_child(player_ent)
 	# Sync
@@ -79,7 +80,7 @@ func spawn_player(player_id: int):
 		
 func spawn_npc():
 	var npc_ent = preload("res://entities/ships/WarshipNpc.tscn").instantiate()
-	npc_ent.faction = 1
+	npc_ent.faction = "Terran"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1
 	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))

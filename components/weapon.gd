@@ -60,11 +60,12 @@ func _ready():
 		#false
 	#)
 	#
-	#iff = IffProfile.new(
-		#parent,
-		#parent.faction,
-		#true
-	#)
+
+	iff = IffProfile.new(
+		parent,
+		parent.faction,
+		true
+	)
 
 func try_shoot():
 	if Util.is_server():
@@ -126,7 +127,7 @@ func _create_projectile():
 		#projectile.linear_velocity = parent.linear_velocity
 		#
 
-	projectile.rotate_x(randf_range(-spread/2, spread/2))
+	#projectile.rotate_x(randf_range(-spread/2, spread/2))
 	projectile.rotate_y(randf_range(-spread/2, spread/2))
 	
 	# TODO: This seems like a similar direction issue to warp-in
@@ -161,9 +162,6 @@ func _effects():
 	$AudioStreamPlayer3D.play()
 	#parent.flash_weapon()
 
-func _on_Cooldown_timeout():
-	cooldown = false
-
 func _on_BurstCooldown_timeout():
 	burst_cooldown = false
 	burst_counter = 0
@@ -172,3 +170,7 @@ func _try_consume_ammo():
 	if ammo_item == "":
 		return true
 	return parent.get_node("Inventory").deduct_ingredients({ammo_item: 1})
+
+
+func _on_cooldown_timeout():
+	cooldown = false

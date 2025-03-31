@@ -171,6 +171,13 @@ func decrease_bank(delta):
 			$Graphics.rotation[bank_axis] = 0
 	
 func _on_health_destroyed():
+	if Util.is_server():
+		for player in Server.get_rpc_player_ids():
+			ship_destroyed.rpc_id(player)
+	ship_destroyed()
+
+@rpc("reliable", "authority")
+func ship_destroyed():
 	call_deferred("queue_free")
 	emit_signal("destroyed")
 
@@ -231,19 +238,23 @@ func marshal_spawn_state() -> Dictionary:
 		"name": name,
 		"origin": transform.origin,
 		"#path": get_scene_file_path(),
-		"player_owner": player_owner
+		"player_owner": player_owner,
+		"health": $Health.marshal_spawn_state()
 	}
 
 func unmarshal_spawn_state(state):
 	name = state.name
 	transform.origin = state.origin
 	player_owner = state.player_owner
+	$Health.unmarshal_spawn_state(state.health)
 	
 func marshal_frame_state() -> Dictionary:
 	return {
 		"origin": Util.flatten_25d(transform.origin),
 		"rotation": rotation.y
-	}
+	}.merged(
+		$Health.marshal_frame_state()
+	)
 	
 func ready_player_controller():
 	add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
@@ -256,4 +267,5 @@ func do_lerp_update():
 	if lerp_helper.can_lerp:
 		transform.origin = Util.raise_25d(lerp_helper.calc_vector("origin"))
 		rotation.y = lerp_helper.calc_angle("rotation")
-	
+		$Health.health = lerp_helper.calc_numeric("health")
+		$Health.shields = lerp_helper.calc_numeric("shields")

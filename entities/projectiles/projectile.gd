@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 var iff: IffProfile
-#var damage: Health.DamageVal
+var damage: Health.DamageVal = Health.DamageVal.new(1, 1, false)
 #var splash_damage: Health.DamageVal
 var splash_radius: int
 var linear_velocity = Vector2()
@@ -20,7 +20,7 @@ func _ready():
 	if fade:
 		material = $MeshInstance3D.mesh.surface_get_material(0).duplicate(true)
 		$MeshInstance3D.set_surface_override_material(0, material)
-
+		
 func _process(delta):
 	if fade:
 		material.albedo_color.a = _fade_factor()
@@ -31,19 +31,11 @@ func _physics_process(_delta):
 	#Util.wrap_to_play_radius(self)
 
 
-func _on_Projectile_body_entered(body):
-	if is_instance_valid(body) and not iff.should_exclude(body):
-		#Health.do_damage(body, get_falloff_damage(damage), owner())
-		if impact > 0 and body.has_method("receive_impact"):
-			body.receive_impact(linear_velocity.normalized() * get_falloff_impact(impact))
-		detonate()
-		queue_free()
-
-#func get_falloff_damage(damage) -> Health.DamageVal:
-	#if damage_falloff:
-		#return damage.faded(_fade_factor())
-	#else:
-		#return damage
+func get_falloff_damage(damage) -> Health.DamageVal:
+	if damage_falloff:
+		return damage.faded(_fade_factor())
+	else:
+		return damage
 
 func get_falloff_impact(impact) -> int:
 	if damage_falloff:
@@ -81,7 +73,8 @@ func detonate():
 func marshal_spawn_state() -> Dictionary:
 	return {
 		"name": name,
-		"origin": transform.origin,
+		"origin": global_transform.origin,
+		"rotation": Util.flatten_rotation(self),
 		"velocity": velocity,
 		"#path": get_scene_file_path()
 	}
@@ -90,3 +83,14 @@ func unmarshal_spawn_state(state):
 	name = state.name
 	transform.origin = state.origin
 	velocity = state.velocity
+	rotate_y(state.rotation)
+
+
+func _on_area_3d_body_entered(body):
+	if is_instance_valid(body) and not iff.should_exclude(body):
+		if Util.is_server():
+			Health.do_damage(body, get_falloff_damage(damage), owner())
+			if impact > 0 and body.has_method("receive_impact"):
+				body.receive_impact(linear_velocity.normalized() * get_falloff_impact(impact))
+		detonate()
+		queue_free()

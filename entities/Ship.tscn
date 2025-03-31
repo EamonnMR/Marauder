@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://j002g8qmqpxr"]
+[gd_scene load_steps=4 format=3 uid="uid://j002g8qmqpxr"]
 
 [ext_resource type="Script" uid="uid://csk4gjwxjdot1" path="res://entities/ship.gd" id="1_udskb"]
 [ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="2_mi7wl"]
+[ext_resource type="PackedScene" uid="uid://o11bh7fuh4e7" path="res://components/Health.tscn" id="3_mcdp8"]
 
 [node name="Ship" type="CharacterBody3D"]
 script = ExtResource("1_udskb")
@@ -11,3 +12,7 @@ script = ExtResource("1_udskb")
 [node name="CameraFollower" type="RemoteTransform3D" parent="."]
 update_rotation = false
 update_scale = false
+
+[node name="Health" parent="." instance=ExtResource("3_mcdp8")]
+
+[connection signal="destroyed" from="Health" to="." method="_on_health_destroyed"]
