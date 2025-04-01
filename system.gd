@@ -15,10 +15,12 @@ func unmarshal_network_state(state: Dictionary):
 	for node_id in state:
 		spawn_entity(state[node_id])
 
-func spawn_entity(state: Dictionary):
+func spawn_entity(state: Dictionary) -> Node:
+	# TODO: Cache scenes, precache stuff
 	var entity = load(state["#path"]).instantiate()
 	entity.unmarshal_spawn_state(state)
 	add_child(entity)
+	return entity
 	
 ### Frame Functions
 
@@ -34,6 +36,8 @@ func dispatch_net_frame():
 	var net_frame = marshal_frame_state()
 	var server_time = Server.time()
 	for player in get_player_ids():
+		if player < 10:
+			breakpoint
 		receive_net_frame.rpc_id(player, server_time, net_frame)
 
 
@@ -82,4 +86,90 @@ func get_net_frame(entity_name, offset):
 
 func get_player_ids():
 	# TODO: only players in-system
-	return Server.players.keys()
+	return Server.get_rpc_player_ids()
+
+func camera_offset():
+	return $Node3D/CameraOffset
+
+func camera():
+	return $Node3D/CameraOffset/Camera3D
+
+
+class LerpHelper:
+	# Calculates lerp/extrapolation results
+	var entity: Node
+	var time: float
+	var past: NetFrame
+	var future: NetFrame
+	var lerp_factor: float
+	var extrapolation_factor: float
+	var can_lerp: bool
+	var can_extrapolate: bool
+
+	func _init(entity: Node, system: StarSystem):
+		self.entity = entity
+		self.past = system.get_net_frame(entity.name, 0)
+		self.future = system.get_net_frame(entity.name, 1)
+		self.time = Client.time()
+		
+		if (not future) or (not past):
+			# At least two frames are required for lerping
+			can_lerp = false
+			can_extrapolate = false
+
+		elif future.time > time: # Interpolate
+			var frames = system.net_frames
+			var time_range = future.time - past.time
+			var time_offset = time - past.time
+			lerp_factor = float(time_offset) / float(time_range)
+			can_lerp = true
+			can_extrapolate = false
+
+		else: # Extrapolate
+			# Future is in the past - extrapolate by dead reckoning
+			extrapolation_factor = float(time - past.time) / float(future.time - past.time) - 1.00
+			can_lerp = false
+			can_extrapolate = true
+		
+	func calc_numeric(member: String): # No type hint because it's variable output
+		if can_lerp:
+			return lerp(past.state[member], future.state[member], lerp_factor)
+		elif can_extrapolate:
+			var known_delta = future.state[member] - past.state[member]
+			return future.state[member] + (known_delta * extrapolation_factor)
+		elif past:
+			return past.state[member]
+		else:
+			return 0
+			
+	func calc_angle(member: String) -> float:
+		if can_lerp:
+			return lerp_angle(
+				past.state[member], future.state[member], lerp_factor
+			)
+		elif can_extrapolate:
+			var known_delta = future.state[member] - past.state[member]
+			return fmod(future.state[member] + (known_delta * extrapolation_factor), PI * 2)
+		elif past:
+			return past.state[member]
+		else:
+			return 0.0
+
+	func calc_boolean(member: String) -> bool:
+		if can_lerp:
+			return past.state[member] if lerp_factor < 0.5 else future.state[member]
+		elif past:
+			return past.state[member]
+		else:
+			return false
+			
+	func calc_vector(member: String) -> Vector2:
+		if can_lerp:
+			return past.state[member].lerp(future.state[member], lerp_factor)
+		if can_extrapolate:
+			var known_delta = future.state[member] - past.state[member]
+			return future.state[member] + (known_delta * extrapolation_factor)
+		elif past:
+			return past.state[member]
+		else:
+			return Vector2(0,0)

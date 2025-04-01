@@ -16,8 +16,9 @@ var default_hue = Color(1,0,0).h
 var material: Material
 
 func _ready():
-	material = mesh.surface_get_material(0).duplicate(true)
-	set_surface_override_material(0, material)
+	if mesh:
+		material = mesh.surface_get_material(0).duplicate(true)
+		set_surface_override_material(0, material)
 	
 func _process(delta):
 	var small_delta = delta

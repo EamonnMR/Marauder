@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bc12d6o1k00sj"]
+
+[ext_resource type="Script" uid="uid://d140clq63p537" path="res://components/control/ai_controller.gd" id="1_6u2p1"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_6u2p1"]
+radius = 10.0
+
+[node name="Controller" type="Node3D"]
+script = ExtResource("1_6u2p1")
+
+[node name="EngagementRange" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EngagementRange"]
+shape = SubResource("CylinderShape3D_6u2p1")
+
+[node name="Rethink" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[connection signal="body_entered" from="EngagementRange" to="." method="_on_engagement_range_body_entered"]
+[connection signal="body_exited" from="EngagementRange" to="." method="_on_engagement_range_body_exited"]
+[connection signal="timeout" from="Rethink" to="." method="_on_rethink_timeout"]

@@ -18,6 +18,9 @@ var braking: bool
 
 var jumping: bool
 
+func anglemod(angle: float) -> float:
+	return fmod(angle, PI * 2)
+
 func _facing_within_margin(margin):
 	# Relies on 'ideal face' being populated
 	return ideal_face and abs(Util.anglemod(ideal_face - Util.flatten_rotation(parent))) < margin
@@ -34,6 +37,13 @@ func populate_rotation_impulse_and_ideal_face(at: Vector2, delta):
 		at
 	)
 	rotation_impulse = impulse[0]
+	if abs(rotation_impulse) < 0.001:
+		rotation_impulse = 0
+	elif rotation_impulse > 0:
+		rotation_impulse = 1
+	else:
+		rotation_impulse = -1
+		
 	ideal_face = impulse[1]
 
 func _get_target_lead_position(lead_velocity: float, target: Node3D):

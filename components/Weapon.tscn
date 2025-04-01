@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqpcp7mvknf5"]
+
+[ext_resource type="Script" uid="uid://dvt3wxnqhb0j2" path="res://components/weapon.gd" id="1_vtigp"]
+[ext_resource type="PackedScene" uid="uid://c7tdtoyj82g47" path="res://entities/projectiles/Projectile.tscn" id="2_2b2un"]
+
+[node name="Weapon" type="Node3D"]
+script = ExtResource("1_vtigp")
+projectile_scene = ExtResource("2_2b2un")
+
+[node name="Cooldown" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="BurstCooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+
+[connection signal="timeout" from="Cooldown" to="." method="_on_cooldown_timeout"]

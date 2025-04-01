@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bwcoqhvrrpd6g"]
 
-[ext_resource type="Script" path="res://components/control/keyboard_controller.gd" id="1_y0t63"]
+[ext_resource type="Script" uid="uid://kelckpgx7a5p" path="res://components/control/keyboard_controller.gd" id="1_y0t63"]
 
 [node name="Controller" type="Node3D"]
 script = ExtResource("1_y0t63")

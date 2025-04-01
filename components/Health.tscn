@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://o11bh7fuh4e7"]
+
+[ext_resource type="Script" uid="uid://reyau306jrv7" path="res://components/health.gd" id="1_tnghr"]
+
+[node name="Health" type="Node"]
+script = ExtResource("1_tnghr")
+
+[node name="ShieldRegen" type="Timer" parent="."]
+
+[node name="RegenDelay" type="Timer" parent="."]

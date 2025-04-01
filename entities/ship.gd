@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 class_name Spaceship
 
-var faction
+var faction = "terran"
 var type: String
 
 var skin: String
@@ -45,32 +45,38 @@ func _ready():
 	add_to_group("radar")
 	add_to_group("ships")
 	
-	ready_player_controller()
+	$WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
+	
+	if player_owner:
+		var player_id = multiplayer.get_unique_id()
+		faction = "player_owned"
+		if player_owner == multiplayer.get_unique_id():
+			$CameraFollower.remote_path = Client.system().camera_offset().get_path()
+			#$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
+			#Client.ui_inventory.assign($Inventory, "Your inventory")
+
+		add_to_group("players")
+		ready_player_controller()
+		
+	else:
+		add_to_group("npcs")
+		add_to_group("faction-" + str(faction))
+		ready_npc_controller()
 	
 	return
-	if self == Client.player:
-		add_to_group("players")
-		faction = "player_owned"
-		# TODO: Check client for proper controller type?
-		# add_child(preload("res://component/controllers/KeyboardController.tscn").instantiate())
-		$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
-		Client.ui_inventory.assign($Inventory, "Your inventory")
-		# add_child(preload("res://component/InteractionRange.tscn").instantiate())
-		if skin != "":
-			$Graphics.set_skin_data(Data.skins[skin])
-	else:
-		input_event.connect(_on_input_event_npc)
-		add_to_group("faction-" + faction)
-		add_to_group("npcs")
-		# TODO: Select AI type?
-		# add_child(preload("res://component/controllers/ai/AIController.tscn").instantiate())
-		$Graphics.set_skin_data(Data.skins[Data.factions[faction].skin])
-		var weapon_config = Data.ships[type].weapon_config
-		for weapon_slot in weapon_config:
-			pass
-			#get_node(weapon_slot).add_weapon(WeaponData.instantiate(weapon_config[weapon_slot]))
-		
-	#
+	#if self == Client.player:
+		## add_child(preload("res://component/InteractionRange.tscn").instantiate())
+		#if skin != "":
+			#$Graphics.set_skin_data(Data.skins[skin])
+	#else:
+		#input_event.connect(_on_input_event_npc)
+		#$Graphics.set_skin_data(Data.skins[Data.factions[faction].skin])
+		#var weapon_config = Data.ships[type].weapon_config
+		#for weapon_slot in weapon_config:
+			#pass
+			##get_node(weapon_slot).add_weapon(WeaponData.instantiate(weapon_config[weapon_slot]))
+		#
+	##
 #func get_weapon_slots() -> Array[WeaponSlot]:
 	#return []
 	##var weapon_slots: Array[WeaponSlot] = []
@@ -89,7 +95,7 @@ func _physics_process(delta):
 		# warning-ignore:return_value_discarded
 		set_velocity(U25d.raise(linear_velocity))
 		move_and_slide()
-		#handle_shooting()
+		handle_shooting()
 		#if not warping:
 			#if warping_in:
 				#if Util.out_of_system_radius(self, Util.PLAY_AREA_RADIUS / 2):
@@ -97,11 +103,9 @@ func _physics_process(delta):
 			#else:
 				#Util.wrap_to_play_radius(self)
 	else:
-		# TODO: Lerp between last two frames, extrapolate if frames are in past
-		var frame: StarSystem.NetFrame = parent.get_net_frame(name, 0)
-		if frame:
-			transform.origin = frame.state.origin
-			rotation.y = frame.state.rotation
+		do_lerp_update()
+	
+	
 	var rotation_diff = 0
 	if previous_rotation != rotation.y:
 		rotation_diff = rotation.y - previous_rotation
@@ -118,15 +122,16 @@ func _physics_process(delta):
 
 func handle_shooting():
 	if $Controller.shooting:
-		if chain_fire_mode:
-			$ChainFireManager.shoot_primary()
-		else:
-			for weapon in primary_weapons:
-				weapon.try_shoot()
-
-	if $Controller.shooting_secondary:
-		for weapon in secondary_weapons:
-			weapon.try_shoot()
+		$WeaponSlot/Weapon.try_shoot()
+		#if chain_fire_mode:
+			#$ChainFireManager.shoot_primary()
+		#else:
+			#for weapon in primary_weapons:
+				#weapon.try_shoot()
+#
+	#if $Controller.shooting_secondary:
+		#for weapon in secondary_weapons:
+			#weapon.try_shoot()
 
 func get_limited_velocity_with_thrust(delta):
 	if $Controller.thrusting:
@@ -166,6 +171,13 @@ func decrease_bank(delta):
 			$Graphics.rotation[bank_axis] = 0
 	
 func _on_health_destroyed():
+	if Util.is_server():
+		for player in Server.get_rpc_player_ids():
+			ship_destroyed.rpc_id(player)
+	ship_destroyed()
+
+@rpc("reliable", "authority")
+func ship_destroyed():
 	call_deferred("queue_free")
 	emit_signal("destroyed")
 
@@ -226,20 +238,34 @@ func marshal_spawn_state() -> Dictionary:
 		"name": name,
 		"origin": transform.origin,
 		"#path": get_scene_file_path(),
-		"player_owner": player_owner
+		"player_owner": player_owner,
+		"health": $Health.marshal_spawn_state()
 	}
 
 func unmarshal_spawn_state(state):
 	name = state.name
 	transform.origin = state.origin
 	player_owner = state.player_owner
+	$Health.unmarshal_spawn_state(state.health)
 	
 func marshal_frame_state() -> Dictionary:
 	return {
-		"origin": transform.origin,
+		"origin": Util.flatten_25d(transform.origin),
 		"rotation": rotation.y
-	}
+	}.merged(
+		$Health.marshal_frame_state()
+	)
 	
 func ready_player_controller():
-	if player_owner >= 0:
-		add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
+	add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
+
+func ready_npc_controller():
+	add_child(preload("res://components/control/AIController.tscn").instantiate())
+
+func do_lerp_update():
+	var lerp_helper = StarSystem.LerpHelper.new(self, parent)
+	if lerp_helper.can_lerp:
+		transform.origin = Util.raise_25d(lerp_helper.calc_vector("origin"))
+		rotation.y = lerp_helper.calc_angle("rotation")
+		$Health.health = lerp_helper.calc_numeric("health")
+		$Health.shields = lerp_helper.calc_numeric("shields")

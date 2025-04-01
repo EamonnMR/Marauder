@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmq0ntikjy0gg"]
+
+[ext_resource type="Script" uid="uid://bftf1rwtedtdi" path="res://menu/co_op_menu.gd" id="1_uyweg"]
+
+[sub_resource type="Theme" id="Theme_hv2ko"]
+
+[node name="CoOpMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uyweg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.5
+offset_top = -94.0
+offset_right = 138.5
+offset_bottom = 94.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_hv2ko")
+
+[node name="Title" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+text = "Host Co-Op"
+fit_content = true
+
+[node name="GameName" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "game name"
+placeholder_text = "Host"
+
+[node name="Alias" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Alias"
+
+[node name="Start" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "start"
+
+[node name="Cancel" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "cancel"
+
+[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
