@@ -2,6 +2,7 @@ extends Node
 
 @onready var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 signal universe_loaded
+signal player_ent_updated(entity: Node)
 
 var playing = false
 
@@ -43,8 +44,6 @@ func server_handshake(players, state, appointed_time):
 @rpc("reliable", "authority")
 func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
-	#if state.player_owner == multiplayer.get_unique_id():
-	#	breakpoint
 
 @rpc("reliable", "authority")
 func vanish_ship(player_id, appointed_time):

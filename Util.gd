@@ -76,3 +76,10 @@ func lead_correct_position(projectile_velocity: float, origin_position: Vector2,
 	var relative_vel = target_velocity - origin_velocity
 	var travel_time = target_position.distance_to(origin_position) / projectile_velocity
 	return relative_vel * travel_time + target_position
+
+enum DISPOSITION {
+	FRIENDLY,
+	HOSTILE,
+	NEUTRAL,
+	ABANDONED
+}

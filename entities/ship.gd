@@ -34,6 +34,9 @@ var warping = false
 var warping_in = false
 var warp_speed_factor = 10
 
+var radar_size: int = 2
+
+
 signal destroyed
 signal weapons_changed
 
@@ -52,6 +55,7 @@ func _ready():
 		faction = "player_owned"
 		if player_owner == multiplayer.get_unique_id():
 			$CameraFollower.remote_path = Client.system().camera_offset().get_path()
+			Client.player_ent_updated.emit(self)
 			#$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
 			#Client.ui_inventory.assign($Inventory, "Your inventory")
 
