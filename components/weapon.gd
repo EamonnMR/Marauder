@@ -86,7 +86,7 @@ func _shoot():
 	var projectile = _create_projectile()
 	var projectile_data: Dictionary = projectile.marshal_spawn_state()
 	for player in Server.get_rpc_player_ids():
-		shoot_remote.rpc_id(player, projectile_data)
+		shoot_remote.rpc_id(player, Server.time(), projectile_data)
 	
 	cooldown = true
 	$Cooldown.start()
@@ -95,7 +95,8 @@ func _shoot():
 
 
 @rpc("reliable", "authority")
-func shoot_remote(state: Dictionary):
+func shoot_remote(appointed_time: float, state: Dictionary):
+	Client.delay_until(appointed_time)
 	cooldown = true
 	$Cooldown.start()
 	var new_projectile = Client.system().spawn_entity(state)
