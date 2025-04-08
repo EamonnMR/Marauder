@@ -2,6 +2,13 @@ extends Node
 
 var PORT = 2600
 
+var SPEED_FACTOR = 47.0/100.0 # Meters / second
+
+var ACCEL_FACTOR = 1/1.66 # Meters / second / second
+
+var TURN_FACTOR = deg_to_rad(0.3) # Radians / second
+
+
 func anglemod(angle: float) -> float:
 	return fmod(angle, PI * 2)
 

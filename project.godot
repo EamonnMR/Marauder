@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Marauder"
 config/description="Yet another spacecraft experience"
-run/main_scene="res://menu/MainMenu.tscn"
+run/main_scene="uid://cdf7m68gxfsvb"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,6 +23,11 @@ Server="*res://Server.gd"
 Client="*res://Client.gd"
 Data="*res://Data.gd"
 U25d="*res://U25d.gd"
+
+[display]
+
+window/size/viewport_width=1024
+window/size/viewport_height=768
 
 [input]
 

@@ -1,6 +1,6 @@
 extends Node2D
 
-var radar_scale = 2
+var radar_scale = 0.05
 var player = null
 
 # TODO: Don't hardcode this

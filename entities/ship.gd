@@ -10,9 +10,9 @@ var skin: String
 
 var player_owner: int
 
-var max_speed = 100
-var accel = 0.01
-var turn = 1
+var max_speed = 200 * Util.SPEED_FACTOR
+var accel = 250 * Util.ACCEL_FACTOR
+var turn = 25 * Util.TURN_FACTOR
 var max_bank = deg_to_rad(15)
 var bank_speed = 2.5 / turn
 var engagement_range: float = 0
@@ -139,12 +139,12 @@ func handle_shooting():
 
 func get_limited_velocity_with_thrust(delta):
 	if $Controller.thrusting:
-		linear_velocity += Vector2(accel * delta * 100, 0).rotated(-rotation.y)
+		linear_velocity += Vector2(accel * delta, 0).rotated(-rotation.y)
 		$Graphics.thrusting = true
 	else:
 		$Graphics.thrusting = false
 	if $Controller.braking:
-		linear_velocity = Vector2(linear_velocity.length() - (accel * delta * 100), 0).rotated(linear_velocity.angle())
+		linear_velocity = Vector2(linear_velocity.length() - (accel * delta), 0).rotated(linear_velocity.angle())
 	
 	if not warping:
 		if linear_velocity.length() > max_speed:
