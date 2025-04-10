@@ -5,16 +5,18 @@ class_name Spaceship
 var faction = "terran"
 var type: String
 
+@export var data: ShipData
+
 var skin: String
 @onready var parent: StarSystem = get_node("../")
 
 var player_owner: int
 
-var max_speed = 200 * Util.SPEED_FACTOR
-var accel = 250 * Util.ACCEL_FACTOR
-var turn = 25 * Util.TURN_FACTOR
+@onready var max_speed = data.max_speed * Util.SPEED_FACTOR
+@onready var accel = data.accel * Util.ACCEL_FACTOR
+@onready var turn = data.turn * Util.TURN_FACTOR
 var max_bank = deg_to_rad(15)
-var bank_speed = 2.5 / turn
+@onready var bank_speed = 2.5 / turn
 var engagement_range: float = 0
 var standoff: bool = false
 var mass: float
@@ -61,7 +63,7 @@ func _ready():
 
 		add_to_group("players")
 		ready_player_controller()
-		
+		max_speed = max_speed * 1.25
 	else:
 		add_to_group("npcs")
 		add_to_group("faction-" + str(faction))

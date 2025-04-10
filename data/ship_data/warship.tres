@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=2 format=3 uid="uid://lsijbetv2lgg"]
+
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_ygvvl"]
+
+[resource]
+script = ExtResource("1_ygvvl")
+max_speed = 200
+accel = 250
+turn = 25

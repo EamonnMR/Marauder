@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://cc6snkwm8ev65"]
+[gd_scene load_steps=8 format=3 uid="uid://cc6snkwm8ev65"]
 
 [ext_resource type="PackedScene" uid="uid://j002g8qmqpxr" path="res://entities/Ship.tscn" id="1_ho2by"]
+[ext_resource type="Resource" uid="uid://fm50dvt552j8" path="res://data/ship.tres" id="2_gr875"]
 [ext_resource type="ArrayMesh" uid="uid://cvyj1x60yfygw" path="res://assets/eamonn/warship/warship.obj" id="2_h2sfx"]
 [ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="3_wf5bb"]
 [ext_resource type="PackedScene" uid="uid://cqpcp7mvknf5" path="res://components/Weapon.tscn" id="4_h2sfx"]
@@ -15,6 +16,7 @@ points = PackedVector3Array(-2.06889, 8.82601, 22.5997, -22.9304, -4.10899, -21.
 
 [node name="Ship" instance=ExtResource("1_ho2by")]
 collision_mask = 0
+data = ExtResource("2_gr875")
 
 [node name="Graphics" parent="." index="0"]
 mesh = ExtResource("2_h2sfx")

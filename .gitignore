@@ -3,3 +3,5 @@
 /android/
 *.blend1
 *.import
+addons/*
+example/*
