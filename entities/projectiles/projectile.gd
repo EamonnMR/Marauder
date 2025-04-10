@@ -5,7 +5,7 @@ var damage: Health.DamageVal = Health.DamageVal.new(1, 1, false)
 #var splash_damage: Health.DamageVal
 var splash_radius: int
 var linear_velocity = Vector2()
-var initial_velocity = 10
+var initial_velocity = 1400
 var explode_on_timeout: bool = true
 var damage_falloff: bool = false
 var fade: bool = false
@@ -15,7 +15,7 @@ var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
 
 
 func _ready():
-	linear_velocity += Vector2(initial_velocity, 0).rotated(-rotation.y)
+	linear_velocity += Vector2(initial_velocity * Util.SPEED_FACTOR, 0).rotated(-rotation.y)
 	
 	if fade:
 		material = $MeshInstance3D.mesh.surface_get_material(0).duplicate(true)

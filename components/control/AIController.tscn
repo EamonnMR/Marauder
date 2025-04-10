@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d140clq63p537" path="res://components/control/ai_controller.gd" id="1_6u2p1"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_6u2p1"]
-radius = 10.0
+radius = 1000.0
 
 [node name="Controller" type="Node3D"]
 script = ExtResource("1_6u2p1")

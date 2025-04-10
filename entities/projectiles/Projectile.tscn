@@ -3,12 +3,11 @@
 [ext_resource type="Script" uid="uid://b34844wo075m3" path="res://entities/projectiles/projectile.gd" id="1_avawr"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_avawr"]
-radius = 0.25
-height = 0.5
+radius = 2.0
+height = 48.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_avawr"]
-height = 4.48511
-radius = 0.233887
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_avawr"]
+points = PackedVector3Array(1.89271, 7.25435, 0.20484, -1.8433, -9.05182, -0.134164, -0.979955, 22.9809, 0.646328, 0.646328, -16.4704, 1.86659, 1.45969, -11.9975, -1.79375, -0.573493, 17.2854, -1.79375, -0.979955, -19.7257, -1.38685, -1.38685, 11.59, 1.86659, 1.45969, 16.0677, 1.45969, 1.45969, 19.3182, -0.979955, -1.38685, -16.8779, 1.45969, 1.45969, -20.5407, 0.646328, -1.79375, 12.8124, -1.38685, -1.38685, -12.8124, -1.79375, 1.86659, -14.4377, 1.05279, 1.86659, 11.59, -1.38685, -1.79375, 11.9975, 1.45969, -0.979955, -22.9809, 0.646328, 0.646328, -22.9809, -0.979955, 1.05279, 14.4377, 1.86659, 1.86659, -14.8452, -0.979955, -1.79375, -16.0677, -0.979955, 1.05279, 22.9809, -0.573493, 0.646328, 20.5407, 1.45969, -0.979955, 22.1659, -0.979955, 1.05279, 15.6602, -1.79375, 1.86659, 16.4704, 0.646328, -1.79375, -11.9975, 1.45969, -1.38685, -11.59, 1.86659, -1.79375, 17.2854, 0.646328, 0.646328, -22.5734, 1.05279, 0.646328, -17.2854, -1.79375)
 
 [node name="Projectile" type="CharacterBody3D"]
 collision_layer = 0
@@ -16,12 +15,13 @@ collision_mask = 0
 script = ExtResource("1_avawr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("SphereMesh_avawr")
 
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.249878, 0)
-shape = SubResource("CylinderShape3D_avawr")
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_avawr")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
