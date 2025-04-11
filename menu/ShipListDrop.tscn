@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4kn423wls8ce"]
+
+[ext_resource type="Script" uid="uid://ygo7xlsx65e4" path="res://menu/ship_list_drop.gd" id="1_hyfiw"]
+
+[node name="ShipListDrop" type="OptionButton"]
+script = ExtResource("1_hyfiw")

@@ -17,10 +17,12 @@ func system() -> StarSystem:
 class PlayerRecord:
 	var id: int
 	var alias: String
+	var ship_pref: String
 	
-	func _init(id, alias):
+	func _init(id, alias, ship_pref):
 		self.id = id
 		self.alias = alias
+		self.ship_pref = ship_pref
 
 var players: Dictionary[int, PlayerRecord] = {}
 
@@ -45,7 +47,7 @@ func init():
 	online = true
 	# universe().system().show()
 
-func init_local(alias):
+func init_local():
 	print("Server init local")
 	DisplayServer.window_set_title("Marauder - Local")
 	
@@ -53,11 +55,14 @@ func init_local(alias):
 	#universe().system().show()
 	
 @rpc("reliable", "any_peer", "call_remote")
-func client_handshake(alias):
+func client_handshake(alias: String, ship_pref: String):
 	var sender = get_sender()
 	print("Client Handshake from: ", sender)
 	
-	players[sender] = PlayerRecord.new(sender, alias)
+	if not ship_pref in Data.ships:
+		print("Invalid Ship: ", ship_pref)
+		ship_pref = "shuttle"
+	players[sender] = PlayerRecord.new(sender, alias, ship_pref)
 	# maybe don't set this 
 	#players[sender].entity = 
 	print(players)

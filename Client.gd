@@ -11,7 +11,7 @@ func system() -> StarSystem:
 	return get_tree().get_root().get_node("Universe/System")
 
 
-func init(host: String, alias: String):
+func init(host: String, alias: String, ship_pref: String):
 	print("Client init")
 	var error = peer.create_client(host, Util.PORT)
 	if error:
@@ -21,15 +21,15 @@ func init(host: String, alias: String):
 	#get_tree().get_root().set_multiplayer_authority(0)
 	get_tree().get_root().multiplayer.connected_to_server.connect(func _on_connected():
 		var mpe = get_multiplayer_authority()
-		Server.client_handshake.rpc(alias)
+		Server.client_handshake.rpc(alias, ship_pref)
 	)
 	
 	DisplayServer.window_set_title("Marauder - Client")
 	playing = true 
 
-func init_local(alias: String):
+func init_local(alias: String, ship_pref: String):
 	universe_loaded.connect(func handshake_closure():
-		Server.client_handshake(alias)
+		Server.client_handshake(alias, ship_pref)
 	)
 	playing = true
 

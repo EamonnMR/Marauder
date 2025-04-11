@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmq0ntikjy0gg"]
+[gd_scene load_steps=4 format=3 uid="uid://dmq0ntikjy0gg"]
 
 [ext_resource type="Script" uid="uid://bftf1rwtedtdi" path="res://menu/co_op_menu.gd" id="1_uyweg"]
+[ext_resource type="PackedScene" uid="uid://c4kn423wls8ce" path="res://menu/ShipListDrop.tscn" id="2_jkr5t"]
 
 [sub_resource type="Theme" id="Theme_hv2ko"]
 
@@ -41,6 +42,9 @@ placeholder_text = "Host"
 [node name="Alias" type="LineEdit" parent="VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Alias"
+
+[node name="ShipListDrop" parent="VBoxContainer" instance=ExtResource("2_jkr5t")]
+layout_mode = 2
 
 [node name="Start" type="Button" parent="VBoxContainer"]
 layout_mode = 2

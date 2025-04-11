@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=2 format=3 uid="uid://b0tvvdft3irua"]
+
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_7061c"]
+
+[resource]
+script = ExtResource("1_7061c")
+id = "shuttle"
+max_speed = 300
+accel = 300
+turn = 45
+name = "Shuttle"
+make = "Terran"
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

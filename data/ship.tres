@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://fm50dvt552j8"]
+[gd_resource type="Resource" script_class="ShipData" load_steps=2 format=3 uid="uid://fm50dvt552j8"]
 
 [ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_26vou"]
 
