@@ -50,6 +50,12 @@ func _ready():
 	add_to_group("radar")
 	add_to_group("ships")
 	
+	var graphics = data.graphics.instantiate()
+	
+	add_child(graphics)
+	graphics.name = "Graphics"
+	add_child(graphics.get_collision_shape())
+	
 	$Graphics/WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
 	
 	if player_owner:

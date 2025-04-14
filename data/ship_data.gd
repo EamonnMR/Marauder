@@ -7,6 +7,7 @@ class_name ShipData
 @export var turn: int = 45
 @export var name: String = ""
 @export var make: String = ""
+@export var graphics: PackedScene
 
 func display_name():
 	return " ".join([make, name])

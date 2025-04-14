@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ShipData" load_steps=2 format=3 uid="uid://b0tvvdft3irua"]
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://b0tvvdft3irua"]
 
+[ext_resource type="PackedScene" uid="uid://dnmi0xihtglf7" path="res://data/ship_animations/Shuttle.tscn" id="1_4nb3n"]
 [ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_7061c"]
 
 [resource]
@@ -10,4 +11,5 @@ accel = 300
 turn = 45
 name = "Shuttle"
 make = "Terran"
+graphics = ExtResource("1_4nb3n")
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

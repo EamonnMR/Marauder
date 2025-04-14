@@ -72,7 +72,8 @@ func client_handshake(alias: String, ship_pref: String):
 	print("RPC Sent")
 
 func spawn_player(player_id: int):
-	var player_ent = preload("res://entities/ships/Warship.tscn").instantiate()
+	var player_ent = preload("res://entities/Ship.tscn").instantiate()
+	player_ent.data = Data.ships[players[player_id].ship_pref]
 	player_ent.player_owner = player_id
 	player_ent.name = player_ship_name(player_id)
 	player_ent.faction = "pirate"
@@ -84,7 +85,8 @@ func spawn_player(player_id: int):
 		Client.spawn_ship.rpc_id(player, player_state)
 		
 func spawn_npc():
-	var npc_ent = preload("res://entities/ships/WarshipNpc.tscn").instantiate()
+	var npc_ent = preload("res://entities/Ship.tscn").instantiate()
+	npc_ent.data = Data.ships["warship"]
 	npc_ent.faction = "Terran"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1

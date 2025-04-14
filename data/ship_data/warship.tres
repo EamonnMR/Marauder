@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ShipData" load_steps=2 format=3 uid="uid://lsijbetv2lgg"]
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://lsijbetv2lgg"]
 
+[ext_resource type="PackedScene" uid="uid://br17la3i5d04j" path="res://data/ship_animations/Warship.tscn" id="1_i6yxi"]
 [ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_ygvvl"]
 
 [resource]
@@ -10,3 +11,4 @@ accel = 250
 turn = 25
 name = "Warship"
 make = "Terran"
+graphics = ExtResource("1_i6yxi")
