@@ -22,11 +22,11 @@ data = ExtResource("2_gr875")
 mesh = ExtResource("2_h2sfx")
 surface_material_override/0 = SubResource("StandardMaterial3D_gr875")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
-shape = SubResource("ConvexPolygonShape3D_gr875")
-
-[node name="WeaponSlot" parent="." index="3" instance=ExtResource("3_wf5bb")]
+[node name="WeaponSlot" parent="Graphics" index="0" instance=ExtResource("3_wf5bb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1059, 0, 0)
 
-[node name="Weapon" parent="WeaponSlot" index="0" instance=ExtResource("4_h2sfx")]
+[node name="Weapon" parent="Graphics/WeaponSlot" index="0" instance=ExtResource("4_h2sfx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1059, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+shape = SubResource("ConvexPolygonShape3D_gr875")

@@ -4,6 +4,9 @@
 
 [resource]
 script = ExtResource("1_26vou")
+id = ""
 max_speed = 200
 accel = 250
 turn = 25
+name = ""
+make = ""

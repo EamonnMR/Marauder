@@ -13,7 +13,7 @@ func _process(delta):
 func _ready():
 	var children = get_children()
 	if children:
-		get_node("../").add_weapon(children[0])
+		get_node("../../").add_weapon(children[0])
 	
 	#if turret:
 		#var controller: PackedScene = preload("res://component/controllers/turret_controller.tscn")
@@ -26,7 +26,7 @@ func remove_weapon():
 
 func add_weapon(weapon: Node):
 	add_child(weapon)
-	get_node("../").add_weapon(weapon)
+	get_node("../../").add_weapon(weapon)
 
 func get_weapon():
 	return get_children()[0]

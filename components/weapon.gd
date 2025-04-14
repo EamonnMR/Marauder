@@ -12,7 +12,7 @@ var iff: IffProfile
 
 var type: String
 
-@onready var parent = get_node("../../")
+@onready var parent = get_node("../../../")
 
 @export var projectile_scene: PackedScene
 @export var burst_count = 0
@@ -152,7 +152,10 @@ func _create_projectile():
 	#
 	if new_projectile and world_projectile:
 		projectile.global_transform = global_transform
+		# TODO: Reset projectile scale
 		Client.system().add_child(projectile)
+		projectile.scale = Vector3(1,1,1)
+
 	else:
 		get_node("../").add_child(projectile)
 	return projectile

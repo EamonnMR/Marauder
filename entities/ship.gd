@@ -50,7 +50,7 @@ func _ready():
 	add_to_group("radar")
 	add_to_group("ships")
 	
-	$WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
+	$Graphics/WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
 	
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()
@@ -128,7 +128,7 @@ func _physics_process(delta):
 
 func handle_shooting():
 	if $Controller.shooting:
-		$WeaponSlot/Weapon.try_shoot()
+		$Graphics/WeaponSlot/Weapon.try_shoot()
 		#if chain_fire_mode:
 			#$ChainFireManager.shoot_primary()
 		#else:
