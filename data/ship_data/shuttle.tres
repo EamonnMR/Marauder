@@ -12,4 +12,6 @@ turn = 45
 name = "Shuttle"
 make = "Terran"
 graphics = ExtResource("1_4nb3n")
+max_shields = 30.0
+max_armor = 40.0
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://bsayia4jymkew"]
+
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_gfqyq"]
+[ext_resource type="PackedScene" uid="uid://bjx4mc6vmcegu" path="res://data/ship_animations/Cruiser.tscn" id="1_v1i3b"]
+
+[resource]
+script = ExtResource("1_gfqyq")
+id = "cruiser"
+max_speed = 300
+accel = 300
+turn = 45
+name = "Cruiser"
+make = "Calderan"
+graphics = ExtResource("1_v1i3b")
+max_shields = 800.0
+max_armor = 750.0
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

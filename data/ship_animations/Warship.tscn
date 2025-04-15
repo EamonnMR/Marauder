@@ -4,18 +4,23 @@
 [ext_resource type="ArrayMesh" uid="uid://cvyj1x60yfygw" path="res://assets/eamonn/warship/warship.obj" id="2_5f7vf"]
 [ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_bua3w"]
 [ext_resource type="PackedScene" uid="uid://cqpcp7mvknf5" path="res://components/Weapon.tscn" id="3_5f7vf"]
-[ext_resource type="Material" uid="uid://cbgs55wiyarwq" path="res://data/ship_animations/Warship.tres" id="3_h2js6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5f7vf"]
+resource_name = "Material"
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+metallic = 0.5
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_h2js6"]
 points = PackedVector3Array(-2.06889, 8.82601, 22.5997, -22.9304, -4.10899, -21.2483, -22.724, 4.60516, -21.0576, 60.6955, -6.38834, -4.03438, -57.2411, -15.9016, 9.28041, -57.2411, 20.2411, -5.93841, 53.0914, 10.7278, -9.73753, 53.0914, -15.9016, 5.47683, 53.0914, 14.5357, 7.37639, -57.2411, -19.7052, -5.93841, -3.9759, -10.1919, -23.0613, -57.2411, 18.3393, 7.37192, -3.9759, -10.1919, 22.5997, -3.9759, 10.7278, -23.0613, 53.0914, -15.9016, -5.93841, -24.9906, 20.66, -7.31674, -24.0415, -19.3443, 8.29493, -57.2411, -12.098, -11.646, 53.0914, -12.098, 9.28041, -21.2405, 8.17103, 20.8524, -23.6486, 19.5573, 8.15458, 31.0921, 16.774, -7.17499, -61.0432, 14.5357, -5.93841, -57.2411, 12.6339, 11.1844, -23.5279, -18.9222, -8.57302, -57.2411, 14.5357, -9.742, -61.0432, -15.9016, 5.47683, -3.9759, 10.7278, 22.5997, -57.2411, -12.098, 11.1844, 60.6955, 6.92422, 3.5728, 53.0914, -13.9998, -7.8335, 31.3214, 16.895, 6.76432)
 
 [node name="MeshGraphics" instance=ExtResource("1_43wt6")]
 mesh = ExtResource("2_5f7vf")
-surface_material_override/0 = ExtResource("3_h2js6")
+surface_material_override/0 = SubResource("StandardMaterial3D_5f7vf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
 shape = SubResource("ConvexPolygonShape3D_h2js6")
 
 [node name="WeaponSlot" parent="." index="1" instance=ExtResource("2_bua3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.6298, 0, 0)
 
 [node name="Weapon" parent="WeaponSlot" index="0" instance=ExtResource("3_5f7vf")]

@@ -8,6 +8,8 @@ class_name ShipData
 @export var name: String = ""
 @export var make: String = ""
 @export var graphics: PackedScene
+@export var max_shields: int = 10
+@export var max_health: int = 10
 
 func display_name():
 	return " ".join([make, name])

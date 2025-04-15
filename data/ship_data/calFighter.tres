@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://bjp6j7wkblivp"]
+
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_213wk"]
+[ext_resource type="PackedScene" uid="uid://cllgp8h23470i" path="res://data/ship_animations/CalFighter.tscn" id="1_ybulp"]
+
+[resource]
+script = ExtResource("1_213wk")
+id = ""
+max_speed = 500.0
+accel = 700.0
+turn = 70.0
+name = "Fighter"
+make = "Calderan"
+graphics = ExtResource("1_ybulp")
+max_shields = 60.0
+max_armor = 40.0
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

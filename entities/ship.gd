@@ -56,6 +56,9 @@ func _ready():
 	graphics.name = "Graphics"
 	add_child(graphics.get_collision_shape())
 	
+	$Health.max_health = data.max_health
+	$Health.max_shields = data.max_shields
+	
 	$Graphics/WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
 	
 	if player_owner:

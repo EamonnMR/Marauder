@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjx4mc6vmcegu"]
+
+[ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="1_2ayds"]
+[ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_15tex"]
+[ext_resource type="PackedScene" uid="uid://cqpcp7mvknf5" path="res://components/Weapon.tscn" id="3_r6md8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_2ayds"]
+size = Vector3(80, 20, 55)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_a8itj"]
+data = PackedVector3Array(-40, 10, 27.5, 40, 10, 27.5, -40, -10, 27.5, 40, 10, 27.5, 40, -10, 27.5, -40, -10, 27.5, 40, 10, -27.5, -40, 10, -27.5, 40, -10, -27.5, -40, 10, -27.5, -40, -10, -27.5, 40, -10, -27.5, 40, 10, 27.5, 40, 10, -27.5, 40, -10, 27.5, 40, 10, -27.5, 40, -10, -27.5, 40, -10, 27.5, -40, 10, -27.5, -40, 10, 27.5, -40, -10, -27.5, -40, 10, 27.5, -40, -10, 27.5, -40, -10, -27.5, 40, 10, 27.5, -40, 10, 27.5, 40, 10, -27.5, -40, 10, 27.5, -40, 10, -27.5, 40, 10, -27.5, -40, -10, 27.5, 40, -10, 27.5, -40, -10, -27.5, 40, -10, 27.5, 40, -10, -27.5, -40, -10, -27.5)
+
+[node name="MeshGraphics" instance=ExtResource("1_2ayds")]
+mesh = SubResource("BoxMesh_2ayds")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
+shape = SubResource("ConcavePolygonShape3D_a8itj")
+
+[node name="WeaponSlot" parent="." index="1" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.0674, 0, 0)
+
+[node name="Weapon" parent="WeaponSlot" index="0" instance=ExtResource("3_r6md8")]
