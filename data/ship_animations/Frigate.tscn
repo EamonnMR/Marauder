@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ery5bjuixywl"]
+[gd_scene load_steps=5 format=3 uid="uid://ery5bjuixywl"]
 
 [ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="1_f1d2i"]
 [ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_lkgt7"]
-[ext_resource type="PackedScene" uid="uid://cqpcp7mvknf5" path="res://components/Weapon.tscn" id="3_vabbm"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_f1d2i"]
 size = Vector3(100, 16, 16)
@@ -17,6 +16,3 @@ mesh = SubResource("BoxMesh_f1d2i")
 shape = SubResource("ConvexPolygonShape3D_844x0")
 
 [node name="WeaponSlot" parent="." index="1" instance=ExtResource("2_lkgt7")]
-
-[node name="Weapon" parent="WeaponSlot" index="0" instance=ExtResource("3_vabbm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.9814, 0, 0)

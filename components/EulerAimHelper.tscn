@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://5s6qjwrt6wrn"]
+
+[ext_resource type="Script" uid="uid://dvt81r0byo3cr" path="res://components/euler_aim_helper.gd" id="1_aqhtr"]
+
+[node name="EulerAimHelper" type="RemoteTransform3D"]
+script = ExtResource("1_aqhtr")

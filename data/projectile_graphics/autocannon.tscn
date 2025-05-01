@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvvt5kyhpiatf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qsmxv"]
+metallic = 1.0
+metallic_specular = 1.0
+emission_enabled = true
+emission = Color(0.450262, 0.367729, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_c6ath"]
+material = SubResource("StandardMaterial3D_qsmxv")
+top_radius = 0.1
+bottom_radius = 0.4
+
+[node name="Autocannon" type="MeshInstance3D"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_c6ath")

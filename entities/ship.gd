@@ -38,6 +38,7 @@ var warp_speed_factor = 10
 
 var radar_size: int = 2
 
+var target: Node3D
 
 signal destroyed
 signal weapons_changed
@@ -59,8 +60,7 @@ func _ready():
 	$Health.max_health = data.max_health
 	$Health.max_shields = data.max_shields
 	
-	$Graphics/WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
-	
+	$Graphics/WeaponSlot.add_weapon(preload("res://data/weapon_data/Plasma.tres"))
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()
 		faction = "player_owned"
@@ -69,22 +69,22 @@ func _ready():
 			Client.player_ent_updated.emit(self)
 			#$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
 			#Client.ui_inventory.assign($Inventory, "Your inventory")
-
 		add_to_group("players")
 		ready_player_controller()
 		max_speed = max_speed * 1.25
 	else:
+		input_event.connect(_on_input_event_npc)
 		add_to_group("npcs")
 		add_to_group("faction-" + str(faction))
 		ready_npc_controller()
-	
-	return
+
+
 	#if self == Client.player:
+		#pass
 		## add_child(preload("res://component/InteractionRange.tscn").instantiate())
 		#if skin != "":
 			#$Graphics.set_skin_data(Data.skins[skin])
 	#else:
-		#input_event.connect(_on_input_event_npc)
 		#$Graphics.set_skin_data(Data.skins[Data.factions[faction].skin])
 		#var weapon_config = Data.ships[type].weapon_config
 		#for weapon_slot in weapon_config:
@@ -137,12 +137,12 @@ func _physics_process(delta):
 
 func handle_shooting():
 	if $Controller.shooting:
-		$Graphics/WeaponSlot/Weapon.try_shoot()
+		#$Graphics/WeaponSlot/Weapon.try_shoot()
 		#if chain_fire_mode:
 			#$ChainFireManager.shoot_primary()
 		#else:
-			#for weapon in primary_weapons:
-				#weapon.try_shoot()
+		for weapon in primary_weapons:
+			weapon.try_shoot()
 #
 	#if $Controller.shooting_secondary:
 		#for weapon in secondary_weapons:
@@ -202,7 +202,8 @@ func _on_input_event_npc(_camera, event, _click_position, _camera_normal, _shape
 	if mouse_click and mouse_click.button_index == 1 and mouse_click.pressed:
 		Client.update_player_target_ship(self)
 	else:
-		Client.mouseover_entered(self)
+		pass
+		#Client.mouseover_entered(self)
 
 func serialize_player():
 	return {
@@ -284,3 +285,6 @@ func do_lerp_update():
 		rotation.y = lerp_helper.calc_angle("rotation")
 		$Health.health = lerp_helper.calc_numeric("health")
 		$Health.shields = lerp_helper.calc_numeric("shields")
+
+func set_target(target: Node3D):
+	self.target = target

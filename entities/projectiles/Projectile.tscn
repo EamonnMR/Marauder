@@ -1,27 +1,26 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7tdtoyj82g47"]
 
 [ext_resource type="Script" uid="uid://b34844wo075m3" path="res://entities/projectiles/projectile.gd" id="1_avawr"]
+[ext_resource type="PackedScene" uid="uid://bvvt5kyhpiatf" path="res://data/projectile_graphics/autocannon.tscn" id="2_j1bw3"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_avawr"]
-radius = 2.0
-height = 48.0
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_avawr"]
-points = PackedVector3Array(1.89271, 7.25435, 0.20484, -1.8433, -9.05182, -0.134164, -0.979955, 22.9809, 0.646328, 0.646328, -16.4704, 1.86659, 1.45969, -11.9975, -1.79375, -0.573493, 17.2854, -1.79375, -0.979955, -19.7257, -1.38685, -1.38685, 11.59, 1.86659, 1.45969, 16.0677, 1.45969, 1.45969, 19.3182, -0.979955, -1.38685, -16.8779, 1.45969, 1.45969, -20.5407, 0.646328, -1.79375, 12.8124, -1.38685, -1.38685, -12.8124, -1.79375, 1.86659, -14.4377, 1.05279, 1.86659, 11.59, -1.38685, -1.79375, 11.9975, 1.45969, -0.979955, -22.9809, 0.646328, 0.646328, -22.9809, -0.979955, 1.05279, 14.4377, 1.86659, 1.86659, -14.8452, -0.979955, -1.79375, -16.0677, -0.979955, 1.05279, 22.9809, -0.573493, 0.646328, 20.5407, 1.45969, -0.979955, 22.1659, -0.979955, 1.05279, 15.6602, -1.79375, 1.86659, 16.4704, 0.646328, -1.79375, -11.9975, 1.45969, -1.38685, -11.59, 1.86659, -1.79375, 17.2854, 0.646328, 0.646328, -22.5734, 1.05279, 0.646328, -17.2854, -1.79375)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_j1bw3"]
+points = PackedVector3Array(0.409443, -0.825347, 0.0284907, -0.415792, -1.01587, -0.130078, -0.415792, -1.01587, 0.123729, -0.130078, 1.01587, -0.0348398, 0.123729, -1.01587, -0.415792, 0.155475, -1.01587, 0.409443, 0.123729, 1.01587, -0.0665859, -0.0665859, 1.01587, 0.123729, -0.225316, -0.952232, 0.377697, -0.130078, -0.952232, -0.415792, 0.377697, -1.01587, -0.225316, 0.123729, 0.952232, 0.0919827, -0.0665859, 0.984052, -0.130078, 0.314205, -0.984052, 0.314205, -0.320554, -0.888789, -0.288808, -0.0348398, -0.825347, 0.409443, 0.0919827, 0.92061, -0.130078, 0.282459, -0.856969, -0.320554, -0.384046, -0.984052, 0.218967, 0.409443, -1.01587, 0.155475, 0.0602367, 1.01587, 0.123729, -0.130078, 0.92061, 0.0919827, 0.0602367, -0.888789, -0.415792, 0.409443, -0.92061, -0.130078, -0.415792, -0.888789, 0.0602367, -0.161824, -1.01587, 0.409443, -0.257062, -1.01587, -0.3523, -0.288808, -0.698264, 0.282459, -0.415792, -0.952232, -0.130078, -0.130078, 0.888789, -0.0983319, -0.257062, -0.92061, -0.3523, 0.218967, -0.984052, -0.384046)
 
 [node name="Projectile" type="CharacterBody3D"]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_avawr")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("SphereMesh_avawr")
+[node name="Graphics" parent="." instance=ExtResource("2_j1bw3")]
 
 [node name="Area3D" type="Area3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_avawr")
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_j1bw3")
+
+[node name="Lifetime" type="Timer" parent="."]
+autostart = true
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="Lifetime" to="." method="_on_Lifetime_timeout"]

@@ -13,5 +13,5 @@ name = "Fighter"
 make = "Calderan"
 graphics = ExtResource("1_ybulp")
 max_shields = 60.0
-max_armor = 40.0
+max_health = 10
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

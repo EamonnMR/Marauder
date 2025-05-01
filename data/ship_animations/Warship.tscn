@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://br17la3i5d04j"]
+[gd_scene load_steps=6 format=3 uid="uid://br17la3i5d04j"]
 
 [ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="1_43wt6"]
 [ext_resource type="ArrayMesh" uid="uid://cvyj1x60yfygw" path="res://assets/eamonn/warship/warship.obj" id="2_5f7vf"]
 [ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_bua3w"]
-[ext_resource type="PackedScene" uid="uid://cqpcp7mvknf5" path="res://components/Weapon.tscn" id="3_5f7vf"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5f7vf"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bua3w"]
 resource_name = "Material"
 albedo_color = Color(0.8, 0.8, 0.8, 1)
 metallic = 0.5
@@ -15,12 +14,10 @@ points = PackedVector3Array(-2.06889, 8.82601, 22.5997, -22.9304, -4.10899, -21.
 
 [node name="MeshGraphics" instance=ExtResource("1_43wt6")]
 mesh = ExtResource("2_5f7vf")
-surface_material_override/0 = SubResource("StandardMaterial3D_5f7vf")
+surface_material_override/0 = SubResource("StandardMaterial3D_bua3w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
 shape = SubResource("ConvexPolygonShape3D_h2js6")
 
 [node name="WeaponSlot" parent="." index="1" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.6298, 0, 0)
-
-[node name="Weapon" parent="WeaponSlot" index="0" instance=ExtResource("3_5f7vf")]

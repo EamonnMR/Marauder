@@ -5,6 +5,7 @@
 
 [node name="Ship" type="CharacterBody3D"]
 collision_mask = 0
+input_capture_on_drag = true
 script = ExtResource("1_udskb")
 
 [node name="CameraFollower" type="RemoteTransform3D" parent="."]

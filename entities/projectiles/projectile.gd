@@ -1,28 +1,26 @@
 extends CharacterBody3D
 
-var iff: IffProfile
-var damage: Health.DamageVal = Health.DamageVal.new(1, 1, false)
-#var splash_damage: Health.DamageVal
-var splash_radius: int
 var linear_velocity = Vector2()
-var initial_velocity = 1400
+
+@export var data: WeaponData
+var iff: IffProfile
+@onready var damage: Health.DamageVal = data.damage()
+@onready var splash_damage: Health.DamageVal = data.splash_damage()
+
 var explode_on_timeout: bool = true
-var damage_falloff: bool = false
-var fade: bool = false
 var impact: float
 var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
-@export var explosion: PackedScene
 
 
 func _ready():
-	linear_velocity += Vector2(initial_velocity * Util.SPEED_FACTOR, 0).rotated(-rotation.y)
-	
-	if fade:
-		material = $MeshInstance3D.mesh.surface_get_material(0).duplicate(true)
-		$MeshInstance3D.set_surface_override_material(0, material)
+	linear_velocity += Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y)
+	$Lifetime.wait_time = (Util.TIME_FACTOR * data.decay) / max(data.energy_damage, data.mass_damage)
+	if data.fade:
+		material = $Graphics.mesh.surface_get_material(0).duplicate(true)
+		$Graphics.set_surface_override_material(0, material)
 		
 func _process(delta):
-	if fade:
+	if data.fade:
 		material.albedo_color.a = _fade_factor()
 
 func _physics_process(_delta):
@@ -32,21 +30,21 @@ func _physics_process(_delta):
 
 
 func get_falloff_damage(damage) -> Health.DamageVal:
-	if damage_falloff:
+	if data.fade:
 		return damage.faded(_fade_factor())
 	else:
 		return damage
 
-func get_falloff_impact(impact) -> int:
-	if damage_falloff:
-		return impact * _fade_factor()
+func get_falloff_impact() -> int:
+	if data.fade:
+		return data.impact * _fade_factor()
 	else:
-		return impact
+		return data.impact
 		
 func _fade_factor():
-	return $Timer.time_left / $Timer.wait_time
+	return $Lifetime.time_left / $Lifetime.wait_time
 
-func _on_Timer_timeout():
+func _on_Lifetime_timeout():
 	if explode_on_timeout:
 		detonate()
 	queue_free()
@@ -62,11 +60,11 @@ func owner():
 	return null
 
 func detonate():
-	if explosion:
+	if data.explosion:
 		pass
 		#Explosion.make_explo(explosion, self)
 	#if splash_damage:
-		#for data in Util.sphere_query(get_world_3d(), global_transform, splash_radius, $Area3D.collision_mask, $Sphere/SphereShapeHolder.shape):
+		#for data in Util.sphere_query(get_world_3d(), global_transform, data.splash_radius, $Area3D.collision_mask, $Sphere/SphereShapeHolder.shape):
 			#pass
 			#Health.do_damage(data.collider, splash_damage, owner())
 
@@ -91,6 +89,6 @@ func _on_area_3d_body_entered(body):
 		if Util.is_server():
 			Health.do_damage(body, get_falloff_damage(damage), owner())
 			if impact > 0 and body.has_method("receive_impact"):
-				body.receive_impact(linear_velocity.normalized() * get_falloff_impact(impact))
+				body.receive_impact(linear_velocity.normalized() * get_falloff_impact())
 		detonate()
 		queue_free()

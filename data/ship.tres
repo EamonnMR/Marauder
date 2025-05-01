@@ -10,3 +10,5 @@ accel = 250
 turn = 25
 name = ""
 make = ""
+max_shields = 10
+max_health = 10

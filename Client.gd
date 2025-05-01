@@ -5,6 +5,7 @@ signal universe_loaded
 signal player_ent_updated(entity: Node)
 
 var playing = false
+var player_ent: Spaceship
 
 func system() -> StarSystem:
 	# Client only cares about one system - the one the player is in
@@ -25,13 +26,16 @@ func init(host: String, alias: String, ship_pref: String):
 	)
 	
 	DisplayServer.window_set_title("Marauder - Client")
+	player_ent_updated.connect(update_player)
 	playing = true 
 
 func init_local(alias: String, ship_pref: String):
 	universe_loaded.connect(func handshake_closure():
 		Server.client_handshake(alias, ship_pref)
 	)
+	player_ent_updated.connect(update_player)
 	playing = true
+	
 
 	
 @rpc("reliable", "authority")
@@ -76,3 +80,11 @@ func delay_until(appointed_time):
 		print("Actual Delay: ", actual_delay)
 	else:
 		print("Arrived late!")
+		
+func update_player(player_ent):
+	self.player_ent = player_ent
+		
+func update_player_target_ship(target):
+	if is_instance_valid(player_ent):
+		player_ent.set_target(target)
+	

@@ -2,12 +2,15 @@ extends Node
 
 var PORT = 2600
 
-var SPEED_FACTOR = 47.0/100.0 # Meters / second
+var LEGACY_FPS = 47.0 # 30?
+
+var SPEED_FACTOR = LEGACY_FPS/100.0 # Meters / second
 
 var ACCEL_FACTOR = 1/1.66 # Meters / second / second
 
 var TURN_FACTOR = deg_to_rad(3) # Radians / second
 
+var TIME_FACTOR = 1/LEGACY_FPS
 
 func anglemod(angle: float) -> float:
 	return fmod(angle, PI * 2)
@@ -90,3 +93,32 @@ enum DISPOSITION {
 	NEUTRAL,
 	ABANDONED
 }
+
+enum QUADRANT {
+	FRONT,
+	LEFT,
+	RIGHT,
+	REAR
+}
+
+
+func relative_quadrant(position: Vector2, rotation: float, subject: Vector2):
+	var rel_position: Vector2 = subject - position
+	rel_position = rel_position.rotated(rotation)
+	var angle = anglemod(rel_position.angle() + PI * 2)
+	print("rel_position", rel_position, " angle: ", rad_to_deg(angle))
+	if angle < deg_to_rad(45):
+		print("FRONT")
+		return QUADRANT.FRONT
+	elif angle < deg_to_rad(135):
+		print("RIGHT")
+		return QUADRANT.RIGHT
+	elif angle < deg_to_rad(225):
+		print("REAR")
+		return QUADRANT.REAR
+	elif angle < deg_to_rad(315):
+		print("LEFT")
+		return QUADRANT.LEFT
+	else:
+		print("FRONT")
+		return QUADRANT.FRONT
