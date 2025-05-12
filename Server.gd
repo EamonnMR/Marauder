@@ -90,7 +90,7 @@ func spawn_npc():
 	npc_ent.faction = "Terran"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1
-	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
+	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5000,5000), randf_range(-5000,5000)))
 	universe().get_node("System").add_child(npc_ent)
 	# Sync
 	var state = npc_ent.marshal_spawn_state()

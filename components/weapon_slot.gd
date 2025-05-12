@@ -31,8 +31,8 @@ func do_turret_aim():
 		$Turret.rotation.y = aim.y + PI/2
 		$Turret/Pivot.rotation.x = aim.x
 	else:
-		$Turret.rotation.y = 0
-		$Turret/Pivot.rotation.z = 0
+		$Turret.rotation.y = 0 #deg_to_rad(90)
+		$Turret/Pivot.rotation.z = 0# deg_to_rad(90)
 
 func do_front_quadrant_aim():
 	if is_instance_valid(parent.target) and target_quadrant() == Util.QUADRANT.FRONT:

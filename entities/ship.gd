@@ -60,7 +60,7 @@ func _ready():
 	$Health.max_health = data.max_health
 	$Health.max_shields = data.max_shields
 	
-	$Graphics/WeaponSlot.add_weapon(preload("res://data/weapon_data/Plasma.tres"))
+	$Graphics/WeaponSlot.add_weapon(preload("res://data/weapon_data/PlasmaTurret.tres"))
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()
 		faction = "player_owned"

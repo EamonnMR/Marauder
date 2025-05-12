@@ -20,5 +20,5 @@ fade = true
 impact = 1.0
 reload = 20.0
 decay = 25.0
-guidance_type = 2
+guidance_type = 3
 metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"

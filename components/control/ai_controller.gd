@@ -16,7 +16,6 @@ enum STATES {
 
 #export var engagement_range_radius = 100
 
-var target
 var path_target
 var lead_velocity: float
 var state = STATES.IDLE
@@ -45,8 +44,8 @@ func _ready():
 	
 
 func _verify_target():
-	if target == null or not is_instance_valid(target):
-		#print("No target", target)
+	if parent.target == null or not is_instance_valid(parent.target):
+		#print("No parent.target", parent.target)
 		change_state_idle()
 		return false
 	return true
@@ -98,7 +97,7 @@ func process_state_attack(delta):
 	
 	populate_rotation_impulse_and_ideal_face(
 		#_get_target_lead_position(lead_velocity, target),
-		Util.flatten_25d(target.global_transform.origin),
+		Util.flatten_25d(parent.target.global_transform.origin),
 		delta
 	)
 	shooting = _facing_within_margin(shoot_margin)
@@ -108,7 +107,7 @@ func process_state_attack(delta):
 func process_state_persue(delta):
 	if not _verify_target():
 		return
-	populate_rotation_impulse_and_ideal_face(Util.flatten_25d(target.global_transform.origin), delta)
+	populate_rotation_impulse_and_ideal_face(Util.flatten_25d(parent.target.global_transform.origin), delta)
 	shooting = false
 	print("Rotation Impulse: ", rotation_impulse)
 	thrusting = _facing_within_margin(accel_margin)
@@ -189,7 +188,7 @@ func rethink_state_attack():
 
 func change_state_idle():
 	state = STATES.IDLE
-	target = null
+	parent.target = null
 	thrusting = false
 	shooting = false
 	rotation_impulse = 0
@@ -202,7 +201,7 @@ func change_state_persue(target):
 		return
 	
 	state = STATES.PERSUE
-	self.target = target
+	self.parent.target = target
 	#if target == Client.player:
 		#parent.add_to_group("npcs-hostile")
 	#else:
@@ -243,7 +242,7 @@ func _on_engagement_range_body_entered(body):
 	
 	bodies_in_engagement_range.append(body)
 	
-	if body == target and state == STATES.PERSUE:
+	if body == parent.target and state == STATES.PERSUE:
 		#print("Reached target")
 		change_state_attack()
 	
@@ -254,9 +253,9 @@ func _on_engagement_range_body_exited(body):
 	
 	bodies_in_engagement_range.erase(body)
 	
-	if body == target and state == STATES.ATTACK:
+	if body == parent.target and state == STATES.ATTACK:
 		#print("Target left engagement range")
-		change_state_persue(target)
+		change_state_persue(parent.target)
 
 func _on_damage_taken(source):
 	match state:
@@ -264,4 +263,4 @@ func _on_damage_taken(source):
 			change_state_persue(source)
 
 func get_target():
-	return target
+	return parent.target

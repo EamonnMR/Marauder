@@ -2,6 +2,7 @@ extends Resource
 class_name WeaponData
 
 enum GUIDANCE_TYPE {
+	FIXED,
 	TURRET,
 	PDC,
 	FRONT_QUADRANT,
