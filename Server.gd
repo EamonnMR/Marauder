@@ -18,6 +18,7 @@ class PlayerRecord:
 	var id: int
 	var alias: String
 	var ship_pref: String
+	var player_entity: Spaceship
 	
 	func _init(id, alias, ship_pref):
 		self.id = id
@@ -79,6 +80,7 @@ func spawn_player(player_id: int):
 	player_ent.faction = "pirate"
 	player_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
 	universe().get_node("System").add_child(player_ent)
+	players[player_id].player_entity = player_ent
 	# Sync
 	var player_state = player_ent.marshal_spawn_state()
 	for player in get_rpc_player_ids():
@@ -105,6 +107,9 @@ func get_sender() -> int:
 	if rid == 0:
 		return 1
 	return rid
+
+func get_sender_data() -> PlayerRecord:
+	return players[get_sender()]
 	
 func peer_disconnected(peer_id):
 	if players[peer_id]:
@@ -127,3 +132,10 @@ func get_rpc_player_ids():
 	var keys = Server.players.keys()
 	keys.erase(1)
 	return keys
+
+@rpc("reliable", "any_peer", "call_remote")
+func update_player_target_ship(target):
+	var sender: PlayerRecord = get_sender_data()
+	var target_ent = get_node(target)
+	if target is Spaceship and is_instance_valid(sender.player_entity):
+		sender.player_entity.server_set_target(target)

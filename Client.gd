@@ -4,6 +4,7 @@ extends Node
 signal universe_loaded
 signal player_ent_updated(entity: Node)
 
+
 var playing = false
 var player_ent: Spaceship
 
@@ -80,11 +81,15 @@ func delay_until(appointed_time):
 		print("Actual Delay: ", actual_delay)
 	else:
 		print("Arrived late!")
-		
+
 func update_player(player_ent):
 	self.player_ent = player_ent
-		
-func update_player_target_ship(target):
-	if is_instance_valid(player_ent):
-		player_ent.set_target(target)
 	
+	player_ent.target_updated.connect(update_player_target)
+	
+func update_player_target(target_ent):
+	self.player_target = target_ent
+	# TODO: Update display stuff
+
+func update_player_target_ship(target):
+	Server.update_player_target_ship.rpc(target.get_path())

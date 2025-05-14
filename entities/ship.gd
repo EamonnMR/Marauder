@@ -42,6 +42,7 @@ var target: Node3D
 
 signal destroyed
 signal weapons_changed
+signal target_updated(new_target)
 
 func _ready():
 	#if not Data.ships[type]["screen_box_side_length"]:
@@ -253,7 +254,7 @@ func marshal_spawn_state() -> Dictionary:
 	return {
 		"name": name,
 		"origin": transform.origin,
-		"#path": get_scene_file_path(),
+		"ai_con#path": get_scene_file_path(),
 		"player_owner": player_owner,
 		"health": $Health.marshal_spawn_state()
 	}
@@ -286,5 +287,17 @@ func do_lerp_update():
 		$Health.health = lerp_helper.calc_numeric("health")
 		$Health.shields = lerp_helper.calc_numeric("shields")
 
-func set_target(target: Node3D):
-	self.target = target
+func server_set_target(new_target: Node3D):
+	set_target(new_target)
+	for player in Server.get_rpc_player_ids():
+		set_target.rpc_id(player, new_target.get_path(), Server.time())
+
+@rpc("reliable", "authority")
+func client_set_target(new_target_path, appointed_time):
+	Client.delay_until(appointed_time)
+	target = get_node(new_target_path)
+	set_target(target)
+	
+func set_target(new_target_path):
+	target = get_node(new_target_path)
+	target_updated.emit(target)

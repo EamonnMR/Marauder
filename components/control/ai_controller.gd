@@ -188,7 +188,7 @@ func rethink_state_attack():
 
 func change_state_idle():
 	state = STATES.IDLE
-	parent.target = null
+	parent.server_set_target(null)
 	thrusting = false
 	shooting = false
 	rotation_impulse = 0
@@ -201,7 +201,7 @@ func change_state_persue(target):
 		return
 	
 	state = STATES.PERSUE
-	self.parent.target = target
+	self.parent.server_set_target(target)
 	#if target == Client.player:
 		#parent.add_to_group("npcs-hostile")
 	#else:

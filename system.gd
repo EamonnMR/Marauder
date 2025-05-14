@@ -2,6 +2,8 @@ extends Node
 
 class_name StarSystem
 
+var max_npcs = 5
+
 ### Join Functions
 
 func marshal_network_state() -> Dictionary:
