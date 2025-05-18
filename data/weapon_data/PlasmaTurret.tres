@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("3_0hq3q")
+id = "plasma_turret"
 speed = 1200.0
 projectile_scene = ExtResource("2_ff1uc")
 graphics = ExtResource("1_fj81m")

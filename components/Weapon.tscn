@@ -1,12 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqpcp7mvknf5"]
+[gd_scene load_steps=3 format=3 uid="uid://cqpcp7mvknf5"]
 
 [ext_resource type="Script" uid="uid://dvt3wxnqhb0j2" path="res://components/weapon.gd" id="1_vtigp"]
-[ext_resource type="Resource" uid="uid://cita77ysysgkf" path="res://data/weapon_data/Plasma.tres" id="2_bxwjv"]
 [ext_resource type="PackedScene" uid="uid://cg1y745ai0rlh" path="res://data/weapon_graphics/autocannon.tscn" id="3_bxwjv"]
 
 [node name="Weapon" type="Node3D"]
 script = ExtResource("1_vtigp")
-data = ExtResource("2_bxwjv")
 
 [node name="Cooldown" type="Timer" parent="."]
 wait_time = 0.5

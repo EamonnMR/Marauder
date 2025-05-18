@@ -10,9 +10,8 @@ var projectile
 
 var iff: IffProfile
 
-var type: String
-
-@export var data: WeaponData
+@export var type: String
+@onready var data: WeaponData = Data.weapons[type]
 
 var parent: Spaceship
 
@@ -143,7 +142,7 @@ func _create_projectile():
 
 	
 	projectile.iff = iff
-	projectile.data = data
+	projectile.type = type
 	#if "recoil" in projectile:
 		#projectile.recoil = recoil
 	#if "explode_on_timeout" in projectile:

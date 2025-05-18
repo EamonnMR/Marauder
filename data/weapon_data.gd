@@ -10,6 +10,7 @@ enum GUIDANCE_TYPE {
 	MINE
 }
 
+@export var id: String
 @export var speed: int
 @export var projectile_scene: PackedScene
 @export var graphics: PackedScene

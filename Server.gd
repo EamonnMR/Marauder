@@ -74,7 +74,7 @@ func client_handshake(alias: String, ship_pref: String):
 
 func spawn_player(player_id: int):
 	var player_ent = preload("res://entities/Ship.tscn").instantiate()
-	player_ent.data = Data.ships[players[player_id].ship_pref]
+	player_ent.type = players[player_id].ship_pref
 	player_ent.player_owner = player_id
 	player_ent.name = player_ship_name(player_id)
 	player_ent.faction = "pirate"
@@ -88,7 +88,7 @@ func spawn_player(player_id: int):
 		
 func spawn_npc():
 	var npc_ent = preload("res://entities/Ship.tscn").instantiate()
-	npc_ent.data = Data.ships["warship"]
+	npc_ent.type = "warship"
 	npc_ent.faction = "Terran"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1
@@ -135,6 +135,7 @@ func get_rpc_player_ids():
 
 @rpc("reliable", "any_peer", "call_remote")
 func update_player_target_ship(target):
+	breakpoint
 	var sender: PlayerRecord = get_sender_data()
 	var target_ent = get_node(target)
 	if target is Spaceship and is_instance_valid(sender.player_entity):

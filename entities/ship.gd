@@ -5,7 +5,7 @@ class_name Spaceship
 var faction = "terran"
 var type: String
 
-@export var data: ShipData
+@onready var data: ShipData = Data.ships[type]
 
 var skin: String
 @onready var parent: StarSystem = get_node("../")
@@ -61,7 +61,7 @@ func _ready():
 	$Health.max_health = data.max_health
 	$Health.max_shields = data.max_shields
 	
-	$Graphics/WeaponSlot.add_weapon(preload("res://data/weapon_data/PlasmaTurret.tres"))
+	$Graphics/WeaponSlot.add_weapon("plasma_turret")
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()
 		faction = "player_owned"
@@ -253,14 +253,16 @@ func receive_impact(impact: Vector2):
 func marshal_spawn_state() -> Dictionary:
 	return {
 		"name": name,
+		"type": type,
 		"origin": transform.origin,
-		"ai_con#path": get_scene_file_path(),
+		"#path": get_scene_file_path(),
 		"player_owner": player_owner,
 		"health": $Health.marshal_spawn_state()
 	}
 
 func unmarshal_spawn_state(state):
 	name = state.name
+	type = state.type
 	transform.origin = state.origin
 	player_owner = state.player_owner
 	$Health.unmarshal_spawn_state(state.health)
@@ -289,15 +291,23 @@ func do_lerp_update():
 
 func server_set_target(new_target: Node3D):
 	set_target(new_target)
+	if new_target:
+		var target_path = new_target.get_path()
+	else:
+		var target_path = ""
+
 	for player in Server.get_rpc_player_ids():
-		set_target.rpc_id(player, new_target.get_path(), Server.time())
+		client_set_target.rpc_id(player, new_target.get_path(), Server.time())
 
 @rpc("reliable", "authority")
 func client_set_target(new_target_path, appointed_time):
 	Client.delay_until(appointed_time)
-	target = get_node(new_target_path)
+	if new_target_path:
+		target = get_node(new_target_path)
+	else:
+		target = null
 	set_target(target)
 	
-func set_target(new_target_path):
-	target = get_node(new_target_path)
+func set_target(new_target):
+	target = new_target
 	target_updated.emit(target)

@@ -2,7 +2,8 @@ extends CharacterBody3D
 
 var linear_velocity = Vector2()
 
-@export var data: WeaponData
+@export var type: String
+@onready var data: WeaponData = Data.weapons[type]
 var iff: IffProfile
 @onready var damage: Health.DamageVal = data.damage()
 @onready var splash_damage: Health.DamageVal = data.splash_damage()
@@ -74,11 +75,13 @@ func marshal_spawn_state() -> Dictionary:
 		"origin": global_transform.origin,
 		"rotation": Util.flatten_rotation(self),
 		"velocity": velocity,
-		"#path": get_scene_file_path()
+		"#path": get_scene_file_path(),
+		"type": type
 	}
 
 func unmarshal_spawn_state(state):
 	name = state.name
+	type = state.type
 	transform.origin = state.origin
 	velocity = state.velocity
 	rotate_y(state.rotation)

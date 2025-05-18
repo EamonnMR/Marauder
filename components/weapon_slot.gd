@@ -3,7 +3,8 @@ extends Node3D
 class_name WeaponSlot
 
 @export var turret: bool
-@export var type: WeaponData
+@export var type: String
+@export var loaded_data: WeaponData
 #@onready var parent: Spaceship = get_node("../../")
 var parent: Spaceship
 
@@ -12,16 +13,16 @@ var weapon_graphic: Node3D
 var turret_graphic: Node3D
 var weapon: Node3D
 
-var turn = PI*2
+# var turn = PI*2
 
 func _ready():
 	parent = get_node("../../")
 	
 func _process(delta):
-	if type.is_turreted():
-		if type.guidance_type == WeaponData.GUIDANCE_TYPE.TURRET:
+	if loaded_data.is_turreted():
+		if loaded_data.guidance_type == WeaponData.GUIDANCE_TYPE.TURRET:
 			do_turret_aim()
-		elif type.guidance_type == WeaponData.GUIDANCE_TYPE.FRONT_QUADRANT:
+		elif loaded_data.guidance_type == WeaponData.GUIDANCE_TYPE.FRONT_QUADRANT:
 			do_front_quadrant_aim()
 
 func do_turret_aim():
@@ -50,15 +51,18 @@ func remove_weapon():
 	]:
 		if is_instance_valid(element):
 			element.queue_free()
-	type = null
+	type = ""
+	loaded_data = null
 
-func add_weapon(data: WeaponData):
-	type = data
+func add_weapon(type: String):
+	self.type = type
+	loaded_data = Data.weapons[type]
 	parent = get_node("../../")
 	weapon = preload("res://components/Weapon.tscn").instantiate()
+	weapon.type = type
 	weapon.parent = parent
-	weapon_graphic = data.graphics.instantiate()
-	if type.is_turreted():
+	weapon_graphic = loaded_data.graphics.instantiate()
+	if loaded_data.is_turreted():
 		#var controller = preload("res://components/TurretController.tscn").instantiate()
 		#add_child(controller)
 		#controller.name = "Controller"
