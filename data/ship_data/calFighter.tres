@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_213wk")
-id = ""
+id = "cal_fighters"
 max_speed = 500.0
 accel = 700.0
 turn = 70.0

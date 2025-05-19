@@ -7,6 +7,7 @@ func _ready():
 	print("Loading Ships")
 	process_dir("res://data/ship_data", func load_ship(path):
 		var ship_data: ShipData = load(path)
+		assert(ship_data.id != "")
 		ships[ship_data.id] = ship_data
 	)
 

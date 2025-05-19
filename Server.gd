@@ -68,7 +68,7 @@ func client_handshake(alias: String, ship_pref: String):
 	#players[sender].entity = 
 	print(players)
 	var net_state = system().marshal_network_state()
-	#Client.server_handshake.rpc_id(sender, players, net_state, time())
+	Client.server_handshake.rpc_id(sender, players, net_state, time())
 	spawn_player(sender) # TODO: Player options
 	print("RPC Sent")
 
