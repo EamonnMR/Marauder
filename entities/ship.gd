@@ -295,9 +295,10 @@ func server_set_target(new_target: Node3D):
 		var target_path = new_target.get_path()
 	else:
 		var target_path = ""
-
+	
 	for player in Server.get_rpc_player_ids():
 		client_set_target.rpc_id(player, new_target.get_path(), Server.time())
+
 
 @rpc("reliable", "authority")
 func client_set_target(new_target_path, appointed_time):

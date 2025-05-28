@@ -135,8 +135,8 @@ func get_rpc_player_ids():
 
 @rpc("reliable", "any_peer", "call_remote")
 func update_player_target_ship(target):
-	breakpoint
 	var sender: PlayerRecord = get_sender_data()
 	var target_ent = get_node(target)
-	if target is Spaceship and is_instance_valid(sender.player_entity):
-		sender.player_entity.server_set_target(target)
+
+	if target_ent is Spaceship and is_instance_valid(sender.player_entity):
+		sender.player_entity.server_set_target(target_ent)

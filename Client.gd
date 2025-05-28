@@ -7,6 +7,7 @@ signal player_ent_updated(entity: Node)
 
 var playing = false
 var player_ent: Spaceship
+var player_target = null
 
 func system() -> StarSystem:
 	# Client only cares about one system - the one the player is in
@@ -36,7 +37,6 @@ func init_local(alias: String, ship_pref: String):
 	)
 	player_ent_updated.connect(update_player)
 	playing = true
-	
 
 	
 @rpc("reliable", "authority")
@@ -92,4 +92,8 @@ func update_player_target(target_ent):
 	# TODO: Update display stuff
 
 func update_player_target_ship(target):
-	Server.update_player_target_ship.rpc(target.get_path())
+	var path = target.get_path()
+	if Util.is_local():
+		Server.update_player_target_ship(path)
+	else:
+		Server.update_player_target_ship.rpc(path)
