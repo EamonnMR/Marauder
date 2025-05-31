@@ -62,6 +62,7 @@ func _ready():
 	$Health.max_shields = data.max_shields
 	
 	$Graphics/WeaponSlot.add_weapon("plasma_turret")
+
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()
 		faction = "player_owned"
@@ -74,7 +75,6 @@ func _ready():
 		ready_player_controller()
 		max_speed = max_speed * 1.25
 	else:
-		input_event.connect(_on_input_event_npc)
 		add_to_group("npcs")
 		add_to_group("faction-" + str(faction))
 		ready_npc_controller()
@@ -197,7 +197,9 @@ func ship_destroyed():
 	call_deferred("queue_free")
 	emit_signal("destroyed")
 
-func _on_input_event_npc(_camera, event, _click_position, _camera_normal, _shape):
+func _on_input_event(_camera, event, _click_position, _camera_normal, _shape):
+	if Client.player_ent == self:
+		return
 	#https://stackoverflow.com/questions/58628154/detecting-click-touchscreen-input-on-a-3d-object-inside-godot
 	var mouse_click = event as InputEventMouseButton
 	if mouse_click and mouse_click.button_index == 1 and mouse_click.pressed:

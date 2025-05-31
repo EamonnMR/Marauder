@@ -14,4 +14,5 @@ update_scale = false
 
 [node name="Health" parent="." instance=ExtResource("3_mcdp8")]
 
+[connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="destroyed" from="Health" to="." method="_on_health_destroyed"]
