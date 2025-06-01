@@ -94,6 +94,13 @@ enum DISPOSITION {
 	ABANDONED
 }
 
+var DISPOSITION_COLORS = {
+	Util.DISPOSITION.FRIENDLY: Color(0,1,0),
+	Util.DISPOSITION.HOSTILE: Color(1,0,0),
+	Util.DISPOSITION.NEUTRAL: Color(1,1,0),
+	Util.DISPOSITION.ABANDONED: Color(0.5,0.5,0.5)
+}
+
 enum QUADRANT {
 	FRONT,
 	LEFT,
@@ -122,3 +129,15 @@ func relative_quadrant(position: Vector2, rotation: float, subject: Vector2):
 	else:
 		print("FRONT")
 		return QUADRANT.FRONT
+
+
+func item_screen_box_side_length(object):
+	var scale = Client.system().camera().size / 10 # TODO: Pull from camera
+	if not object:
+		return 0
+	if object.has_method("screen_box_side_length"):
+		return object.screen_box_side_length() / scale
+	elif "screen_box_side_length" in object:
+		return object.screen_box_side_length / scale
+	else:
+		return 100 / scale

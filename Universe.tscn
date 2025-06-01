@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c3nv740euw7op"]
+[gd_scene load_steps=19 format=3 uid="uid://c3nv740euw7op"]
 
 [ext_resource type="Script" uid="uid://bs1m1n4bxbte8" path="res://universe.gd" id="1_2xk0u"]
 [ext_resource type="Script" uid="uid://my0cdymeumjy" path="res://system.gd" id="2_so72h"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://egqfvrhuys2u" path="res://npc_spawner.gd" id="9_kdak6"]
 [ext_resource type="Texture2D" uid="uid://c4agmxol13vq" path="res://assets/danc_cc_by/radar.png" id="10_p2t3q"]
 [ext_resource type="Script" uid="uid://d2yt47ybpohg1" path="res://RadarDisplay.gd" id="11_giygu"]
+[ext_resource type="PackedScene" uid="uid://drbkeo1e43ckc" path="res://ui/TargetFollower.tscn" id="12_sxnkl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1mqx7"]
 shader = ExtResource("3_4q1wc")
@@ -116,6 +117,8 @@ autostart = true
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3
+
+[node name="TargetFollower" parent="UI" instance=ExtResource("12_sxnkl")]
 
 [node name="Radar" type="TextureRect" parent="UI"]
 modulate = Color(1, 1, 1, 0.482353)

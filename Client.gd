@@ -3,6 +3,7 @@ extends Node
 @onready var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 signal universe_loaded
 signal player_ent_updated(entity: Node)
+signal player_target_updated(entity: Node)
 
 
 var playing = false
@@ -84,11 +85,11 @@ func delay_until(appointed_time):
 
 func update_player(player_ent):
 	self.player_ent = player_ent
-	
 	player_ent.target_updated.connect(update_player_target)
 	
 func update_player_target(target_ent):
 	self.player_target = target_ent
+	player_target_updated.emit(target_ent)
 	# TODO: Update display stuff
 
 func update_player_target_ship(target):
@@ -97,3 +98,6 @@ func update_player_target_ship(target):
 		Server.update_player_target_ship(path)
 	else:
 		Server.update_player_target_ship.rpc(path)
+
+func get_disposition(entity):
+	return Util.DISPOSITION.NEUTRAL
