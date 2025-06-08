@@ -14,4 +14,7 @@ make = "Calderan"
 graphics = ExtResource("1_ybulp")
 max_shields = 60.0
 max_health = 10
+weapon_config = Dictionary[String, String]({
+"WeaponSlot": "plasma_turret"
+})
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

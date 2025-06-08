@@ -100,7 +100,8 @@ func process_state_attack(delta):
 		Util.flatten_25d(parent.target.global_transform.origin),
 		delta
 	)
-	shooting = _facing_within_margin(shoot_margin)
+	# TODO: Shoot weapons independently based on margin and range
+	shooting = true #_facing_within_margin(shoot_margin)
 	thrusting = not parent.standoff and _facing_within_margin(accel_margin)
 	braking = parent.standoff
 
@@ -109,7 +110,7 @@ func process_state_persue(delta):
 		return
 	populate_rotation_impulse_and_ideal_face(Util.flatten_25d(parent.target.global_transform.origin), delta)
 	shooting = false
-	print("Rotation Impulse: ", rotation_impulse)
+	#print("Rotation Impulse: ", rotation_impulse)
 	thrusting = _facing_within_margin(accel_margin)
 	braking = false
 

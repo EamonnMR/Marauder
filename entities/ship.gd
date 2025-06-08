@@ -23,7 +23,7 @@ var mass: float
 @export var bank_factor = 1
 @export var bank_axis = "x"
 
-var screen_box_side_length: int
+var screen_box_side_length: int = 500
 
 var chain_fire_mode = true
 var lock_turrets = false
@@ -61,7 +61,8 @@ func _ready():
 	$Health.max_health = data.max_health
 	$Health.max_shields = data.max_shields
 	
-	$Graphics/WeaponSlot.add_weapon("plasma_turret")
+	for slot in data.weapon_config:
+		$Graphics.get_node(slot).add_weapon(data.weapon_config[slot])
 
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()

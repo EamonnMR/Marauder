@@ -5,15 +5,26 @@ var weapons = {}
 
 func _ready():
 	print("Loading Ships")
-	process_dir("res://data/ship_data", func load_ship(path):
-		var ship_data: ShipData = load(path)
-		assert(ship_data.id != "")
-		ships[ship_data.id] = ship_data
-	)
-
+	
+	
 	process_dir("res://data/weapon_data", func load_weapon(path):
 		var weapon_data: WeaponData = load(path)
 		weapons[weapon_data.id] = weapon_data
+	)
+
+	
+	process_dir("res://data/ship_data", func load_ship(path):
+		var ship_data: ShipData = load(path)
+		assert(ship_data.id != "")
+		
+		# Verify weapon config
+		
+		var graphics_inst = ship_data.graphics.instantiate()
+		for weapon_slot in ship_data.weapon_config:
+			assert(graphics_inst.has_node(weapon_slot))
+			assert(ship_data.weapon_config[weapon_slot] in weapons)
+			
+		ships[ship_data.id] = ship_data
 	)
 
 func process_dir(path, function: Callable):

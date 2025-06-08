@@ -10,6 +10,7 @@ class_name ShipData
 @export var graphics: PackedScene
 @export var max_shields: int = 10
 @export var max_health: int = 10
+@export var weapon_config: Dictionary[String, String]
 
 func display_name():
 	return " ".join([make, name])

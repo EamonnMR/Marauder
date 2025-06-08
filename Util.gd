@@ -140,4 +140,4 @@ func item_screen_box_side_length(object):
 	elif "screen_box_side_length" in object:
 		return object.screen_box_side_length / scale
 	else:
-		return 100 / scale
+		return 300 / scale

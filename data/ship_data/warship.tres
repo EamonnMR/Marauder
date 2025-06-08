@@ -13,4 +13,7 @@ name = "Warship"
 make = "Terran"
 graphics = ExtResource("1_i6yxi")
 max_shields = 20.0
-max_armor = 1650.0
+max_health = 1650.0
+weapon_config = Dictionary[String, String]({
+"WeaponSlot": "plasma_turret"
+})
