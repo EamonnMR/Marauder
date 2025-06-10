@@ -11,9 +11,10 @@ var iff: IffProfile
 var explode_on_timeout: bool = true
 var impact: float
 var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
-
+var initial_rotation = 0
 
 func _ready():
+	rotate_y(initial_rotation)
 	linear_velocity += Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y)
 	$Lifetime.wait_time = (Util.TIME_FACTOR * data.decay) / max(data.energy_damage, data.mass_damage)
 	if data.fade:

@@ -158,8 +158,14 @@ func _create_projectile():
 	if new_projectile and world_projectile:
 		projectile.global_transform = emerge_point.global_transform
 		# TODO: Reset projectile scale
+		var deflect = randf_range(spread_min, spread_max)
+		var deflect_deg = rad_to_deg(PI)
+		print("Deflect degrees", deflect_deg)
+		projectile.initial_rotation = deflect
 		Client.system().add_child(projectile)
+		#projectile.rotate_y(deflect)
 		projectile.scale = Vector3(1,1,1)
+		projectile.initial_rotation = deflect
 
 	else:
 		get_node("../").add_child(projectile)

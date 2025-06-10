@@ -12,8 +12,15 @@ turn = 25
 name = "Warship"
 make = "Terran"
 graphics = ExtResource("1_i6yxi")
-max_shields = 20.0
+max_shields = 200.0
 max_health = 1650.0
 weapon_config = Dictionary[String, String]({
-"WeaponSlot": "plasma_turret"
+"ForeBL": "plasma_multi",
+"ForeBR": "plasma_multi",
+"ForeTL": "mass_driver_l",
+"ForeTR": "mass_driver_l",
+"MidBL": "mass_driver_m",
+"MidBR": "mass_driver_m",
+"MidTL": "mass_driver_m",
+"MidTR": "mass_driver_m"
 })

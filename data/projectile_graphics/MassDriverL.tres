@@ -1,0 +1,11 @@
+[gd_resource type="CylinderMesh" load_steps=2 format=3 uid="uid://druaqjxtyhtcg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l7hmj"]
+transparency = 1
+blend_mode = 1
+emission_enabled = true
+emission = Color(0.550994, 0.368304, 1, 1)
+
+[resource]
+material = SubResource("StandardMaterial3D_l7hmj")
+height = 25.0
