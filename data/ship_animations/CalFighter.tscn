@@ -15,5 +15,11 @@ mesh = SubResource("BoxMesh_l1bne")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
 shape = SubResource("ConvexPolygonShape3D_pouar")
 
-[node name="WeaponSlot" parent="." index="1" instance=ExtResource("2_pouar")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.7952, 0, 0)
+[node name="C" parent="." index="1" instance=ExtResource("2_pouar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0416, -2.53904, 0)
+
+[node name="R" parent="." index="2" instance=ExtResource("2_pouar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0416, 1.74331, 12.6662)
+
+[node name="L" parent="." index="3" instance=ExtResource("2_pouar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.042, 1.743, -12.666)
