@@ -22,4 +22,11 @@ impact = 1.0
 reload = 25.0
 decay = 15.0
 guidance_type = 3
-metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"
+metadata/_custom_type_script = Dictionary[String, String]({
+"ProwL": "disrupter_l",
+"ProwR": "disrupter_l",
+"SideL": "disrupter_m",
+"SideR": "disrupter_m",
+"TopL": "disrupter_m_t",
+"TopR": "disrupter_m_t"
+})

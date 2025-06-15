@@ -2,18 +2,31 @@
 
 [ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="1_2ayds"]
 [ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_15tex"]
+[ext_resource type="ArrayMesh" uid="uid://dwyni2770fy7s" path="res://assets/eamonn/cruiser/xic_drillship_from_fts.obj" id="2_r6md8"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_2ayds"]
-size = Vector3(80, 20, 55)
-
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_a8itj"]
-data = PackedVector3Array(-40, 10, 27.5, 40, 10, 27.5, -40, -10, 27.5, 40, 10, 27.5, 40, -10, 27.5, -40, -10, 27.5, 40, 10, -27.5, -40, 10, -27.5, 40, -10, -27.5, -40, 10, -27.5, -40, -10, -27.5, 40, -10, -27.5, 40, 10, 27.5, 40, 10, -27.5, 40, -10, 27.5, 40, 10, -27.5, 40, -10, -27.5, 40, -10, 27.5, -40, 10, -27.5, -40, 10, 27.5, -40, -10, -27.5, -40, 10, 27.5, -40, -10, 27.5, -40, -10, -27.5, 40, 10, 27.5, -40, 10, 27.5, 40, 10, -27.5, -40, 10, 27.5, -40, 10, -27.5, 40, 10, -27.5, -40, -10, 27.5, 40, -10, 27.5, -40, -10, -27.5, 40, -10, 27.5, 40, -10, -27.5, -40, -10, -27.5)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_a8itj"]
+points = PackedVector3Array(-30.7643, -5.73696, -23.1469, 44.6775, 1.74219, 7.97261, 38.0198, 1.74219, 11.9756, -25.4914, 9.96132, -3.59871, -24.5428, -2.24959, 42.5984, -23.2129, 3.07352, -39.9297, 39.3497, -4.91225, -3.9863, -25.7934, -10.578, 1.20987, 43.3394, 4.40485, -3.9863, -17.8851, 8.39884, 21.2992, -37.4564, 6.76517, 3.82168, -24.5428, -2.24959, -42.5984, -36.8287, -7.16297, 3.76201, 38.0198, -4.91225, 5.32063, -23.2129, 3.07352, 39.9297, -16.5552, -6.24358, -29.2801, -17.8851, 8.39884, -21.2992, -16.5552, -6.24358, 29.2801, 44.6775, 1.74219, -7.97261, 43.3394, 4.40485, 3.9863, -37.4564, 6.76517, -3.82168, -28.4808, 0.3827, 39.5157, 44.6775, -3.58092, -5.32063, 4.44401, 8.25104, -1.12954, -28.4808, 0.3827, -39.5157, 44.6775, -3.58092, 5.32063, -36.8287, -7.16297, -3.76201, -25.7934, -10.578, -1.20987, -30.7643, -5.73696, 23.1469, -30.5719, 5.19808, -24.2208, -30.5719, 5.19808, 24.2208, -27.0329, 10.0796, 1.21092)
 
 [node name="MeshGraphics" instance=ExtResource("1_2ayds")]
-mesh = SubResource("BoxMesh_2ayds")
+mesh = ExtResource("2_r6md8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
-shape = SubResource("ConcavePolygonShape3D_a8itj")
+shape = SubResource("ConvexPolygonShape3D_a8itj")
 
-[node name="WeaponSlot" parent="." index="1" instance=ExtResource("2_15tex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.1963, 0, 0.50985)
+[node name="ProwL" parent="." index="1" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.1688, 0, 6.19868)
+
+[node name="ProwR" parent="." index="2" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.169, 0, -6.199)
+
+[node name="SideL" parent="." index="3" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.1133, 0, 13.7608)
+
+[node name="SideR" parent="." index="4" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.113, 0, -13.761)
+
+[node name="TopR" parent="." index="5" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.61676, 4.62553, 13.7608)
+
+[node name="TopL" parent="." index="6" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.61708, 4.62553, -13.761)

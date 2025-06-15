@@ -22,7 +22,8 @@ func _ready():
 		var graphics_inst = ship_data.graphics.instantiate()
 		for weapon_slot in ship_data.weapon_config:
 			assert(graphics_inst.has_node(weapon_slot))
-			assert(ship_data.weapon_config[weapon_slot] in weapons)
+			var weapon_id = ship_data.weapon_config[weapon_slot]
+			assert(weapon_id in weapons)
 			
 		ships[ship_data.id] = ship_data
 	)

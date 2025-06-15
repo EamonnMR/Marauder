@@ -15,6 +15,11 @@ graphics = ExtResource("1_v1i3b")
 max_shields = 800.0
 max_health = 10
 weapon_config = Dictionary[String, String]({
-"WeaponSlot": "plasma_turret"
+"ProwL": "disruptor_l",
+"ProwR": "disruptor_l",
+"SideL": "disruptor_m",
+"SideR": "disruptor_m",
+"TopL": "disruptor_m_t",
+"TopR": "disruptor_m_t"
 })
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

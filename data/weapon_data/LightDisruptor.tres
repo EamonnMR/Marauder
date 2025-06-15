@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("3_o5dtc")
 id = "disruptor_l"
-speed = 1200.0
+speed = 1500.0
 projectile_scene = ExtResource("2_fh52f")
 graphics = ExtResource("1_fh52f")
 spread = 9.0

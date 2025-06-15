@@ -12,6 +12,8 @@ var explode_on_timeout: bool = true
 var impact: float
 var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
 var initial_rotation = 0
+var initial_emission_energy
+var initial_albedo
 
 func _ready():
 	rotate_y(initial_rotation)
@@ -20,10 +22,13 @@ func _ready():
 	if data.fade:
 		material = $Graphics.mesh.surface_get_material(0).duplicate(true)
 		$Graphics.set_surface_override_material(0, material)
-		
+		initial_emission_energy = material.emission_intensity
+		initial_albedo = material.albedo_color.a
 func _process(delta):
 	if data.fade:
-		material.albedo_color.a = _fade_factor()
+		var fade = _fade_factor()
+		material.albedo_color.a = initial_albedo * fade
+		material.emission_intensity = initial_emission_energy * fade
 
 func _physics_process(_delta):
 	set_velocity(Util.raise_25d(linear_velocity))
