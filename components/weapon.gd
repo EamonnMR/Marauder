@@ -160,7 +160,6 @@ func _create_projectile():
 		# TODO: Reset projectile scale
 		var deflect = randf_range(spread_min, spread_max)
 		var deflect_deg = rad_to_deg(PI)
-		print("Deflect degrees", deflect_deg)
 		projectile.initial_rotation = deflect
 		Client.system().add_child(projectile)
 		#projectile.rotate_y(deflect)

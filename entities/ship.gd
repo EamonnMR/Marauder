@@ -139,13 +139,7 @@ func _physics_process(delta):
 
 func handle_shooting():
 	if $Controller.shooting:
-		#$Graphics/WeaponSlot/Weapon.try_shoot()
-		#if chain_fire_mode:
-			#$ChainFireManager.shoot_primary()
-		#else:
-		for weapon in primary_weapons:
-			weapon.try_shoot()
-#
+		$ChainFireManager.shoot_primary()
 	#if $Controller.shooting_secondary:
 		#for weapon in secondary_weapons:
 			#weapon.try_shoot()

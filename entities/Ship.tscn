@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://j002g8qmqpxr"]
+[gd_scene load_steps=4 format=3 uid="uid://j002g8qmqpxr"]
 
 [ext_resource type="Script" uid="uid://csk4gjwxjdot1" path="res://entities/ship.gd" id="1_udskb"]
+[ext_resource type="PackedScene" uid="uid://33myg6onhx2h" path="res://components/ChainFireManager.tscn" id="2_mcdp8"]
 [ext_resource type="PackedScene" uid="uid://o11bh7fuh4e7" path="res://components/Health.tscn" id="3_mcdp8"]
 
 [node name="Ship" type="CharacterBody3D"]
 collision_mask = 0
 input_capture_on_drag = true
 script = ExtResource("1_udskb")
+
+[node name="ChainFireManager" parent="." instance=ExtResource("2_mcdp8")]
 
 [node name="CameraFollower" type="RemoteTransform3D" parent="."]
 update_rotation = false
