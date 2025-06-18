@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://daqvpskp7duat"]
+[gd_scene load_steps=4 format=3 uid="uid://daqvpskp7duat"]
 
 [ext_resource type="PackedScene" uid="uid://c7tdtoyj82g47" path="res://entities/projectiles/Projectile.tscn" id="1_ry14l"]
 
@@ -14,15 +14,8 @@ material = SubResource("StandardMaterial3D_ry14l")
 bottom_radius = 0.01
 height = 24.0
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_dhk2b"]
-points = PackedVector3Array(0.442199, 9.42025, 0.442199, -0.562827, 8.9196, -0.0601479, -0.18579, -9.54777, -0.0601479, 0.316557, 12.0628, -0.562827, -0.311432, 12.0628, 0.568063, 0.190915, -8.0411, 0.190915, -0.311432, 12.0628, -0.562827, 0.190915, -8.1639, -0.18579, 0.568063, 12.0628, -0.311432, -0.18579, -8.1639, 0.190915, 0.316557, 12.0628, 0.568063, -0.562827, 12.0628, 0.316557, 0.568063, 9.42025, 0.190915, -0.562827, 10.6766, -0.311432, -0.18579, -8.41658, -0.18579, 0.0652729, 8.9196, -0.562827, 0.0652729, 9.17228, 0.568063, -0.0601479, -12.0628, -0.0601479, 0.568063, 12.0628, 0.316557, 0.568063, 9.29745, -0.18579, 0.190915, -9.29745, -0.0601479, -0.311432, 10.6766, -0.562827, -0.562827, 9.17228, 0.190915, -0.437074, 9.17228, 0.442199, 0.442199, 9.17228, -0.437074, -0.0601479, -9.29745, 0.190915, -0.18579, 9.29745, 0.568063, 0.0652729, -9.54777, -0.18579, -0.18579, 9.04476, -0.562827, 0.316557, 10.8041, -0.562827, -0.562827, 12.0628, -0.311432, -0.437074, 9.04476, -0.437074)
-
 [node name="Projectile" instance=ExtResource("1_ry14l")]
 
 [node name="Graphics" parent="." index="0"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -11.2078, 0, 0)
 mesh = SubResource("CylinderMesh_xyw23")
-
-[node name="CollisionShape3D2" parent="Area3D" index="0"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -11.0964, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_dhk2b")

@@ -141,3 +141,6 @@ func item_screen_box_side_length(object):
 		return object.screen_box_side_length / scale
 	else:
 		return 300 / scale
+
+func random_select(iterable):
+	return iterable[randi() % iterable.size()]

@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://b34844wo075m3" path="res://entities/projectiles/projectile.gd" id="1_avawr"]
 [ext_resource type="PackedScene" uid="uid://bvvt5kyhpiatf" path="res://data/projectile_graphics/autocannon.tscn" id="2_j1bw3"]
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_j1bw3"]
-points = PackedVector3Array(0.409443, -0.825347, 0.0284907, -0.415792, -1.01587, -0.130078, -0.415792, -1.01587, 0.123729, -0.130078, 1.01587, -0.0348398, 0.123729, -1.01587, -0.415792, 0.155475, -1.01587, 0.409443, 0.123729, 1.01587, -0.0665859, -0.0665859, 1.01587, 0.123729, -0.225316, -0.952232, 0.377697, -0.130078, -0.952232, -0.415792, 0.377697, -1.01587, -0.225316, 0.123729, 0.952232, 0.0919827, -0.0665859, 0.984052, -0.130078, 0.314205, -0.984052, 0.314205, -0.320554, -0.888789, -0.288808, -0.0348398, -0.825347, 0.409443, 0.0919827, 0.92061, -0.130078, 0.282459, -0.856969, -0.320554, -0.384046, -0.984052, 0.218967, 0.409443, -1.01587, 0.155475, 0.0602367, 1.01587, 0.123729, -0.130078, 0.92061, 0.0919827, 0.0602367, -0.888789, -0.415792, 0.409443, -0.92061, -0.130078, -0.415792, -0.888789, 0.0602367, -0.161824, -1.01587, 0.409443, -0.257062, -1.01587, -0.3523, -0.288808, -0.698264, 0.282459, -0.415792, -0.952232, -0.130078, -0.130078, 0.888789, -0.0983319, -0.257062, -0.92061, -0.3523, 0.218967, -0.984052, -0.384046)
+[sub_resource type="BoxShape3D" id="BoxShape3D_j1bw3"]
+size = Vector3(1, 22.4009, 1)
 
 [node name="Projectile" type="CharacterBody3D"]
 collision_layer = 0
@@ -16,8 +16,8 @@ script = ExtResource("1_avawr")
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_j1bw3")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00610352, 0)
+shape = SubResource("BoxShape3D_j1bw3")
 
 [node name="Lifetime" type="Timer" parent="."]
 autostart = true
