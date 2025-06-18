@@ -136,7 +136,7 @@ func item_screen_box_side_length(object):
 	if not object:
 		return 0
 	if object.has_method("screen_box_side_length"):
-		return object.screen_box_side_length() / scale
+		return object.screen_box_side_length()# / scale
 	elif "screen_box_side_length" in object:
 		return object.screen_box_side_length / scale
 	else:

@@ -3,7 +3,8 @@ extends NinePatchRect
 var initial_position
 
 func _ready():
-	set_radius(100)
+	pass
+	#sset_radius(10000)
 
 func set_disposition(new_disposition: Util.DISPOSITION):
 	#texture = textures[new_disposition]

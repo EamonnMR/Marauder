@@ -10,8 +10,8 @@ func _ready():
 			self.target_ship = target_ship
 			if target_ship:
 				show()
-				$VBoxContainer/SelectionBox.set_radius(Util.item_screen_box_side_length(target_ship))
-				$VBoxContainer/SelectionBox.set_disposition(Client.get_disposition(target_ship))
+				$SelectionBox.set_radius(Util.item_screen_box_side_length(target_ship))
+				$SelectionBox.set_disposition(Client.get_disposition(target_ship))
 				target_ship.destroyed.connect(_on_target_ship_exited)
 				#Client.exited_system.connect(_on_target_ship_exited)
 			else:

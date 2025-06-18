@@ -23,7 +23,7 @@ var mass: float
 @export var bank_factor = 1
 @export var bank_axis = "x"
 
-var screen_box_side_length: int = 500
+#var screen_box_side_length: int = 500
 
 var chain_fire_mode = true
 var lock_turrets = false
@@ -236,16 +236,20 @@ func remove_weapon(weapon: Node):
 func receive_impact(impact: Vector2):
 	linear_velocity += impact / mass
 
-#func screen_box_side_length():
-	#var mesh = $Graphics.mesh
-	#var aabb = mesh.get_aabb()
-	#var trns: Transform3D
-	##var factor = $Graphics.transform.basis.get_scale().x
-	#var max_dim = max(aabb.size.x, aabb.size.y, aabb.size.z) # * factor
-	#var camera_scale = Client.camera.size
-	#var reference_dim = 10.0
-	#var re_scale = camera_scale * reference_dim * max_dim
-	#return re_scale
+var sbsl = 0
+
+func screen_box_side_length():
+	if not sbsl:
+		var mesh = $Graphics.mesh
+		var aabb = mesh.get_aabb()
+		var max_dim = max(aabb.size.x, aabb.size.y, aabb.size.z) # * factor
+		#var camera_scale =  Client.system().camera().size 
+		#var reference_dim = 10.0
+		#var re_scale = camera_scale * reference_dim * max_dim
+		sbsl = max_dim
+		return max_dim
+	else:
+		return sbsl
 
 func marshal_spawn_state() -> Dictionary:
 	return {
