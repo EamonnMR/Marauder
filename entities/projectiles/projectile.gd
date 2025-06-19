@@ -22,13 +22,13 @@ func _ready():
 	if data.fade:
 		material = $Graphics.mesh.surface_get_material(0).duplicate(true)
 		$Graphics.set_surface_override_material(0, material)
-		initial_emission_energy = material.emission_intensity
+		initial_emission_energy = material.emission_energy_multiplier
 		initial_albedo = material.albedo_color.a
 func _process(delta):
 	if data.fade:
 		var fade = _fade_factor()
 		material.albedo_color.a = initial_albedo * fade
-		material.emission_intensity = initial_emission_energy * fade
+		material.emission_energy_multiplier = initial_emission_energy * fade
 
 func _physics_process(_delta):
 	set_velocity(Util.raise_25d(linear_velocity))

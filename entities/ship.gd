@@ -248,7 +248,9 @@ func screen_box_side_length():
 		#var re_scale = camera_scale * reference_dim * max_dim
 		sbsl = max_dim
 		return max_dim
+		breakpoint
 	else:
+		breakpoint
 		return sbsl
 
 func marshal_spawn_state() -> Dictionary:
