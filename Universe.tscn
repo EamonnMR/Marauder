@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c3nv740euw7op"]
+[gd_scene load_steps=20 format=3 uid="uid://c3nv740euw7op"]
 
 [ext_resource type="Script" uid="uid://bs1m1n4bxbte8" path="res://universe.gd" id="1_2xk0u"]
 [ext_resource type="Script" uid="uid://my0cdymeumjy" path="res://system.gd" id="2_so72h"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://c4agmxol13vq" path="res://assets/danc_cc_by/radar.png" id="10_p2t3q"]
 [ext_resource type="Script" uid="uid://d2yt47ybpohg1" path="res://RadarDisplay.gd" id="11_giygu"]
 [ext_resource type="PackedScene" uid="uid://drbkeo1e43ckc" path="res://ui/TargetFollower.tscn" id="12_sxnkl"]
+[ext_resource type="Script" uid="uid://tntkcqw41t5d" path="res://ui/target_info.gd" id="15_08gru"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1mqx7"]
 shader = ExtResource("3_4q1wc")
@@ -136,5 +137,15 @@ texture = ExtResource("10_p2t3q")
 [node name="Node2D" type="Node2D" parent="UI/Radar"]
 position = Vector2(119, 119)
 script = ExtResource("11_giygu")
+
+[node name="TargetInfo" type="ColorRect" parent="UI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -223.0
+offset_right = 235.0
+grow_vertical = 0
+color = Color(0.0811599, 0.241788, 0.151087, 0.415686)
+script = ExtResource("15_08gru")
 
 [connection signal="timeout" from="System/NPCSpawner/Timer" to="System/NPCSpawner" method="_on_timer_timeout"]

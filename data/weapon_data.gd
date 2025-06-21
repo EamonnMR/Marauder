@@ -26,6 +26,7 @@ enum GUIDANCE_TYPE {
 @export var impact: int
 @export var reload: int
 @export var decay: int
+@export var lifetime: int
 @export var guidance_type: GUIDANCE_TYPE
 
 func damage() -> Health.DamageVal:

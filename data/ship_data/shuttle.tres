@@ -14,6 +14,7 @@ make = "Terran"
 graphics = ExtResource("1_4nb3n")
 max_shields = 30.0
 max_health = 40.0
+mass = 13.0
 weapon_config = Dictionary[String, String]({
 "WeaponSlot": "plasma_turret"
 })

@@ -13,7 +13,8 @@ name = "Fighter"
 make = "Calderan"
 graphics = ExtResource("1_ybulp")
 max_shields = 60.0
-max_health = 10
+max_health = 40.0
+mass = 10
 weapon_config = Dictionary[String, String]({
 "C": "disruptor_l",
 "L": "disruptor_l",

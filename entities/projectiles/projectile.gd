@@ -9,7 +9,6 @@ var iff: IffProfile
 @onready var splash_damage: Health.DamageVal = data.splash_damage()
 
 var explode_on_timeout: bool = true
-var impact: float
 var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
 var initial_rotation = 0
 var initial_emission_energy
@@ -18,14 +17,16 @@ var initial_albedo
 func _ready():
 	rotate_y(initial_rotation)
 	linear_velocity += Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y)
-	$Lifetime.wait_time = (Util.TIME_FACTOR * data.decay) / max(data.energy_damage, data.mass_damage)
+	#$Lifetime.wait_time = (Util.TIME_FACTOR * data.decay) / max(data.energy_damage, data.mass_damage)
+	$Lifetime.wait_time = data.lifetime
+	material = $Graphics.mesh.surface_get_material(0).duplicate(true)
+	$Graphics.set_surface_override_material(0, material)
 	if data.fade:
-		material = $Graphics.mesh.surface_get_material(0).duplicate(true)
-		$Graphics.set_surface_override_material(0, material)
 		initial_emission_energy = material.emission_energy_multiplier
 		initial_albedo = material.albedo_color.a
 func _process(delta):
 	if data.fade:
+		return
 		var fade = _fade_factor()
 		material.albedo_color.a = initial_albedo * fade
 		material.emission_energy_multiplier = initial_emission_energy * fade
@@ -38,18 +39,26 @@ func _physics_process(_delta):
 
 func get_falloff_damage(damage) -> Health.DamageVal:
 	if data.fade:
-		return damage.faded(_fade_factor())
+		return damage.faded(_decay_factor())
 	else:
 		return damage
 
-func get_falloff_impact() -> int:
+func get_falloff_impact(impact) -> int:
 	if data.fade:
-		return data.impact * _fade_factor()
+		return max(1, data.impact * _decay_factor())
 	else:
 		return data.impact
 		
 func _fade_factor():
 	return $Lifetime.time_left / $Lifetime.wait_time
+	
+func _decay_factor():
+	# TODO Actually implement this properly.
+	# It shouldn't be a factor anymore. It should be using the decay divided into time to diminish the damage.
+	return 1
+	#time_passed = $Lifetime.wait_time - $Lifetime.time_left
+	#Util.TIME_FACTOR * data.decay
+
 
 func _on_Lifetime_timeout():
 	if explode_on_timeout:
@@ -97,7 +106,7 @@ func _on_area_3d_body_entered(body):
 	if is_instance_valid(body) and not iff.should_exclude(body):
 		if Util.is_server():
 			Health.do_damage(body, get_falloff_damage(damage), owner())
-			if impact > 0 and body.has_method("receive_impact"):
-				body.receive_impact(linear_velocity.normalized() * get_falloff_impact())
+			if data.impact > 0 and body.has_method("receive_impact"):
+				body.receive_impact(linear_velocity.normalized() * data.impact)
 		detonate()
 		queue_free()

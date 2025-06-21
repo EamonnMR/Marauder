@@ -13,7 +13,8 @@ name = "Cruiser"
 make = "Calderan"
 graphics = ExtResource("1_v1i3b")
 max_shields = 800.0
-max_health = 10
+max_health = 750.0
+mass = 800.0
 weapon_config = Dictionary[String, String]({
 "ProwL": "disruptor_l",
 "ProwR": "disruptor_l",

@@ -234,7 +234,7 @@ func remove_weapon(weapon: Node):
 	weapons_changed.emit()
 				
 func receive_impact(impact: Vector2):
-	linear_velocity += impact / mass
+	linear_velocity += (impact / mass) * Util.SPEED_FACTOR
 
 var sbsl = 0
 

@@ -14,6 +14,7 @@ make = "Idan"
 graphics = ExtResource("1_nitpj")
 max_shields = 525.0
 max_health = 750.0
+mass = 650.0
 weapon_config = Dictionary[String, String]({
 "WeaponSlot": "plasma_turret"
 })
