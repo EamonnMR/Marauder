@@ -14,14 +14,11 @@ enum STATES {
 @export var max_target_distance = 1000
 @export var destination_margin = 100
 
-#export var engagement_range_radius = 100
-
 var path_target
 var lead_velocity: float
 var state = STATES.IDLE
 var cache_lead_position
 
-var bodies_in_engagement_range = []
 #
 #var unvisited_spobs: Array
 
@@ -177,15 +174,16 @@ func rethink_state_path():
 	pass
 
 func rethink_state_persue():
-	#_find_target()
-	pass
+	if _check_range(parent.target):
+		change_state_attack()
 	
 #func rethink_state_leave():
 	#if warp_conditions_met():
 		#state = STATES.WARP
 
 func rethink_state_attack():
-	pass
+	if not _check_range(parent.target):
+		change_state_persue(parent.target)
 
 func change_state_idle():
 	state = STATES.IDLE
@@ -197,10 +195,9 @@ func change_state_idle():
 	#print("New State: Idle")
 
 func change_state_persue(target):
-	if target in bodies_in_engagement_range:
+	if _check_range(target):
 		change_state_attack()
 		return
-	
 	state = STATES.PERSUE
 	self.parent.server_set_target(target)
 	#if target == Client.player:
@@ -238,26 +235,6 @@ func _get_target_lead_position(lead_velocity, target):
 	#	pass
 	return lead_position
 
-# Somewhat questioning the need for a whole node setup for this.
-func _on_engagement_range_body_entered(body):
-	
-	bodies_in_engagement_range.append(body)
-	
-	if body == parent.target and state == STATES.PERSUE:
-		#print("Reached target")
-		change_state_attack()
-	
-	if body == path_target and state == STATES.PATH:
-		change_state_idle()
-
-func _on_engagement_range_body_exited(body):
-	
-	bodies_in_engagement_range.erase(body)
-	
-	if body == parent.target and state == STATES.ATTACK:
-		#print("Target left engagement range")
-		change_state_persue(parent.target)
-
 func _on_damage_taken(source):
 	match state:
 		STATES.IDLE, STATES.PERSUE, STATES.PATH:
@@ -265,3 +242,11 @@ func _on_damage_taken(source):
 
 func get_target():
 	return parent.target
+
+func _distance_to(target: Node3D) -> float:
+	return (Util.flatten_25d(target.global_transform.origin) -  Util.flatten_25d(global_transform.origin)).length()
+
+func _check_range(target: Node3D):
+	if _distance_to(target) < parent.effective_range:
+		return true
+	return false

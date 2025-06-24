@@ -29,8 +29,8 @@ var chain_fire_mode = true
 var lock_turrets = false
 
 var linear_velocity = Vector2(0,0)
-var primary_weapons = []
-var secondary_weapons = []
+var primary_weapons: Array[Weapon] = []
+var secondary_weapons: Array[Weapon] = []
 
 var warping = false
 var warping_in = false
@@ -39,6 +39,8 @@ var warp_speed_factor = 10
 var radar_size: int = 2
 
 var target: Node3D
+
+var effective_range
 
 signal destroyed
 signal weapons_changed
@@ -79,8 +81,8 @@ func _ready():
 		add_to_group("npcs")
 		add_to_group("faction-" + str(faction))
 		ready_npc_controller()
-
-
+		
+		effective_range = _calculate_effective_range()
 	#if self == Client.player:
 		#pass
 		## add_child(preload("res://component/InteractionRange.tscn").instantiate())
@@ -315,3 +317,14 @@ func client_set_target(new_target_path, appointed_time):
 func set_target(new_target):
 	target = new_target
 	target_updated.emit(target)
+
+func _calculate_effective_range():
+	var ranges = []
+	for weapon: Weapon in primary_weapons:
+		ranges.append(weapon.data.effective_range())
+		
+	for weapon: Weapon in secondary_weapons:
+		ranges.append(weapon.data.effective_range())
+	
+	return ranges.max()
+	

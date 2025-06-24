@@ -10,12 +10,54 @@ signal damaged(source)
 signal healed
 signal destroyed
 
+class DamageVal:
+	var mass: int
+	var energy: int
+	#var ionization: int
+	#var disruption: int
+	# Also: Crew specific damage? Crit chance?
+	var ignore_shields: bool
+	
+	func _init(mass_damage: int, energy_damage: int, ignore_shields: bool):
+		self.mass = mass_damage
+		self.energy = energy_damage
+		self.ignore_shields = ignore_shields
+		
+	func diminished(mass_damage, energy_damage):
+		return DamageVal.new(
+			min(mass - mass_damage, 1),
+			min(energy - energy_damage, 1),
+			ignore_shields
+		)
+
+		
+		
+		self.mass -= mass_damage
+		self.energy -= energy_damage
+		self.mass = max(self.mass, 1)
+		self.energy = max(self.energy, 1)
+
+	func calc_fade(damage: int, factor: float) -> int:
+		if damage > 1:
+			return roundi((damage - 1) * factor) + 1
+		else:
+			return 0
+	
+	func faded(factor):
+		return DamageVal.new(
+			calc_fade(mass, factor),
+			calc_fade(energy, factor),
+			ignore_shields
+		)
+
 @export var max_health: int = 1
 @export var health: int = -1
 @export var max_shields: int = 10
 @export var shields: int = -1
 @export var shield_regen: float = 1
 @export var shield_regen_delay: float = 5
+
+
 
 func _ready():
 	set_max_health(max_health, max_shields)
@@ -53,7 +95,7 @@ func heal(amount):
 func can_heal():
 	return health < max_health
 
-func take_damage(damage, source):
+func take_damage(damage: DamageVal, source):
 	
 	if invulnerable:
 		return
@@ -104,32 +146,6 @@ func reset_shield_regen():
 	shield_regen_cooldown = true
 	$ShieldRegen.start()
 	$RegenDelay.start()
-
-class DamageVal:
-	var mass: int
-	var energy: int
-	#var ionization: int
-	#var disruption: int
-	# Also: Crew specific damage? Crit chance?
-	var ignore_shields: bool
-	
-	func _init(mass_damage: int, energy_damage: int, ignore_shields: bool):
-		self.mass = mass_damage
-		self.energy = energy_damage
-		self.ignore_shields = ignore_shields
-
-	func calc_fade(damage: int, factor: float) -> int:
-		if damage > 1:
-			return roundi((damage - 1) * factor) + 1
-		else:
-			return 0
-	
-	func faded(factor):
-		return DamageVal.new(
-			calc_fade(mass, factor),
-			calc_fade(energy, factor),
-			ignore_shields
-		)
 
 func _on_regen_delay_timeout():
 	shield_regen_cooldown = false

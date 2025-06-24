@@ -129,11 +129,6 @@ func _create_projectile():
 	#if "splash_damage" in projectile:
 		#projectile.splash_damage = splash_damage
 		#projectile.splash_radius = splash_radius
-	#if "linear_velocity" in projectile:
-		#projectile.initial_velocity = projectile_velocity
-		#projectile.linear_velocity = parent.linear_velocity
-		#
-
 	projectile.rotate_y(randf_range(spread_min, spread_max))
 	
 	# TODO: This seems like a similar direction issue to warp-in
@@ -161,6 +156,8 @@ func _create_projectile():
 		var deflect = randf_range(spread_min, spread_max)
 		var deflect_deg = rad_to_deg(PI)
 		projectile.initial_rotation = deflect
+		projectile.initial_velocity = parent.linear_velocity
+
 		Client.system().add_child(projectile)
 		#projectile.rotate_y(deflect)
 		projectile.scale = Vector3(1,1,1)

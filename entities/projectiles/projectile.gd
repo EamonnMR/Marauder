@@ -13,12 +13,16 @@ var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
 var initial_rotation = 0
 var initial_emission_energy
 var initial_albedo
+var initial_velocity: Vector2
 
 func _ready():
 	rotate_y(initial_rotation)
+	linear_velocity = initial_velocity
 	linear_velocity += Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y)
+	set_velocity(Util.raise_25d(linear_velocity))
 	#$Lifetime.wait_time = (Util.TIME_FACTOR * data.decay) / max(data.energy_damage, data.mass_damage)
-	$Lifetime.wait_time = data.lifetime
+	$Lifetime.wait_time = data.lifetime * Util.TIME_FACTOR
+	$Lifetime.start()
 	material = $Graphics.mesh.surface_get_material(0).duplicate(true)
 	$Graphics.set_surface_override_material(0, material)
 	if data.fade:
@@ -26,38 +30,38 @@ func _ready():
 		initial_albedo = material.albedo_color.a
 func _process(delta):
 	if data.fade:
-		return
 		var fade = _fade_factor()
 		material.albedo_color.a = initial_albedo * fade
 		material.emission_energy_multiplier = initial_emission_energy * fade
 
 func _physics_process(_delta):
-	set_velocity(Util.raise_25d(linear_velocity))
+	#set_velocity(Util.raise_25d(linear_velocity))
 	move_and_slide()
 	#Util.wrap_to_play_radius(self)
 
+func _falloff_amount():
+	var time_passed = $Lifetime.wait_time - $Lifetime.time_left
+	return time_passed * Util.TIME_FACTOR / data.decay
 
 func get_falloff_damage(damage) -> Health.DamageVal:
-	if data.fade:
-		return damage.faded(_decay_factor())
+	if data.decay:
+		var accumulated_falloff = _falloff_amount()
+		return damage.diminished(accumulated_falloff, accumulated_falloff)
 	else:
 		return damage
 
 func get_falloff_impact(impact) -> int:
-	if data.fade:
-		return max(1, data.impact * _decay_factor())
+	if data.decay:
+		var accumulated_falloff = _falloff_amount()
+		return max(1, data.impact * accumulated_falloff)
 	else:
 		return data.impact
 		
 func _fade_factor():
+	print($Lifetime.wait_time)
+	print($Lifetime.time_left)
+	print($Lifetime.time_left / $Lifetime.wait_time)
 	return $Lifetime.time_left / $Lifetime.wait_time
-	
-func _decay_factor():
-	# TODO Actually implement this properly.
-	# It shouldn't be a factor anymore. It should be using the decay divided into time to diminish the damage.
-	return 1
-	#time_passed = $Lifetime.wait_time - $Lifetime.time_left
-	#Util.TIME_FACTOR * data.decay
 
 
 func _on_Lifetime_timeout():
