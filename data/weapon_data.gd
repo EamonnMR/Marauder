@@ -28,6 +28,7 @@ enum GUIDANCE_TYPE {
 @export var decay: int
 @export var lifetime: int
 @export var guidance_type: GUIDANCE_TYPE
+@export var translucent: bool
 
 func damage() -> Health.DamageVal:
 	return Health.DamageVal.new(mass_damage, energy_damage, ignore_shields)
@@ -41,3 +42,8 @@ func is_turreted():
 func effective_range():
 	# TODO: calculate decay to 50%
 	return (Util.TIME_FACTOR * lifetime) * (Util.SPEED_FACTOR * speed)
+
+func lead_position(position: Vector2, target_position: Vector2, target_velocity: Vector2):
+	var travel_time = (target_position - position).length() / (Util.SPEED_FACTOR * speed)
+	var lead_position = target_velocity * travel_time + target_position
+	return lead_position

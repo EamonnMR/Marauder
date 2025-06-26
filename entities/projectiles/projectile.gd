@@ -25,7 +25,10 @@ func _ready():
 	$Lifetime.start()
 	material = $Graphics.mesh.surface_get_material(0).duplicate(true)
 	$Graphics.set_surface_override_material(0, material)
-	if data.fade:
+	if data.translucent:
+		initial_emission_energy = material.emission_energy_multiplier / 2
+		initial_albedo = material.albedo_color.a / 2
+	else:
 		initial_emission_energy = material.emission_energy_multiplier
 		initial_albedo = material.albedo_color.a
 func _process(delta):
@@ -33,7 +36,7 @@ func _process(delta):
 		var fade = _fade_factor()
 		material.albedo_color.a = initial_albedo * fade
 		material.emission_energy_multiplier = initial_emission_energy * fade
-
+	
 func _physics_process(_delta):
 	#set_velocity(Util.raise_25d(linear_velocity))
 	move_and_slide()
@@ -58,9 +61,6 @@ func get_falloff_impact(impact) -> int:
 		return data.impact
 		
 func _fade_factor():
-	print($Lifetime.wait_time)
-	print($Lifetime.time_left)
-	print($Lifetime.time_left / $Lifetime.wait_time)
 	return $Lifetime.time_left / $Lifetime.wait_time
 
 

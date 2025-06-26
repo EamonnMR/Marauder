@@ -27,7 +27,7 @@ func _process(delta):
 
 func do_turret_aim():
 	if is_instance_valid(parent.target):
-		var aimpoint = U25d.flatten(parent.target.global_position)
+		var aimpoint = parent.get_target_lead_weapon(weapon.data)
 		var aim = $EulerAimHelper.get_euler_aim(aimpoint)
 		$Turret.rotation.y = aim.y + PI/2
 		$Turret/Pivot.rotation.x = aim.x

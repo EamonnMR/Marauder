@@ -20,7 +20,7 @@ var max_bank = deg_to_rad(15)
 var engagement_range: float = 0
 var standoff: bool = false
 var mass: float
-@export var bank_factor = 1
+@export var bank_factor = -1
 @export var bank_axis = "x"
 
 #var screen_box_side_length: int = 500
@@ -302,7 +302,7 @@ func server_set_target(new_target: Node3D):
 		var target_path = ""
 	
 	for player in Server.get_rpc_player_ids():
-		client_set_target.rpc_id(player, new_target.get_path(), Server.time())
+		client_set_target.rpc_id(player, new_target.get_path() if new_target else "", Server.time())
 
 
 @rpc("reliable", "authority")
@@ -327,4 +327,21 @@ func _calculate_effective_range():
 		ranges.append(weapon.data.effective_range())
 	
 	return ranges.max()
+
+func get_target_lead() -> Vector2:
+	if not is_instance_valid(target):
+		return Vector2(0,0)
+		
+	if not $ChainFireManager.primary_weapon_types:
+		return Vector2(0,0)
 	
+	# TODO: average weapon ranges? Rank by importance?
+	var keys = $ChainFireManager.primary_weapon_types.keys()
+	var type: WeaponData = Data.weapons[keys[0]]
+	return get_target_lead_weapon(type)
+	
+func get_target_lead_weapon(weapon_data: WeaponData) -> Vector2:
+	return weapon_data.lead_position(position_25d(), target.position_25d(), target.linear_velocity - linear_velocity)
+
+func position_25d():
+	return Util.flatten_25d(global_position)

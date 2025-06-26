@@ -91,10 +91,9 @@ func process_state_idle(_delta):
 func process_state_attack(delta):
 	if not _verify_target():
 		return
-	
+	var target_2d_pos = Util.flatten_25d(parent.target.global_transform.origin)
 	populate_rotation_impulse_and_ideal_face(
-		#_get_target_lead_position(lead_velocity, target),
-		Util.flatten_25d(parent.target.global_transform.origin),
+		parent.get_target_lead(),
 		delta
 	)
 	# TODO: Shoot weapons independently based on margin and range

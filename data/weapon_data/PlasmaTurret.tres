@@ -23,4 +23,5 @@ reload = 20.0
 decay = 25.0
 lifetime = 55.0
 guidance_type = 1
+translucent = true
 metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"
