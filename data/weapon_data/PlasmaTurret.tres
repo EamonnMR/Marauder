@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://dbfmbawe85t4c"]
+
+[ext_resource type="PackedScene" uid="uid://cg1y745ai0rlh" path="res://data/weapon_graphics/autocannon.tscn" id="1_fj81m"]
+[ext_resource type="PackedScene" uid="uid://dseftpp7y2xps" path="res://entities/projectiles/plasma.tscn" id="2_fj81m"]
+[ext_resource type="Script" uid="uid://cbwlu5j6nqt4p" path="res://data/weapon_data.gd" id="3_0hq3q"]
+
+[resource]
+script = ExtResource("3_0hq3q")
+id = "plasma_turret"
+speed = 1200.0
+projectile_scene = ExtResource("2_fj81m")
+graphics = ExtResource("1_fj81m")
+spread = 2.0
+mass_damage = 10.0
+energy_damage = 20.0
+splash_mass_damage = 10.0
+splash_energy_damage = 20.0
+splash_radius = 20.0
+ignore_shields = false
+fade = true
+impact = 40.0
+reload = 20.0
+decay = 25.0
+lifetime = 55.0
+guidance_type = 1
+translucent = true
+metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"

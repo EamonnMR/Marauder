@@ -5,37 +5,46 @@ class_name Spaceship
 var faction = "terran"
 var type: String
 
+@onready var data: ShipData = Data.ships[type]
+
 var skin: String
 @onready var parent: StarSystem = get_node("../")
 
 var player_owner: int
 
-var max_speed = 100
-var accel = 0.01
-var turn = 1
+@onready var max_speed = data.max_speed * Util.SPEED_FACTOR
+@onready var accel = data.accel * Util.ACCEL_FACTOR
+@onready var turn = data.turn * Util.TURN_FACTOR
 var max_bank = deg_to_rad(15)
-var bank_speed = 2.5 / turn
+@onready var bank_speed = 2.5 / turn
 var engagement_range: float = 0
 var standoff: bool = false
 var mass: float
-@export var bank_factor = 1
+@export var bank_factor = -1
 @export var bank_axis = "x"
 
-var screen_box_side_length: int
+#var screen_box_side_length: int = 500
 
 var chain_fire_mode = true
 var lock_turrets = false
 
 var linear_velocity = Vector2(0,0)
-var primary_weapons = []
-var secondary_weapons = []
+var primary_weapons: Array[Weapon] = []
+var secondary_weapons: Array[Weapon] = []
 
 var warping = false
 var warping_in = false
 var warp_speed_factor = 10
 
+var radar_size: int = 2
+
+var target: Node3D
+
+var effective_range
+
 signal destroyed
 signal weapons_changed
+signal target_updated(new_target)
 
 func _ready():
 	#if not Data.ships[type]["screen_box_side_length"]:
@@ -45,31 +54,41 @@ func _ready():
 	add_to_group("radar")
 	add_to_group("ships")
 	
-	$WeaponSlot.add_weapon(preload("res://components/Weapon.tscn").instantiate())
+	var graphics = data.graphics.instantiate()
 	
+	add_child(graphics)
+	graphics.name = "Graphics"
+	add_child(graphics.get_collision_shape())
+	
+	$Health.max_health = data.max_health
+	$Health.max_shields = data.max_shields
+	
+	for slot in data.weapon_config:
+		$Graphics.get_node(slot).add_weapon(data.weapon_config[slot])
+
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()
 		faction = "player_owned"
 		if player_owner == multiplayer.get_unique_id():
 			$CameraFollower.remote_path = Client.system().camera_offset().get_path()
+			Client.player_ent_updated.emit(self)
 			#$CameraFollower.remote_path = Client.camera.get_node("../").get_path()
 			#Client.ui_inventory.assign($Inventory, "Your inventory")
-
 		add_to_group("players")
 		ready_player_controller()
-		
+		max_speed = max_speed * 1.25
 	else:
 		add_to_group("npcs")
 		add_to_group("faction-" + str(faction))
 		ready_npc_controller()
-	
-	return
+		
+		effective_range = _calculate_effective_range()
 	#if self == Client.player:
+		#pass
 		## add_child(preload("res://component/InteractionRange.tscn").instantiate())
 		#if skin != "":
 			#$Graphics.set_skin_data(Data.skins[skin])
 	#else:
-		#input_event.connect(_on_input_event_npc)
 		#$Graphics.set_skin_data(Data.skins[Data.factions[faction].skin])
 		#var weapon_config = Data.ships[type].weapon_config
 		#for weapon_slot in weapon_config:
@@ -122,25 +141,19 @@ func _physics_process(delta):
 
 func handle_shooting():
 	if $Controller.shooting:
-		$WeaponSlot/Weapon.try_shoot()
-		#if chain_fire_mode:
-			#$ChainFireManager.shoot_primary()
-		#else:
-			#for weapon in primary_weapons:
-				#weapon.try_shoot()
-#
+		$ChainFireManager.shoot_primary()
 	#if $Controller.shooting_secondary:
 		#for weapon in secondary_weapons:
 			#weapon.try_shoot()
 
 func get_limited_velocity_with_thrust(delta):
 	if $Controller.thrusting:
-		linear_velocity += Vector2(accel * delta * 100, 0).rotated(-rotation.y)
+		linear_velocity += Vector2(accel * delta, 0).rotated(-rotation.y)
 		$Graphics.thrusting = true
 	else:
 		$Graphics.thrusting = false
 	if $Controller.braking:
-		linear_velocity = Vector2(linear_velocity.length() - (accel * delta * 100), 0).rotated(linear_velocity.angle())
+		linear_velocity = Vector2(linear_velocity.length() - (accel * delta), 0).rotated(linear_velocity.angle())
 	
 	if not warping:
 		if linear_velocity.length() > max_speed:
@@ -181,13 +194,16 @@ func ship_destroyed():
 	call_deferred("queue_free")
 	emit_signal("destroyed")
 
-func _on_input_event_npc(_camera, event, _click_position, _camera_normal, _shape):
+func _on_input_event(_camera, event, _click_position, _camera_normal, _shape):
+	if Client.player_ent == self:
+		return
 	#https://stackoverflow.com/questions/58628154/detecting-click-touchscreen-input-on-a-3d-object-inside-godot
 	var mouse_click = event as InputEventMouseButton
 	if mouse_click and mouse_click.button_index == 1 and mouse_click.pressed:
 		Client.update_player_target_ship(self)
 	else:
-		Client.mouseover_entered(self)
+		pass
+		#Client.mouseover_entered(self)
 
 func serialize_player():
 	return {
@@ -220,22 +236,29 @@ func remove_weapon(weapon: Node):
 	weapons_changed.emit()
 				
 func receive_impact(impact: Vector2):
-	linear_velocity += impact / mass
+	linear_velocity += (impact / mass) * Util.SPEED_FACTOR
 
-#func screen_box_side_length():
-	#var mesh = $Graphics.mesh
-	#var aabb = mesh.get_aabb()
-	#var trns: Transform3D
-	##var factor = $Graphics.transform.basis.get_scale().x
-	#var max_dim = max(aabb.size.x, aabb.size.y, aabb.size.z) # * factor
-	#var camera_scale = Client.camera.size
-	#var reference_dim = 10.0
-	#var re_scale = camera_scale * reference_dim * max_dim
-	#return re_scale
+var sbsl = 0
+
+func screen_box_side_length():
+	if not sbsl:
+		var mesh = $Graphics.mesh
+		var aabb = mesh.get_aabb()
+		var max_dim = max(aabb.size.x, aabb.size.y, aabb.size.z) # * factor
+		#var camera_scale =  Client.system().camera().size 
+		#var reference_dim = 10.0
+		#var re_scale = camera_scale * reference_dim * max_dim
+		sbsl = max_dim
+		return max_dim
+		breakpoint
+	else:
+		breakpoint
+		return sbsl
 
 func marshal_spawn_state() -> Dictionary:
 	return {
 		"name": name,
+		"type": type,
 		"origin": transform.origin,
 		"#path": get_scene_file_path(),
 		"player_owner": player_owner,
@@ -244,6 +267,7 @@ func marshal_spawn_state() -> Dictionary:
 
 func unmarshal_spawn_state(state):
 	name = state.name
+	type = state.type
 	transform.origin = state.origin
 	player_owner = state.player_owner
 	$Health.unmarshal_spawn_state(state.health)
@@ -269,3 +293,55 @@ func do_lerp_update():
 		rotation.y = lerp_helper.calc_angle("rotation")
 		$Health.health = lerp_helper.calc_numeric("health")
 		$Health.shields = lerp_helper.calc_numeric("shields")
+
+func server_set_target(new_target: Node3D):
+	set_target(new_target)
+	if new_target:
+		var target_path = new_target.get_path()
+	else:
+		var target_path = ""
+	
+	for player in Server.get_rpc_player_ids():
+		client_set_target.rpc_id(player, new_target.get_path() if new_target else "", Server.time())
+
+
+@rpc("reliable", "authority")
+func client_set_target(new_target_path, appointed_time):
+	Client.delay_until(appointed_time)
+	if new_target_path:
+		target = get_node(new_target_path)
+	else:
+		target = null
+	set_target(target)
+	
+func set_target(new_target):
+	target = new_target
+	target_updated.emit(target)
+
+func _calculate_effective_range():
+	var ranges = []
+	for weapon: Weapon in primary_weapons:
+		ranges.append(weapon.data.effective_range())
+		
+	for weapon: Weapon in secondary_weapons:
+		ranges.append(weapon.data.effective_range())
+	
+	return ranges.max()
+
+func get_target_lead() -> Vector2:
+	if not is_instance_valid(target):
+		return Vector2(0,0)
+		
+	if not $ChainFireManager.primary_weapon_types:
+		return Vector2(0,0)
+	
+	# TODO: average weapon ranges? Rank by importance?
+	var keys = $ChainFireManager.primary_weapon_types.keys()
+	var type: WeaponData = Data.weapons[keys[0]]
+	return get_target_lead_weapon(type)
+	
+func get_target_lead_weapon(weapon_data: WeaponData) -> Vector2:
+	return weapon_data.lead_position(position_25d(), target.position_25d(), target.linear_velocity - linear_velocity)
+
+func position_25d():
+	return Util.flatten_25d(global_position)

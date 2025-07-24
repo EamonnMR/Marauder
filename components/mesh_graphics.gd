@@ -17,8 +17,9 @@ var material: Material
 
 func _ready():
 	if mesh:
-		material = mesh.surface_get_material(0).duplicate(true)
-		set_surface_override_material(0, material)
+		if mesh.surface_get_material(0):
+			material = mesh.surface_get_material(0).duplicate(true)
+			set_surface_override_material(0, material)
 	
 func _process(delta):
 	var small_delta = delta
@@ -49,3 +50,8 @@ func flash_weapon():
 #
 #func set_skin_data(skin: SkinData):
 	#skin.apply_to_shader(material)
+
+func get_collision_shape():
+	var collision_shape = $CollisionShape3D
+	remove_child(collision_shape)
+	return collision_shape

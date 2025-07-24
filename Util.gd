@@ -2,6 +2,16 @@ extends Node
 
 var PORT = 2600
 
+var LEGACY_FPS = 47.0 # 30?
+
+var SPEED_FACTOR = LEGACY_FPS/100.0 # Meters / second
+
+var ACCEL_FACTOR = 1/1.66 # Meters / second / second
+
+var TURN_FACTOR = deg_to_rad(3) # Radians / second
+
+var TIME_FACTOR = 1/LEGACY_FPS
+
 func anglemod(angle: float) -> float:
 	return fmod(angle, PI * 2)
 
@@ -76,3 +86,63 @@ func lead_correct_position(projectile_velocity: float, origin_position: Vector2,
 	var relative_vel = target_velocity - origin_velocity
 	var travel_time = target_position.distance_to(origin_position) / projectile_velocity
 	return relative_vel * travel_time + target_position
+
+enum DISPOSITION {
+	FRIENDLY,
+	HOSTILE,
+	NEUTRAL,
+	ABANDONED
+}
+
+var DISPOSITION_COLORS = {
+	Util.DISPOSITION.FRIENDLY: Color(0,1,0),
+	Util.DISPOSITION.HOSTILE: Color(1,0,0),
+	Util.DISPOSITION.NEUTRAL: Color(1,1,0),
+	Util.DISPOSITION.ABANDONED: Color(0.5,0.5,0.5)
+}
+
+enum QUADRANT {
+	FRONT,
+	LEFT,
+	RIGHT,
+	REAR
+}
+
+
+func relative_quadrant(position: Vector2, rotation: float, subject: Vector2):
+	var rel_position: Vector2 = subject - position
+	rel_position = rel_position.rotated(rotation)
+	var angle = anglemod(rel_position.angle() + PI * 2)
+	print("rel_position", rel_position, " angle: ", rad_to_deg(angle))
+	if angle < deg_to_rad(45):
+		print("FRONT")
+		return QUADRANT.FRONT
+	elif angle < deg_to_rad(135):
+		print("RIGHT")
+		return QUADRANT.RIGHT
+	elif angle < deg_to_rad(225):
+		print("REAR")
+		return QUADRANT.REAR
+	elif angle < deg_to_rad(315):
+		print("LEFT")
+		return QUADRANT.LEFT
+	else:
+		print("FRONT")
+		return QUADRANT.FRONT
+
+
+func item_screen_box_side_length(object):
+	var scale = Client.system().camera().size / 10 # TODO: Pull from camera
+	if not object:
+		return 0
+	if object.has_method("screen_box_side_length"):
+		var sbsl = object.screen_box_side_length()# / scale
+		return sbsl
+	#elif "screen_box_side_length" in object:
+		#return object.screen_box_side_length / scale
+	#else:
+		#return 300 / scale
+	return 0
+
+func random_select(iterable):
+	return iterable[randi() % iterable.size()]

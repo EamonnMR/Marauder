@@ -2,15 +2,20 @@ extends Node
 
 @onready var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 signal universe_loaded
+signal player_ent_updated(entity: Node)
+signal player_target_updated(entity: Node)
+
 
 var playing = false
+var player_ent: Spaceship
+var player_target = null
 
 func system() -> StarSystem:
 	# Client only cares about one system - the one the player is in
 	return get_tree().get_root().get_node("Universe/System")
 
 
-func init(host: String, alias: String):
+func init(host: String, alias: String, ship_pref: String):
 	print("Client init")
 	var error = peer.create_client(host, Util.PORT)
 	if error:
@@ -20,16 +25,18 @@ func init(host: String, alias: String):
 	#get_tree().get_root().set_multiplayer_authority(0)
 	get_tree().get_root().multiplayer.connected_to_server.connect(func _on_connected():
 		var mpe = get_multiplayer_authority()
-		Server.client_handshake.rpc(alias)
+		Server.client_handshake.rpc(alias, ship_pref)
 	)
 	
 	DisplayServer.window_set_title("Marauder - Client")
+	player_ent_updated.connect(update_player)
 	playing = true 
 
-func init_local(alias: String):
+func init_local(alias: String, ship_pref: String):
 	universe_loaded.connect(func handshake_closure():
-		Server.client_handshake(alias)
+		Server.client_handshake(alias, ship_pref)
 	)
+	player_ent_updated.connect(update_player)
 	playing = true
 
 	
@@ -43,8 +50,6 @@ func server_handshake(players, state, appointed_time):
 @rpc("reliable", "authority")
 func spawn_ship(state: Dictionary):
 	system().spawn_entity(state)
-	#if state.player_owner == multiplayer.get_unique_id():
-	#	breakpoint
 
 @rpc("reliable", "authority")
 func vanish_ship(player_id, appointed_time):
@@ -77,3 +82,22 @@ func delay_until(appointed_time):
 		print("Actual Delay: ", actual_delay)
 	else:
 		print("Arrived late!")
+
+func update_player(player_ent):
+	self.player_ent = player_ent
+	player_ent.target_updated.connect(update_player_target)
+	
+func update_player_target(target_ent):
+	self.player_target = target_ent
+	player_target_updated.emit(target_ent)
+	# TODO: Update display stuff
+
+func update_player_target_ship(target):
+	var path = target.get_path()
+	if Util.is_local():
+		Server.update_player_target_ship(path)
+	else:
+		Server.update_player_target_ship.rpc(path)
+
+func get_disposition(entity):
+	return Util.DISPOSITION.NEUTRAL

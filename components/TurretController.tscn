@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpvqleqowvunp"]
+
+[ext_resource type="Script" uid="uid://cvuo03xthcs0n" path="res://components/TurretController.gd" id="1_ibyq1"]
+
+[node name="TurretController" type="Node3D"]
+script = ExtResource("1_ibyq1")

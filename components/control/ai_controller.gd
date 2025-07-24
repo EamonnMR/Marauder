@@ -14,15 +14,11 @@ enum STATES {
 @export var max_target_distance = 1000
 @export var destination_margin = 100
 
-#export var engagement_range_radius = 100
-
-var target
 var path_target
 var lead_velocity: float
 var state = STATES.IDLE
 var cache_lead_position
 
-var bodies_in_engagement_range = []
 #
 #var unvisited_spobs: Array
 
@@ -45,8 +41,8 @@ func _ready():
 	
 
 func _verify_target():
-	if target == null or not is_instance_valid(target):
-		#print("No target", target)
+	if parent.target == null or not is_instance_valid(parent.target):
+		#print("No parent.target", parent.target)
 		change_state_idle()
 		return false
 	return true
@@ -95,22 +91,22 @@ func process_state_idle(_delta):
 func process_state_attack(delta):
 	if not _verify_target():
 		return
-	
+	var target_2d_pos = Util.flatten_25d(parent.target.global_transform.origin)
 	populate_rotation_impulse_and_ideal_face(
-		#_get_target_lead_position(lead_velocity, target),
-		Util.flatten_25d(target.global_transform.origin),
+		parent.get_target_lead(),
 		delta
 	)
-	shooting = _facing_within_margin(shoot_margin)
+	# TODO: Shoot weapons independently based on margin and range
+	shooting = true #_facing_within_margin(shoot_margin)
 	thrusting = not parent.standoff and _facing_within_margin(accel_margin)
 	braking = parent.standoff
 
 func process_state_persue(delta):
 	if not _verify_target():
 		return
-	populate_rotation_impulse_and_ideal_face(Util.flatten_25d(target.global_transform.origin), delta)
+	populate_rotation_impulse_and_ideal_face(Util.flatten_25d(parent.target.global_transform.origin), delta)
 	shooting = false
-	print("Rotation Impulse: ", rotation_impulse)
+	#print("Rotation Impulse: ", rotation_impulse)
 	thrusting = _facing_within_margin(accel_margin)
 	braking = false
 
@@ -177,19 +173,20 @@ func rethink_state_path():
 	pass
 
 func rethink_state_persue():
-	#_find_target()
-	pass
+	if _check_range(parent.target):
+		change_state_attack()
 	
 #func rethink_state_leave():
 	#if warp_conditions_met():
 		#state = STATES.WARP
 
 func rethink_state_attack():
-	pass
+	if not _check_range(parent.target):
+		change_state_persue(parent.target)
 
 func change_state_idle():
 	state = STATES.IDLE
-	target = null
+	parent.server_set_target(null)
 	thrusting = false
 	shooting = false
 	rotation_impulse = 0
@@ -197,12 +194,11 @@ func change_state_idle():
 	#print("New State: Idle")
 
 func change_state_persue(target):
-	if target in bodies_in_engagement_range:
+	if _check_range(target):
 		change_state_attack()
 		return
-	
 	state = STATES.PERSUE
-	self.target = target
+	self.parent.server_set_target(target)
 	#if target == Client.player:
 		#parent.add_to_group("npcs-hostile")
 	#else:
@@ -238,30 +234,18 @@ func _get_target_lead_position(lead_velocity, target):
 	#	pass
 	return lead_position
 
-# Somewhat questioning the need for a whole node setup for this.
-func _on_engagement_range_body_entered(body):
-	
-	bodies_in_engagement_range.append(body)
-	
-	if body == target and state == STATES.PERSUE:
-		#print("Reached target")
-		change_state_attack()
-	
-	if body == path_target and state == STATES.PATH:
-		change_state_idle()
-
-func _on_engagement_range_body_exited(body):
-	
-	bodies_in_engagement_range.erase(body)
-	
-	if body == target and state == STATES.ATTACK:
-		#print("Target left engagement range")
-		change_state_persue(target)
-
 func _on_damage_taken(source):
 	match state:
 		STATES.IDLE, STATES.PERSUE, STATES.PATH:
 			change_state_persue(source)
 
 func get_target():
-	return target
+	return parent.target
+
+func _distance_to(target: Node3D) -> float:
+	return (Util.flatten_25d(target.global_transform.origin) -  Util.flatten_25d(global_transform.origin)).length()
+
+func _check_range(target: Node3D):
+	if _distance_to(target) < parent.effective_range:
+		return true
+	return false

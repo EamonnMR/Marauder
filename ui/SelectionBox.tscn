@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjcpe0m0r1sab"]
+
+[ext_resource type="Script" uid="uid://joileouwfr5p" path="res://ui/selection_box.gd" id="1_3dxp5"]
+
+[node name="SelectionBox" type="NinePatchRect"]
+script = ExtResource("1_3dxp5")

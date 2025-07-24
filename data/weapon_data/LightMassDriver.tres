@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://behq6qdmrwcg2"]
+
+[ext_resource type="PackedScene" uid="uid://cg1y745ai0rlh" path="res://data/weapon_graphics/autocannon.tscn" id="1_fl8oh"]
+[ext_resource type="PackedScene" uid="uid://dpgnh0i482a7h" path="res://entities/projectiles/MassDriverL.tscn" id="2_fl8oh"]
+[ext_resource type="Script" uid="uid://cbwlu5j6nqt4p" path="res://data/weapon_data.gd" id="3_80p2d"]
+
+[resource]
+script = ExtResource("3_80p2d")
+id = "mass_driver_l"
+speed = 2000.0
+projectile_scene = ExtResource("2_fl8oh")
+graphics = ExtResource("1_fl8oh")
+spread = 1.0
+mass_damage = 20.0
+energy_damage = 10.0
+splash_mass_damage = 0
+splash_energy_damage = 0
+splash_radius = 0
+ignore_shields = false
+fade = false
+impact = 40.0
+reload = 25.0
+decay = 15.0
+lifetime = 110.0
+guidance_type = 3
+translucent = false

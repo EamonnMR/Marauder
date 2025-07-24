@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://cita77ysysgkf"]
+
+[ext_resource type="PackedScene" uid="uid://cg1y745ai0rlh" path="res://data/weapon_graphics/autocannon.tscn" id="1_6orgr"]
+[ext_resource type="Script" uid="uid://cbwlu5j6nqt4p" path="res://data/weapon_data.gd" id="1_i3224"]
+[ext_resource type="PackedScene" uid="uid://dseftpp7y2xps" path="res://entities/projectiles/plasma.tscn" id="2_6orgr"]
+
+[resource]
+script = ExtResource("1_i3224")
+id = "plasma"
+speed = 1200.0
+projectile_scene = ExtResource("2_6orgr")
+graphics = ExtResource("1_6orgr")
+spread = 2.0
+mass_damage = 10.0
+energy_damage = 20.0
+splash_mass_damage = 10.0
+splash_energy_damage = 20.0
+splash_radius = 20.0
+ignore_shields = false
+fade = true
+impact = 40.0
+reload = 20.0
+decay = 25.0
+lifetime = 50.0
+guidance_type = 3
+translucent = true
+metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"

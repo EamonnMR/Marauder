@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://bypxiodd7q533"]
+
+[ext_resource type="PackedScene" uid="uid://5s6qjwrt6wrn" path="res://components/EulerAimHelper.tscn" id="2_ddti2"]
+[ext_resource type="Script" uid="uid://cvuo03xthcs0n" path="res://components/TurretController.gd" id="2_uiqyg"]
+
+[sub_resource type="GDScript" id="GDScript_uiqyg"]
+script/source = "extends Node3D
+
+func add_graphics(graphics):
+	$ElevationPivot.add_child(graphics)
+
+func get_emerge_point():
+	return $ElevationPivot/Graphics/EmergePoint
+
+func _process(delta):
+	var rotate_self, rotate_pivot $EulerAimHelper.do the thing
+"
+
+[node name="FrontQuadrantTurret" type="Node3D"]
+script = SubResource("GDScript_uiqyg")
+
+[node name="EulerAimHelper" parent="." instance=ExtResource("2_ddti2")]
+
+[node name="ElevationPivot" type="Node3D" parent="."]
+
+[node name="Controller" type="Node3D" parent="."]
+script = ExtResource("2_uiqyg")
+metadata/_custom_type_script = "uid://de1o527n4yahm"

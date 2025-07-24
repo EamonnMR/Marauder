@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cllgp8h23470i"]
+
+[ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="1_l1bne"]
+[ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_pouar"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_l1bne"]
+size = Vector3(32, 5, 24)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_pouar"]
+points = PackedVector3Array(16.254, 2.83333, 12.1246, -14.7763, -2.5, -11.1436, -16.254, 2.83333, -12.2516, -16.254, 2.83333, 12.1246, 16.254, 2.83333, -12.2516, 14.7763, -2.5, 11.0166, -14.7763, -2.5, 11.0166, 14.7763, -2.5, -11.1436)
+
+[node name="MeshGraphics" instance=ExtResource("1_l1bne")]
+mesh = SubResource("BoxMesh_l1bne")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
+shape = SubResource("ConvexPolygonShape3D_pouar")
+
+[node name="C" parent="." index="1" instance=ExtResource("2_pouar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0416, -2.53904, 0)
+
+[node name="R" parent="." index="2" instance=ExtResource("2_pouar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0416, 1.74331, 12.6662)
+
+[node name="L" parent="." index="3" instance=ExtResource("2_pouar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.042, 1.743, -12.666)

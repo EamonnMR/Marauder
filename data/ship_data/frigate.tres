@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://duuihlbafcod1"]
+
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_83t0d"]
+[ext_resource type="PackedScene" uid="uid://ery5bjuixywl" path="res://data/ship_animations/Frigate.tscn" id="1_nitpj"]
+
+[resource]
+script = ExtResource("1_83t0d")
+id = "frigate"
+max_speed = 300
+accel = 300
+turn = 45
+name = "Frigate"
+make = "Idan"
+graphics = ExtResource("1_nitpj")
+max_shields = 525.0
+max_health = 750.0
+mass = 650.0
+weapon_config = Dictionary[String, String]({
+"WeaponSlot": "plasma_turret"
+})
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

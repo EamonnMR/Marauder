@@ -10,27 +10,24 @@ var projectile
 
 var iff: IffProfile
 
-var type: String
+@export var type: String
+@onready var data: WeaponData = Data.weapons[type]
 
-@onready var parent = get_node("../../")
+var parent: Spaceship
 
-@export var projectile_scene: PackedScene
+@onready var spread_max = deg_to_rad(data.spread * 0.5)
+@onready var spread_min = -1 * spread_max
+var emerge_point: Node3D
+
 @export var burst_count = 0
 @export var dupe_count = 1
-@export var spread: float = 0
 @export var world_projectile: bool = true  # Disable for beams or other things that should follow the player
 @export var vary_pitch = 0
 @export var ammo_item: String
 @export var primary = true
-@export var weapon_name: String
 @export var projectile_velocity: float
 
 # @export var dmg_factor: float = 1
-@export var mass_damage: int
-@export var energy_damage: int
-@export var splash_mass_damage: int
-@export var splash_energy_damage: int
-@export var splash_radius: float
 
 @export var timeout: float
 @export var explode_on_timeout: bool
@@ -41,11 +38,20 @@ var type: String
 @export var beam_length: int
 @export var recoil: int
 
+
+
 #@onready var damage: Health.DamageVal
 #@onready var splash_damage: Health.DamageVal
 
 func _ready():
-	pass
+	$Cooldown.wait_time = data.reload * Util.TIME_FACTOR
+	#if data.front_quadrant_turret:
+		##add_child(preload("res://components/FrontQuadTurret.tscn"))
+		#var graphics = $Graphics
+		#$FrontQuadTurret.add_weapon(graphics)
+		#emerge_point = $FrontQuadTurret
+	#else:
+	emerge_point = self#$Graphics#/EmergePoint
 	#Data.weapons[type].apply_to_node(self)
 #
 	#damage = Health.DamageVal.new(
@@ -86,7 +92,7 @@ func _shoot():
 	var projectile = _create_projectile()
 	var projectile_data: Dictionary = projectile.marshal_spawn_state()
 	for player in Server.get_rpc_player_ids():
-		shoot_remote.rpc_id(player, projectile_data)
+		shoot_remote.rpc_id(player, Server.time(), projectile_data)
 	
 	cooldown = true
 	$Cooldown.start()
@@ -95,7 +101,8 @@ func _shoot():
 
 
 @rpc("reliable", "authority")
-func shoot_remote(state: Dictionary):
+func shoot_remote(appointed_time: float, state: Dictionary):
+	Client.delay_until(appointed_time)
 	cooldown = true
 	$Cooldown.start()
 	var new_projectile = Client.system().spawn_entity(state)
@@ -106,7 +113,7 @@ func _create_projectile():
 	var new_projectile = false
 	var recycle_projectile = not world_projectile # TODO: make optional, it would be neat
 	if world_projectile or (recycle_projectile and not is_instance_valid(projectile)):
-		projectile = projectile_scene.instantiate()
+		projectile = data.projectile_scene.instantiate()
 		new_projectile = true
 	# projectile.init()
 	#projectile.damage *= dmg_factor
@@ -122,13 +129,7 @@ func _create_projectile():
 	#if "splash_damage" in projectile:
 		#projectile.splash_damage = splash_damage
 		#projectile.splash_radius = splash_radius
-	#if "linear_velocity" in projectile:
-		#projectile.initial_velocity = projectile_velocity
-		#projectile.linear_velocity = parent.linear_velocity
-		#
-
-	#projectile.rotate_x(randf_range(-spread/2, spread/2))
-	projectile.rotate_y(randf_range(-spread/2, spread/2))
+	projectile.rotate_y(randf_range(spread_min, spread_max))
 	
 	# TODO: This seems like a similar direction issue to warp-in
 	#if recoil and new_projectile and world_projectile:
@@ -136,7 +137,7 @@ func _create_projectile():
 
 	
 	projectile.iff = iff
-	projectile.set_lifetime(timeout)
+	projectile.type = type
 	#if "recoil" in projectile:
 		#projectile.recoil = recoil
 	#if "explode_on_timeout" in projectile:
@@ -150,8 +151,18 @@ func _create_projectile():
 		#projectile.do_beam.call_deferred(global_transform.origin, [iff.owner])
 	#
 	if new_projectile and world_projectile:
-		projectile.global_transform = global_transform
+		projectile.global_transform = emerge_point.global_transform
+		# TODO: Reset projectile scale
+		var deflect = randf_range(spread_min, spread_max)
+		var deflect_deg = rad_to_deg(PI)
+		projectile.initial_rotation = deflect
+		projectile.initial_velocity = parent.linear_velocity
+
 		Client.system().add_child(projectile)
+		#projectile.rotate_y(deflect)
+		projectile.scale = Vector3(1,1,1)
+		projectile.initial_rotation = deflect
+
 	else:
 		get_node("../").add_child(projectile)
 	return projectile

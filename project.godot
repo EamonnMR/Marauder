@@ -8,11 +8,24 @@
 
 config_version=5
 
+[addons]
+
+resources_spreadsheet_view/array_color_tint=100.0
+resources_spreadsheet_view/color_rows=true
+resources_spreadsheet_view/array_min_width=128.0
+resources_spreadsheet_view/resource_preview_size=32.0
+resources_spreadsheet_view/clip_headers=false
+resources_spreadsheet_view/dupe_arrays=true
+resources_spreadsheet_view/context_menu_on_leftclick=false
+resources_spreadsheet_view/fold_docks=true
+resources_spreadsheet_view/resource_cell_label_mode=1
+resources_spreadsheet_view/freeze_first_column=true
+
 [application]
 
 config/name="Marauder"
 config/description="Yet another spacecraft experience"
-run/main_scene="res://menu/MainMenu.tscn"
+run/main_scene="uid://cdf7m68gxfsvb"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,6 +36,21 @@ Server="*res://Server.gd"
 Client="*res://Client.gd"
 Data="*res://Data.gd"
 U25d="*res://U25d.gd"
+
+[display]
+
+window/size/viewport_width=1024
+window/size/viewport_height=768
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/resources_spreadsheet_view/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://data/projectile_graphics/": "gray"
+}
 
 [input]
 

@@ -17,10 +17,13 @@ func system() -> StarSystem:
 class PlayerRecord:
 	var id: int
 	var alias: String
+	var ship_pref: String
+	var player_entity: Spaceship
 	
-	func _init(id, alias):
+	func _init(id, alias, ship_pref):
 		self.id = id
 		self.alias = alias
+		self.ship_pref = ship_pref
 
 var players: Dictionary[int, PlayerRecord] = {}
 
@@ -45,7 +48,7 @@ func init():
 	online = true
 	# universe().system().show()
 
-func init_local(alias):
+func init_local():
 	print("Server init local")
 	DisplayServer.window_set_title("Marauder - Local")
 	
@@ -53,11 +56,14 @@ func init_local(alias):
 	#universe().system().show()
 	
 @rpc("reliable", "any_peer", "call_remote")
-func client_handshake(alias):
+func client_handshake(alias: String, ship_pref: String):
 	var sender = get_sender()
 	print("Client Handshake from: ", sender)
 	
-	players[sender] = PlayerRecord.new(sender, alias)
+	if not ship_pref in Data.ships:
+		print("Invalid Ship: ", ship_pref)
+		ship_pref = "shuttle"
+	players[sender] = PlayerRecord.new(sender, alias, ship_pref)
 	# maybe don't set this 
 	#players[sender].entity = 
 	print(players)
@@ -67,23 +73,26 @@ func client_handshake(alias):
 	print("RPC Sent")
 
 func spawn_player(player_id: int):
-	var player_ent = preload("res://entities/ships/Warship.tscn").instantiate()
+	var player_ent = preload("res://entities/Ship.tscn").instantiate()
+	player_ent.type = players[player_id].ship_pref
 	player_ent.player_owner = player_id
 	player_ent.name = player_ship_name(player_id)
 	player_ent.faction = "pirate"
 	player_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
 	universe().get_node("System").add_child(player_ent)
+	players[player_id].player_entity = player_ent
 	# Sync
 	var player_state = player_ent.marshal_spawn_state()
 	for player in get_rpc_player_ids():
 		Client.spawn_ship.rpc_id(player, player_state)
 		
 func spawn_npc():
-	var npc_ent = preload("res://entities/ships/WarshipNpc.tscn").instantiate()
+	var npc_ent = preload("res://entities/Ship.tscn").instantiate()
+	npc_ent.type = Util.random_select(Data.ships.keys())
 	npc_ent.faction = "Terran"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1
-	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5,5), randf_range(-5,5)))
+	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5000,5000), randf_range(-5000,5000)))
 	universe().get_node("System").add_child(npc_ent)
 	# Sync
 	var state = npc_ent.marshal_spawn_state()
@@ -98,6 +107,9 @@ func get_sender() -> int:
 	if rid == 0:
 		return 1
 	return rid
+
+func get_sender_data() -> PlayerRecord:
+	return players[get_sender()]
 	
 func peer_disconnected(peer_id):
 	if players[peer_id]:
@@ -120,3 +132,11 @@ func get_rpc_player_ids():
 	var keys = Server.players.keys()
 	keys.erase(1)
 	return keys
+
+@rpc("reliable", "any_peer", "call_remote")
+func update_player_target_ship(target):
+	var sender: PlayerRecord = get_sender_data()
+	var target_ent = get_node(target)
+
+	if target_ent is Spaceship and is_instance_valid(sender.player_entity):
+		sender.player_entity.server_set_target(target_ent)

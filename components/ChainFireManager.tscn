@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://33myg6onhx2h"]
+
+[ext_resource type="Script" uid="uid://0533sfuwed5t" path="res://components/chain_fire_manager.gd" id="1_mtxri"]
+
+[node name="ChainFireManager" type="Node"]
+script = ExtResource("1_mtxri")

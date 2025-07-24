@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://bnjqqilfyaegw"]
+
+[ext_resource type="PackedScene" uid="uid://cg1y745ai0rlh" path="res://data/weapon_graphics/autocannon.tscn" id="1_gkeo3"]
+[ext_resource type="PackedScene" uid="uid://daqvpskp7duat" path="res://entities/projectiles/DisruptorM.tscn" id="2_gkeo3"]
+[ext_resource type="Script" uid="uid://cbwlu5j6nqt4p" path="res://data/weapon_data.gd" id="3_m2rek"]
+
+[resource]
+script = ExtResource("3_m2rek")
+id = "disruptor_m"
+speed = 1400.0
+projectile_scene = ExtResource("2_gkeo3")
+graphics = ExtResource("1_gkeo3")
+spread = 4.0
+mass_damage = 5.0
+energy_damage = 10.0
+splash_mass_damage = 5.0
+splash_energy_damage = 10.0
+splash_radius = 9.0
+ignore_shields = false
+fade = false
+impact = 20.0
+reload = 13.0
+decay = 0
+lifetime = 25.0
+guidance_type = 0
+translucent = true
+metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"

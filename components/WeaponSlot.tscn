@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://883jrcdkyb8h"]
+[gd_scene load_steps=3 format=3 uid="uid://883jrcdkyb8h"]
 
 [ext_resource type="Script" uid="uid://dy5p3vpv1cjxe" path="res://components/weapon_slot.gd" id="1_omx5h"]
+[ext_resource type="PackedScene" uid="uid://5s6qjwrt6wrn" path="res://components/EulerAimHelper.tscn" id="2_jtvxf"]
 
 [node name="WeaponSlot" type="Node3D"]
 script = ExtResource("1_omx5h")
+
+[node name="EulerAimHelper" parent="." instance=ExtResource("2_jtvxf")]
+
+[node name="Turret" type="Node3D" parent="."]
+
+[node name="Pivot" type="Node3D" parent="Turret"]

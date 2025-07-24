@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwq3jd2hg3ema"]
+
+[ext_resource type="CylinderMesh" uid="uid://druaqjxtyhtcg" path="res://data/projectile_graphics/MassDriverL.tres" id="1_ib55w"]
+
+[node name="Autocannon" type="MeshInstance3D"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("1_ib55w")
