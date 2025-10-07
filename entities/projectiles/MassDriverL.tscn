@@ -1,15 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dpgnh0i482a7h"]
+[gd_scene load_steps=3 format=3 uid="uid://dpgnh0i482a7h"]
 
 [ext_resource type="PackedScene" uid="uid://c7tdtoyj82g47" path="res://entities/projectiles/Projectile.tscn" id="1_t7vot"]
 [ext_resource type="CylinderMesh" uid="uid://druaqjxtyhtcg" path="res://data/projectile_graphics/MassDriverL.tres" id="2_xcfkt"]
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8o8gi"]
-points = PackedVector3Array(0.398629, 12.5817, 0.562092, -0.581699, -12.5817, -0.418237, -0.581699, -12.5817, 0.398629, -0.581699, 12.5817, -0.418237, 0.398629, -12.5817, -0.581699, 0.398629, -12.5817, 0.562092, 0.398629, 12.5817, -0.581699, -0.581699, 12.5817, 0.398629)
 
 [node name="Projectile" instance=ExtResource("1_t7vot")]
 
 [node name="Graphics" parent="." index="0"]
 mesh = ExtResource("2_xcfkt")
-
-[node name="CollisionShape3D2" parent="Area3D" index="0"]
-shape = SubResource("ConvexPolygonShape3D_8o8gi")

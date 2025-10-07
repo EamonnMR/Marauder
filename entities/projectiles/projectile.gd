@@ -31,6 +31,19 @@ func _ready():
 	else:
 		initial_emission_energy = material.emission_energy_multiplier
 		initial_albedo = material.albedo_color.a
+	$Area3D/CollisionShape3D2.global_rotation = Vector3(deg_to_rad(45), deg_to_rad(135), deg_to_rad(0))
+	#var camera_offset = get_tree().get_root().get_node("Universe/System/Node3D/CameraOffset")
+	#var camera = camera_offset.get_node("Camera3D")
+	#$Area3D/CollisionShape3D2.look_at_from_position(camera_offset.global_position, camera.global_position)
+	#var gr = $Area3D/CollisionShape3D2.global_rotation
+	#var grx = rad_to_deg(gr.x)
+	#var gry = rad_to_deg(gr.y)
+	#var grz = rad_to_deg(gr.z)
+	#$Area3D/CollisionShape3D2.global_position = global_position
+	
+	
+	
+	#(camera, Vector3(0,0,0))
 func _process(delta):
 	if data.fade:
 		var fade = _fade_factor()

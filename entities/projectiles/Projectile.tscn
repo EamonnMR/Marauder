@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bvvt5kyhpiatf" path="res://data/projectile_graphics/autocannon.tscn" id="2_j1bw3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_j1bw3"]
-size = Vector3(1, 22.4009, 1)
+size = Vector3(1.9610596, 2.2189026, 77.7225)
 
 [node name="Projectile" type="CharacterBody3D"]
 collision_layer = 0
@@ -16,7 +16,7 @@ script = ExtResource("1_avawr")
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00610352, 0)
+transform = Transform3D(1.0000002, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 shape = SubResource("BoxShape3D_j1bw3")
 
 [node name="Lifetime" type="Timer" parent="."]
