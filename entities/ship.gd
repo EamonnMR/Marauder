@@ -108,7 +108,7 @@ func _physics_process(delta):
 	var previous_rotation = rotation.y
 	if Util.is_server():
 		linear_velocity = get_limited_velocity_with_thrust(delta)
-		var rotation_impulse = $Controller.rotation_impulse * delta * turn
+		var rotation_impulse = $Controller.rotation_impulse # * delta * turn
 		rotation.y += rotation_impulse
 		
 		# warning-ignore:return_value_discarded
@@ -245,14 +245,12 @@ func screen_box_side_length():
 		var mesh = $Graphics.mesh
 		var aabb = mesh.get_aabb()
 		var max_dim = max(aabb.size.x, aabb.size.y, aabb.size.z) # * factor
-		#var camera_scale =  Client.system().camera().size 
+		#var camera_scaleg =  Client.system().camera().size 
 		#var reference_dim = 10.0
 		#var re_scale = camera_scale * reference_dim * max_dim
 		sbsl = max_dim
 		return max_dim
-		breakpoint
 	else:
-		breakpoint
 		return sbsl
 
 func marshal_spawn_state() -> Dictionary:
@@ -345,3 +343,6 @@ func get_target_lead_weapon(weapon_data: WeaponData) -> Vector2:
 
 func position_25d():
 	return Util.flatten_25d(global_position)
+
+func display_state():
+	return $Controller.display_state()

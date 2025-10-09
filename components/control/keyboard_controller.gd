@@ -6,13 +6,12 @@ extends Controller
 @onready var is_current_player: bool = decide_if_is_current_player()
 @onready var is_remote: bool = decide_if_is_remote()
 
-func get_rotation_impulse() -> int:
-	var dc = 0
+func get_rotation_impulse(delta) -> float:
 	if Input.is_action_pressed("turn_left"):
-		dc += 1
+		return delta * parent.turn
 	if Input.is_action_pressed("turn_right"):
-		dc -= 1
-	return dc
+		return -delta * parent.turn
+	return 0.0
 	
 func _ready():
 	set_multiplayer_authority(parent.player_owner)
@@ -40,7 +39,7 @@ func _physics_process(delta):
 		frame.thrusting = Input.is_action_pressed("thrust")
 		frame.braking = Input.is_action_pressed("brake")
 		frame.shooting = Input.is_action_pressed("shoot")
-		frame.rotation_impulse = get_rotation_impulse()
+		frame.rotation_impulse = get_rotation_impulse(delta)
 		
 		if is_remote:
 			send_input.rpc_id(1, frame)

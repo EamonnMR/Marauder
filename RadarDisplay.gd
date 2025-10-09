@@ -30,7 +30,10 @@ func _process(_delta):
 
 func _get_color(node: Node):
 	# TODO: if IFF decoder type upgrade is installed
+	#var color = DISPOSITION_COLORS[Util.DISPOSITION.NEUTRAL]#Client.get_disposition(node)]
 	var color = DISPOSITION_COLORS[Util.DISPOSITION.NEUTRAL]#Client.get_disposition(node)]
+	if "target" in node and Client.player_ent == node.target:
+		color = DISPOSITION_COLORS[Util.DISPOSITION.HOSTILE]
 	return color
 	#if Client.target_ship != node:
 	#	return color

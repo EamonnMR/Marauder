@@ -148,4 +148,16 @@ grow_vertical = 0
 color = Color(0.0811599, 0.241788, 0.151087, 0.415686)
 script = ExtResource("15_08gru")
 
+[node name="StaticLabel" type="Label" parent="UI/TargetInfo"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="DynamicLabel" type="Label" parent="UI/TargetInfo"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 42.0
+offset_bottom = 55.0
+
 [connection signal="timeout" from="System/NPCSpawner/Timer" to="System/NPCSpawner" method="_on_timer_timeout"]
