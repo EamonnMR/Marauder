@@ -80,7 +80,7 @@ class Persue extends AiState:
 		
 	func process(delta):
 		if not parent._verify_target():
-			parent.set_idle()
+			return
 		#parent.populate_rotation_impulse_and_ideal_face(
 			#parent.parent.get_target_lead(),
 			#delta
