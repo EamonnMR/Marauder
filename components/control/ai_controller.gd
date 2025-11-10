@@ -186,6 +186,8 @@ func attack_if_in_range():
 	return false
 
 func persue_if_out_of_range():
+	if not _verify_target():
+		return
 	if not _check_range(parent.target):
 		change_state(STATE_NAME.PERSUE)
 		return true
@@ -318,7 +320,7 @@ func display_state():
 		var state_name_txt = STATE_NAME.keys()[state_name]
 		
 		var rot_imp_txt = "rotation impulse: " + str(rotation_impulse)
-		var ideal_face_txt = "ideal face: " + str(deg_to_rad(ideal_face))
+		var ideal_face_txt = "ideal face: " + (str(deg_to_rad(ideal_face)) if ideal_face != null else "Nil")
 		var last_nav_tick_txt = "Last Nav Tick: " + str(last_nav_tick)
 		return "\n".join([state_name_txt, rot_imp_txt, ideal_face_txt, last_nav_tick_txt])
 	else:

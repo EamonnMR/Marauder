@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+class_name Projectile
+
 var linear_velocity = Vector2()
 
 @export var type: String
@@ -32,15 +34,14 @@ func _ready():
 		initial_emission_energy = material.emission_energy_multiplier
 		initial_albedo = material.albedo_color.a
 	$Area3D/CollisionShape3D2.global_rotation = Vector3(deg_to_rad(45), deg_to_rad(135), deg_to_rad(0))
-	#var camera_offset = get_tree().get_root().get_node("Universe/System/Node3D/CameraOffset")
-	#var camera = camera_offset.get_node("Camera3D")
-	#$Area3D/CollisionShape3D2.look_at_from_position(camera_offset.global_position, camera.global_position)
-	#var gr = $Area3D/CollisionShape3D2.global_rotation
-	#var grx = rad_to_deg(gr.x)
-	#var gry = rad_to_deg(gr.y)
-	#var grz = rad_to_deg(gr.z)
-	#$Area3D/CollisionShape3D2.global_position = global_position
 	
+	# Point defense mechanic
+	if data.projectile_health:
+		var health: Health = preload("res://components/Health.tscn").instantiate()
+		health.max_health = data.projectile_health
+		health.max_shields = 0 # TODO: Shielded projectiles?
+		add_child(health)
+		Util.point_defense_can_hit(self)
 	
 	
 	#(camera, Vector3(0,0,0))
@@ -120,10 +121,13 @@ func unmarshal_spawn_state(state):
 
 
 func _on_area_3d_body_entered(body):
-	if is_instance_valid(body) and not iff.should_exclude(body):
+	if is_instance_valid(body) and not _should_exclude_impact(body):
 		if Util.is_server():
 			Health.do_damage(body, get_falloff_damage(damage), owner())
 			if data.impact > 0 and body.has_method("receive_impact"):
 				body.receive_impact(linear_velocity.normalized() * data.impact)
 		detonate()
 		queue_free()
+		
+func _should_exclude_impact(body):
+	return iff.should_exclude(body)

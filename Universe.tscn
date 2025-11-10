@@ -160,4 +160,6 @@ offset_top = 32.0
 offset_right = 42.0
 offset_bottom = 55.0
 
+[node name="Node" type="Node" parent="."]
+
 [connection signal="timeout" from="System/NPCSpawner/Timer" to="System/NPCSpawner" method="_on_timer_timeout"]

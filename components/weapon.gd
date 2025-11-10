@@ -75,12 +75,17 @@ func _ready():
 
 func try_shoot():
 	if Util.is_server():
-		if not cooldown and not burst_cooldown:
-			if _try_consume_ammo():
-				# TODO: Consume ammo
-				_shoot()
-				return true
-		return false
+		if _excluded_by_guidance():
+			return false
+			
+		if cooldown or burst_cooldown:
+			return false
+		
+		if _try_consume_ammo():
+			# TODO: Consume ammo
+			_shoot()
+			return true
+	return false
 
 func _shoot():
 	if burst_count:
@@ -162,6 +167,9 @@ func _create_projectile():
 		#projectile.rotate_y(deflect)
 		projectile.scale = Vector3(1,1,1)
 		projectile.initial_rotation = deflect
+		
+		if "target" in projectile:
+			projectile.target = parent.target
 
 	else:
 		get_node("../").add_child(projectile)
@@ -185,3 +193,9 @@ func _try_consume_ammo():
 
 func _on_cooldown_timeout():
 	cooldown = false
+
+func _excluded_by_guidance():
+	if not data.guidance_type == WeaponData.GUIDANCE_TYPE.GUIDED:
+		return false
+		
+	return not is_instance_valid(parent.target)

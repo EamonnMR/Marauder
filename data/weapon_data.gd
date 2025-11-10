@@ -29,6 +29,8 @@ enum GUIDANCE_TYPE {
 @export var lifetime: int
 @export var guidance_type: GUIDANCE_TYPE
 @export var translucent: bool
+@export var guided_turn_rate: int
+@export var projectile_health: int
 
 func damage() -> Health.DamageVal:
 	return Health.DamageVal.new(mass_damage, energy_damage, ignore_shields)

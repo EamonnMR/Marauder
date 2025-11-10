@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://xpqpmu7ntkti"]
+
+[ext_resource type="PackedScene" uid="uid://cg1y745ai0rlh" path="res://data/weapon_graphics/autocannon.tscn" id="1_wcdft"]
+[ext_resource type="PackedScene" uid="uid://v8n1sia2i851" path="res://entities/projectiles/Torpedo.tscn" id="2_wcdft"]
+[ext_resource type="Script" uid="uid://cbwlu5j6nqt4p" path="res://data/weapon_data.gd" id="3_n2xmo"]
+
+[resource]
+script = ExtResource("3_n2xmo")
+id = "torpedo"
+speed = 1400.0
+projectile_scene = ExtResource("2_wcdft")
+graphics = ExtResource("1_wcdft")
+spread = 2.0
+mass_damage = 20.0
+energy_damage = 10.0
+splash_mass_damage = 5.0
+splash_energy_damage = 10.0
+splash_radius = 10.0
+impact = 50.0
+reload = 15.0
+lifetime = 100.0
+guidance_type = 4
+guided_turn_rate = 70.0
+projectile_health = 4.0
+metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"

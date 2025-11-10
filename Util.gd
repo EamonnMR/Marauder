@@ -146,3 +146,6 @@ func item_screen_box_side_length(object):
 
 func random_select(iterable):
 	return iterable[randi() % iterable.size()]
+
+func point_defense_can_hit(scene):
+	scene.set_collision_layer_value(4, true)
