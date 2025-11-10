@@ -156,6 +156,7 @@ func _create_projectile():
 		#projectile.do_beam.call_deferred(global_transform.origin, [iff.owner])
 	#
 	if new_projectile and world_projectile:
+				
 		projectile.global_transform = emerge_point.global_transform
 		# TODO: Reset projectile scale
 		var deflect = randf_range(spread_min, spread_max)
@@ -164,6 +165,7 @@ func _create_projectile():
 		projectile.initial_velocity = parent.linear_velocity
 
 		Client.system().add_child(projectile)
+		projectile.name = _mangle_name(projectile.name)
 		#projectile.rotate_y(deflect)
 		projectile.scale = Vector3(1,1,1)
 		projectile.initial_rotation = deflect
@@ -199,3 +201,8 @@ func _excluded_by_guidance():
 		return false
 		
 	return not is_instance_valid(parent.target)
+	
+func _mangle_name(name: String):
+	# I once again register my protest against this issue being closed.
+	# https://github.com/godotengine/godot/issues/27608
+	return name.replace("@", "__")

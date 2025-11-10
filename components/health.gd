@@ -104,7 +104,7 @@ func take_damage(damage: DamageVal, source):
 	if not damage.ignore_shields:
 		if damage.energy > 0:
 			reset_shield_regen()
-		
+
 			if shields > 0:
 				if damage.energy > 0:
 					if shields < damage.energy:

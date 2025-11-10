@@ -6,15 +6,20 @@ var target
 @onready var parent: StarSystem = get_node("../")
 
 func _physics_process(delta):
-	if is_instance_valid(target):
-		var turn = get_frame_turn(delta)
-		print("Turn: ", turn)
-		rotation.y += turn
-		velocity = U25d.raise(Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y))
+	if Util.is_server():
+		if is_instance_valid(target):
+			var turn = get_frame_turn(delta)
+			print("Turn: ", turn)
+			rotation.y += turn
+			velocity = U25d.raise(Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y))
+		else:
+			target = null
+		super(delta)
 	else:
-		target = null
-	super(delta)
-	
+		do_lerp_update()
+
+
+
 
 func marshal_spawn_state() -> Dictionary:
 	var super_state = super()
@@ -23,13 +28,14 @@ func marshal_spawn_state() -> Dictionary:
 
 func unmarshal_spawn_state(state):
 	super(state)
-	target = get(state.target) if state.target else null
+	target = get_node(state.target) if state.target else null
 	
 func marshal_frame_state() -> Dictionary:
 	return {
 		"origin": Util.flatten_25d(transform.origin),
 		"rotation": rotation.y
 	}
+	breakpoint
 	#.merged(
 	#	$Health.marshal_frame_state()
 	#)
@@ -41,6 +47,8 @@ func do_lerp_update():
 		rotation.y = lerp_helper.calc_angle("rotation")
 		#$Health.health = lerp_helper.calc_numeric("health")
 		#$Health.shields = lerp_helper.calc_numeric("shields")
+	else:
+		print("Can't lerp")
 
 func server_set_target(new_target: Node3D):
 	set_target(new_target)	
