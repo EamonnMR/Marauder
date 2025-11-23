@@ -14,6 +14,7 @@ script = ExtResource("1_avawr")
 [node name="Graphics" parent="." instance=ExtResource("2_j1bw3")]
 
 [node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(1.0000002, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
@@ -21,5 +22,6 @@ shape = SubResource("BoxShape3D_j1bw3")
 
 [node name="Lifetime" type="Timer" parent="."]
 
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="Lifetime" to="." method="_on_Lifetime_timeout"]

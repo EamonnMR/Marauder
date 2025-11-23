@@ -12,6 +12,7 @@ class_name ShipData
 @export var max_health: int = 10
 @export var mass: int = 10
 @export var weapon_config: Dictionary[String, String]
+@export var pdc_can_target: bool
 
 func display_name():
 	return " ".join([make, name])

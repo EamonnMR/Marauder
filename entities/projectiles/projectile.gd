@@ -9,6 +9,7 @@ var linear_velocity = Vector2()
 var iff: IffProfile
 @onready var damage: Health.DamageVal = data.damage()
 @onready var splash_damage: Health.DamageVal = data.splash_damage()
+@onready var faction = iff.faction
 
 var explode_on_timeout: bool = true
 var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
@@ -33,8 +34,7 @@ func _ready():
 	else:
 		initial_emission_energy = material.emission_energy_multiplier
 		initial_albedo = material.albedo_color.a
-	$Area3D/CollisionShape3D2.global_rotation = Vector3(deg_to_rad(45), deg_to_rad(135), deg_to_rad(0))
-	
+	_camera_align_collider()
 	# Point defense mechanic
 	if data.projectile_health:
 		var health: Health = preload("res://components/Health.tscn").instantiate()
@@ -129,5 +129,9 @@ func _on_area_3d_body_entered(body):
 		detonate()
 		queue_free()
 		
+		
 func _should_exclude_impact(body):
 	return iff.should_exclude(body)
+	
+func _camera_align_collider():
+	$Area3D/CollisionShape3D2.global_rotation = Vector3(deg_to_rad(45), deg_to_rad(135), deg_to_rad(0))

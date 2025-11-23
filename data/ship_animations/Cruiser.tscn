@@ -48,3 +48,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.61676, 4.62553, 13.7608)
 
 [node name="TopL" parent="." index="10" instance=ExtResource("2_15tex")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.61708, 4.62553, -13.761)
+
+[node name="WingR" parent="." index="11" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.326897, 0, 40.78276)
+turret = true
+
+[node name="WingL" parent="." index="12" instance=ExtResource("2_15tex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.327, 0, -40.783)
+turret = true

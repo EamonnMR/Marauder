@@ -209,7 +209,7 @@ func set_idle():
 
 func _verify_target():
 	var target = parent.target
-	if target == null or not is_instance_valid(target):
+	if target == null or not is_instance_valid(parent.target):
 		#print("No parent.target", parent.target)
 		set_idle()
 		return false
@@ -310,7 +310,7 @@ func _distance_to(target: Node3D) -> float:
 	return (Util.flatten_25d(target.global_transform.origin) -  Util.flatten_25d(global_transform.origin)).length()
 
 func _check_range(target: Node3D):
-	if _distance_to(target) < parent.effective_range:
+	if parent.effective_range and _distance_to(target) < parent.effective_range:
 		return true
 	return false
 

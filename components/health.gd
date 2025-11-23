@@ -74,8 +74,9 @@ func set_max_health(max_h, max_s):
 	max_health = max_h
 	if health == -1 or health == old_max:
 		health = max_health
-	max_shields = max_s
+		
 	old_max = max_shields
+	max_shields = max_s
 	if shields == -1 or shields == old_max:
 		shields = max_shields
 		
@@ -96,7 +97,7 @@ func can_heal():
 	return health < max_health
 
 func take_damage(damage: DamageVal, source):
-	
+	print("Health Before: ", shields, "/", health)
 	if invulnerable:
 		return
 	
@@ -116,8 +117,10 @@ func take_damage(damage: DamageVal, source):
 							emit_signal("damaged", source)
 							return
 	if shields > 0:
+		print("Health After: ", shields, "/", health)
 		return
 	health -= mass_damage
+	print("Health After: ", shields, "/", health)
 
 	if health <= 0 and not already_destroyed:
 		already_destroyed = true
@@ -138,9 +141,17 @@ func serialize():
 func deserialize(data):
 	health = data.health
 
+# Note: Hack to support PDC interaction between shots and other shots
+
 static func do_damage(entity: Node, damage: DamageVal, source: Node):
-	if entity.has_node("Health"):
-		entity.get_node("Health").take_damage(damage, source)
+	if Health.can_take_damage(entity):
+		var target_health = entity.get_node("Health")
+		if not target_health:
+			target_health = entity.get_node("../Health")
+		target_health.take_damage(damage, source)
+
+static func can_take_damage(entity: Node):
+	return entity.has_node("Health") or entity.has_node("../Health")
 
 func reset_shield_regen():
 	shield_regen_cooldown = true

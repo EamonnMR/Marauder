@@ -12,6 +12,10 @@ var TURN_FACTOR = deg_to_rad(3) # Radians / second
 
 var TIME_FACTOR = 1/LEGACY_FPS
 
+var IMPACT_FACTOR = ACCEL_FACTOR * 20
+
+const PDC_TARGET_GROUP = "pdc_targets"
+
 func anglemod(angle: float) -> float:
 	return fmod(angle, PI * 2)
 
@@ -147,5 +151,16 @@ func item_screen_box_side_length(object):
 func random_select(iterable):
 	return iterable[randi() % iterable.size()]
 
+var POINT_DEFENSE_LAYER = 5
+
 func point_defense_can_hit(scene):
-	scene.set_collision_layer_value(4, true)
+	scene.set_collision_layer_value(POINT_DEFENSE_LAYER, true)
+	scene.add_to_group(PDC_TARGET_GROUP)
+	
+func point_defense_can_hit_projectile(scene):
+	scene.get_node("Area3D").set_collision_layer_value(POINT_DEFENSE_LAYER, true)
+	scene.add_to_group(PDC_TARGET_GROUP)
+
+func point_defense_projectile(scene):
+	scene.set_collision_mask_value(POINT_DEFENSE_LAYER, true)
+	scene.set_collision_mask_value(1, false)

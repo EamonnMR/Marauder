@@ -39,8 +39,10 @@ func splash_damage() -> Health.DamageVal:
 	return Health.DamageVal.new(splash_mass_damage, splash_energy_damage, ignore_shields)
 
 func is_turreted():
-	return guidance_type == GUIDANCE_TYPE.TURRET or guidance_type == GUIDANCE_TYPE.FRONT_QUADRANT
-
+	match guidance_type:
+		GUIDANCE_TYPE.TURRET, GUIDANCE_TYPE.FRONT_QUADRANT, GUIDANCE_TYPE.PDC:
+			return true
+	return false
 func effective_range():
 	# TODO: calculate decay to 50%
 	return (Util.TIME_FACTOR * lifetime) * (Util.SPEED_FACTOR * speed)

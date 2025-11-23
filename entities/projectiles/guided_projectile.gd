@@ -9,7 +9,6 @@ func _physics_process(delta):
 	if Util.is_server():
 		if is_instance_valid(target):
 			var turn = get_frame_turn(delta)
-			print("Turn: ", turn)
 			rotation.y += turn
 			velocity = U25d.raise(Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y))
 		else:
@@ -17,6 +16,7 @@ func _physics_process(delta):
 		super(delta)
 	else:
 		do_lerp_update()
+	_camera_align_collider()
 
 
 
@@ -35,7 +35,6 @@ func marshal_frame_state() -> Dictionary:
 		"origin": Util.flatten_25d(transform.origin),
 		"rotation": rotation.y
 	}
-	breakpoint
 	#.merged(
 	#	$Health.marshal_frame_state()
 	#)

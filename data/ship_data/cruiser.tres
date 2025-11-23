@@ -22,6 +22,8 @@ weapon_config = Dictionary[String, String]({
 "TorpLB": "torpedo",
 "TorpLF": "torpedo",
 "TorpRB": "torpedo",
-"TorpRF": "torpedo"
+"TorpRF": "torpedo",
+"WingL": "disruptor_pdc",
+"WingR": "disruptor_pdc"
 })
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"
