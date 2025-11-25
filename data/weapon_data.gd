@@ -29,6 +29,8 @@ enum GUIDANCE_TYPE {
 @export var lifetime: int
 @export var guidance_type: GUIDANCE_TYPE
 @export var translucent: bool
+@export var guided_turn_rate: int
+@export var projectile_health: int
 
 func damage() -> Health.DamageVal:
 	return Health.DamageVal.new(mass_damage, energy_damage, ignore_shields)
@@ -37,8 +39,10 @@ func splash_damage() -> Health.DamageVal:
 	return Health.DamageVal.new(splash_mass_damage, splash_energy_damage, ignore_shields)
 
 func is_turreted():
-	return guidance_type == GUIDANCE_TYPE.TURRET or guidance_type == GUIDANCE_TYPE.FRONT_QUADRANT
-
+	match guidance_type:
+		GUIDANCE_TYPE.TURRET, GUIDANCE_TYPE.FRONT_QUADRANT, GUIDANCE_TYPE.PDC:
+			return true
+	return false
 func effective_range():
 	# TODO: calculate decay to 50%
 	return (Util.TIME_FACTOR * lifetime) * (Util.SPEED_FACTOR * speed)

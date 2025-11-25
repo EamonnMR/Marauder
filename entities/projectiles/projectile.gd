@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+class_name Projectile
+
 var linear_velocity = Vector2()
 
 @export var type: String
@@ -7,6 +9,7 @@ var linear_velocity = Vector2()
 var iff: IffProfile
 @onready var damage: Health.DamageVal = data.damage()
 @onready var splash_damage: Health.DamageVal = data.splash_damage()
+@onready var faction = iff.faction
 
 var explode_on_timeout: bool = true
 var material: StandardMaterial3D# = $MeshInstance3D.surface_get_material(0)
@@ -31,6 +34,17 @@ func _ready():
 	else:
 		initial_emission_energy = material.emission_energy_multiplier
 		initial_albedo = material.albedo_color.a
+	_camera_align_collider()
+	# Point defense mechanic
+	if data.projectile_health:
+		var health: Health = preload("res://components/Health.tscn").instantiate()
+		health.max_health = data.projectile_health
+		health.max_shields = 0 # TODO: Shielded projectiles?
+		add_child(health)
+		Util.point_defense_can_hit(self)
+	
+	
+	#(camera, Vector3(0,0,0))
 func _process(delta):
 	if data.fade:
 		var fade = _fade_factor()
@@ -107,10 +121,17 @@ func unmarshal_spawn_state(state):
 
 
 func _on_area_3d_body_entered(body):
-	if is_instance_valid(body) and not iff.should_exclude(body):
+	if is_instance_valid(body) and not _should_exclude_impact(body):
 		if Util.is_server():
 			Health.do_damage(body, get_falloff_damage(damage), owner())
 			if data.impact > 0 and body.has_method("receive_impact"):
 				body.receive_impact(linear_velocity.normalized() * data.impact)
 		detonate()
 		queue_free()
+		
+		
+func _should_exclude_impact(body):
+	return iff.should_exclude(body)
+	
+func _camera_align_collider():
+	$Area3D/CollisionShape3D2.global_rotation = Vector3(deg_to_rad(45), deg_to_rad(135), deg_to_rad(0))

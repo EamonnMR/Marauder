@@ -39,10 +39,10 @@ func populate_rotation_impulse_and_ideal_face(at: Vector2, delta):
 	rotation_impulse = impulse[0]
 	if abs(rotation_impulse) < 0.001:
 		rotation_impulse = 0
-	elif rotation_impulse > 0:
-		rotation_impulse = 1
-	else:
-		rotation_impulse = -1
+	#elif rotation_impulse > 0:
+		#rotation_impulse = 1
+	#else:
+		#rotation_impulse = -1
 		
 	ideal_face = impulse[1]
 
@@ -60,3 +60,6 @@ func get_parent_object():
 	
 func get_target():
 	return null
+
+func display_state():
+	return "No State"

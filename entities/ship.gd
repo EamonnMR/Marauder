@@ -19,7 +19,6 @@ var max_bank = deg_to_rad(15)
 @onready var bank_speed = 2.5 / turn
 var engagement_range: float = 0
 var standoff: bool = false
-var mass: float
 @export var bank_factor = -1
 @export var bank_axis = "x"
 
@@ -60,12 +59,16 @@ func _ready():
 	graphics.name = "Graphics"
 	add_child(graphics.get_collision_shape())
 	
-	$Health.max_health = data.max_health
-	$Health.max_shields = data.max_shields
+	$Health.set_max_health(data.max_health, data.max_shields)
 	
 	for slot in data.weapon_config:
 		$Graphics.get_node(slot).add_weapon(data.weapon_config[slot])
 
+	if data.pdc_can_target:
+		Util.point_defense_can_hit(self)
+		
+	effective_range = _calculate_effective_range()
+	
 	if player_owner:
 		var player_id = multiplayer.get_unique_id()
 		faction = "player_owned"
@@ -81,8 +84,7 @@ func _ready():
 		add_to_group("npcs")
 		add_to_group("faction-" + str(faction))
 		ready_npc_controller()
-		
-		effective_range = _calculate_effective_range()
+
 	#if self == Client.player:
 		#pass
 		## add_child(preload("res://component/InteractionRange.tscn").instantiate())
@@ -108,7 +110,7 @@ func _physics_process(delta):
 	var previous_rotation = rotation.y
 	if Util.is_server():
 		linear_velocity = get_limited_velocity_with_thrust(delta)
-		var rotation_impulse = $Controller.rotation_impulse * delta * turn
+		var rotation_impulse = $Controller.rotation_impulse # * delta * turn
 		rotation.y += rotation_impulse
 		
 		# warning-ignore:return_value_discarded
@@ -147,6 +149,8 @@ func handle_shooting():
 			#weapon.try_shoot()
 
 func get_limited_velocity_with_thrust(delta):
+	if not is_instance_valid($Controller):
+		return
 	if $Controller.thrusting:
 		linear_velocity += Vector2(accel * delta, 0).rotated(-rotation.y)
 		$Graphics.thrusting = true
@@ -222,6 +226,8 @@ func deserialize_player(data: Dictionary):
 	$Inventory.deserialize(data.inventory)
 
 func add_weapon(weapon: Node):
+	if weapon.data.guidance_type == WeaponData.GUIDANCE_TYPE.PDC:
+		return
 	if weapon.primary:
 		primary_weapons.push_back(weapon)
 	else:
@@ -236,7 +242,9 @@ func remove_weapon(weapon: Node):
 	weapons_changed.emit()
 				
 func receive_impact(impact: Vector2):
-	linear_velocity += (impact / mass) * Util.SPEED_FACTOR
+	var speed_factor = Util.SPEED_FACTOR
+	var impact_scaled = impact / data.mass
+	linear_velocity += impact_scaled * Util.IMPACT_FACTOR
 
 var sbsl = 0
 
@@ -245,14 +253,12 @@ func screen_box_side_length():
 		var mesh = $Graphics.mesh
 		var aabb = mesh.get_aabb()
 		var max_dim = max(aabb.size.x, aabb.size.y, aabb.size.z) # * factor
-		#var camera_scale =  Client.system().camera().size 
+		#var camera_scaleg =  Client.system().camera().size 
 		#var reference_dim = 10.0
 		#var re_scale = camera_scale * reference_dim * max_dim
 		sbsl = max_dim
 		return max_dim
-		breakpoint
 	else:
-		breakpoint
 		return sbsl
 
 func marshal_spawn_state() -> Dictionary:
@@ -282,7 +288,7 @@ func marshal_frame_state() -> Dictionary:
 	
 func ready_player_controller():
 	add_child(preload("res://components/control/KeyboardController.tscn").instantiate())
-
+	
 func ready_npc_controller():
 	add_child(preload("res://components/control/AIController.tscn").instantiate())
 
@@ -345,3 +351,6 @@ func get_target_lead_weapon(weapon_data: WeaponData) -> Vector2:
 
 func position_25d():
 	return Util.flatten_25d(global_position)
+
+func display_state():
+	return $Controller.display_state() + "\n" + "Shields: " + str($Health.shields) + "\n" + "Health: " + str($Health.health)

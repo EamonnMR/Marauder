@@ -73,14 +73,34 @@ func _ready():
 		true
 	)
 
+func try_shoot_bp():
+	if Util.is_server():
+		if _excluded_by_guidance():
+			return false
+			
+		if cooldown or burst_cooldown:
+			return false
+		
+		if _try_consume_ammo():
+			# TODO: Consume ammo
+			_shoot()
+			return true
+	return false
+
+
 func try_shoot():
 	if Util.is_server():
-		if not cooldown and not burst_cooldown:
-			if _try_consume_ammo():
-				# TODO: Consume ammo
-				_shoot()
-				return true
-		return false
+		if _excluded_by_guidance():
+			return false
+			
+		if cooldown or burst_cooldown:
+			return false
+		
+		if _try_consume_ammo():
+			# TODO: Consume ammo
+			_shoot()
+			return true
+	return false
 
 func _shoot():
 	if burst_count:
@@ -135,6 +155,9 @@ func _create_projectile():
 	#if recoil and new_projectile and world_projectile:
 	#	parent.receive_impact(Vector2(recoil, 0).rotated(Util.flatten_rotation(self)))
 
+	if data.guidance_type == WeaponData.GUIDANCE_TYPE.PDC:
+		var area = projectile.get_node("Area3D")
+		Util.point_defense_projectile(area)
 	
 	projectile.iff = iff
 	projectile.type = type
@@ -151,6 +174,7 @@ func _create_projectile():
 		#projectile.do_beam.call_deferred(global_transform.origin, [iff.owner])
 	#
 	if new_projectile and world_projectile:
+				
 		projectile.global_transform = emerge_point.global_transform
 		# TODO: Reset projectile scale
 		var deflect = randf_range(spread_min, spread_max)
@@ -159,10 +183,24 @@ func _create_projectile():
 		projectile.initial_velocity = parent.linear_velocity
 
 		Client.system().add_child(projectile)
+		projectile.name = _mangle_name(projectile.name)
 		#projectile.rotate_y(deflect)
 		projectile.scale = Vector3(1,1,1)
 		projectile.initial_rotation = deflect
-
+		
+		if "target" in projectile:
+			projectile.target = parent.target
+			
+		if data.projectile_health:
+			
+			Util.point_defense_can_hit_projectile(projectile)
+						
+			var health = Health.new()
+			health.set_max_health(data.projectile_health, 0)
+			
+			
+			Util.point_defense_can_hit(projectile)
+			
 	else:
 		get_node("../").add_child(projectile)
 	return projectile
@@ -185,3 +223,14 @@ func _try_consume_ammo():
 
 func _on_cooldown_timeout():
 	cooldown = false
+
+func _excluded_by_guidance():
+	if not data.guidance_type == WeaponData.GUIDANCE_TYPE.GUIDED:
+		return false
+		
+	return not is_instance_valid(parent.target)
+	
+func _mangle_name(name: String):
+	# I once again register my protest against this issue being closed.
+	# https://github.com/godotengine/godot/issues/27608
+	return name.replace("@", "__")

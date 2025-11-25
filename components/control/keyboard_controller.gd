@@ -6,13 +6,12 @@ extends Controller
 @onready var is_current_player: bool = decide_if_is_current_player()
 @onready var is_remote: bool = decide_if_is_remote()
 
-func get_rotation_impulse() -> int:
-	var dc = 0
+func get_rotation_impulse(delta) -> float:
 	if Input.is_action_pressed("turn_left"):
-		dc += 1
+		return delta * parent.turn
 	if Input.is_action_pressed("turn_right"):
-		dc -= 1
-	return dc
+		return -delta * parent.turn
+	return 0.0
 	
 func _ready():
 	set_multiplayer_authority(parent.player_owner)
@@ -40,12 +39,15 @@ func _physics_process(delta):
 		frame.thrusting = Input.is_action_pressed("thrust")
 		frame.braking = Input.is_action_pressed("brake")
 		frame.shooting = Input.is_action_pressed("shoot")
-		frame.rotation_impulse = get_rotation_impulse()
+		frame.rotation_impulse = get_rotation_impulse(delta)
 		
 		if is_remote:
 			send_input.rpc_id(1, frame)
 		else:
 			send_input(frame) # Intentional non-rpc call
+		
+		select_nearest_target()
+		cycle_targets()
 
 #func _physics_process(delta):
 	# if not Client.typing:
@@ -68,8 +70,6 @@ func _physics_process(delta):
 	# shooting_secondary = Input.is_action_pressed("shoot_secondary")
 	#rotation_impulse = get_rotation_impulse() * delta * parent.turn
 	# check_jumped()
-	# select_nearest_target()
-	# cycle_targets()
 	# interact()
 	# hyperspace()
 	# handle_cheat_modal()
@@ -95,7 +95,8 @@ func check_jumped():
 
 func select_nearest_target():
 	if Input.is_action_just_pressed("target_nearest_hostile"):
-		var hostile_ships = get_tree().get_nodes_in_group("npcs-hostile")
+		# TODO: Maintain a list of hostile NPCs.
+		var hostile_ships = get_tree().get_nodes_in_group("npcs")
 		if len(hostile_ships) == 0:
 			return
 		elif len(hostile_ships) == 1:
@@ -109,7 +110,7 @@ func select_nearest_target():
 func cycle_targets():
 	if Input.is_action_just_pressed("cycle_targets"):
 		var all_ships = get_tree().get_nodes_in_group("npcs")
-		var index = all_ships.find(Client.target_ship)
+		var index = all_ships.find(Client.player_ent.target)
 		if all_ships.size():
 			var next_index = (index + 1) % all_ships.size()
 			Client.update_player_target_ship(all_ships[next_index])
