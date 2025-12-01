@@ -2,10 +2,11 @@ extends CharacterBody3D
 
 class_name Spaceship
 
-var faction = "terran"
 var type: String
 
 @onready var data: ShipData = Data.ships[type]
+# Default to inherant faction for now
+@onready var faction = data.faction
 
 var skin: String
 @onready var parent: StarSystem = get_node("../")
@@ -44,6 +45,8 @@ var effective_range
 signal destroyed
 signal weapons_changed
 signal target_updated(new_target)
+
+
 
 func _ready():
 	#if not Data.ships[type]["screen_box_side_length"]:

@@ -26,4 +26,5 @@ weapon_config = Dictionary[String, String]({
 "WingL": "disruptor_pdc",
 "WingR": "disruptor_pdc"
 })
+faction = "calderan"
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

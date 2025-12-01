@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FactionData" load_steps=2 format=3 uid="uid://o1gqang6bxml"]
+
+[ext_resource type="Script" uid="uid://dkp60ophxxcc" path="res://data/faction_data.gd" id="1_w10o2"]
+
+[resource]
+script = ExtResource("1_w10o2")
+id = "trader"
+name = "Trader"
+metadata/_custom_type_script = "uid://dkp60ophxxcc"

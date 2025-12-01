@@ -19,11 +19,15 @@ class PlayerRecord:
 	var alias: String
 	var ship_pref: String
 	var player_entity: Spaceship
+	var faction_status: Dictionary[String, float]
 	
 	func _init(id, alias, ship_pref):
 		self.id = id
 		self.alias = alias
 		self.ship_pref = ship_pref
+		self.faction_status = {}
+		for faction in Data.factions:
+			faction_status[faction] = Data.factions[faction].initial_disposition
 
 var players: Dictionary[int, PlayerRecord] = {}
 
@@ -88,9 +92,8 @@ func spawn_player(player_id: int):
 		
 func spawn_npc():
 	var npc_ent = preload("res://entities/Ship.tscn").instantiate()
-	#npc_ent.type = #Util.random_select(Data.ships.keys())
-	npc_ent.type = "cruiser"
-	npc_ent.faction = "Terran"
+	npc_ent.type = Util.random_select(Data.ships.keys())
+	#npc_ent.type = "cruiser"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1
 	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5000,5000), randf_range(-5000,5000)))

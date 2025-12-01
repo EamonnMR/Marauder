@@ -243,11 +243,21 @@ func _physics_process(delta):
 	#braking = false
 
 func _find_target():
+	var valid_targets = []
 	var players = get_tree().get_nodes_in_group("players")
-	if len(players):
+	#for player in players:
+		#if Server.players[player.name].faction_status[parent.faction] < 0:
+			#valid_targets.append(player)
+	var npcs = get_tree().get_nodes_in_group("npcs")
+	for npc in npcs:
+		# TODO: if 'mothership' in npc
+		if npc.data.faction in parent.data.faction_data.enemies:
+			valid_targets.append(npc)
+	if len(valid_targets):
 		persue_target(
-			Util.closest(players, Util.flatten_25d(parent.global_transform.origin))
+			Util.closest(valid_targets, Util.flatten_25d(parent.global_transform.origin))
 		)
+	
 	#var enemy_ships = [Client.player] if faction.hostile_to_player() and is_instance_valid(Client.player) else []
 	#for faction_id in faction.get_enemies():
 		#enemy_ships += get_tree().get_nodes_in_group("faction-" + str(faction_id))

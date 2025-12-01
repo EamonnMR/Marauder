@@ -15,4 +15,5 @@ mass = 13.0
 weapon_config = Dictionary[String, String]({
 "WeaponSlot": "plasma_turret"
 })
+faction = "terran"
 metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"
