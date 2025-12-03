@@ -22,23 +22,29 @@ shape = SubResource("ConvexPolygonShape3D_h2js6")
 [node name="MidTR" parent="." index="1" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.6298, 12, 9)
 
-[node name="MidBR" parent="." index="2" instance=ExtResource("2_bua3w")]
+[node name="SideR" parent="." index="2" instance=ExtResource("2_bua3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.064718, 1.9494629, 22.06569)
+
+[node name="SideL" parent="." index="3" instance=ExtResource("2_bua3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.065, 1.949, -22.066)
+
+[node name="MidBR" parent="." index="4" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.63, -12, 9)
 
-[node name="MidTL" parent="." index="3" instance=ExtResource("2_bua3w")]
+[node name="MidTL" parent="." index="5" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.63, 12, -9)
 
-[node name="MidBL" parent="." index="4" instance=ExtResource("2_bua3w")]
+[node name="MidBL" parent="." index="6" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.63, -12, -9)
 
-[node name="ForeTR" parent="." index="5" instance=ExtResource("2_bua3w")]
+[node name="ForeTR" parent="." index="7" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.1506, 11.2959, 6.64502)
 
-[node name="ForeTL" parent="." index="6" instance=ExtResource("2_bua3w")]
+[node name="ForeTL" parent="." index="8" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.151, 11.296, -6.645)
 
-[node name="ForeBL" parent="." index="7" instance=ExtResource("2_bua3w")]
+[node name="ForeBL" parent="." index="9" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.151, -11.296, -6.645)
 
-[node name="ForeBR" parent="." index="8" instance=ExtResource("2_bua3w")]
+[node name="ForeBR" parent="." index="10" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.151, -11.296, 6.645)

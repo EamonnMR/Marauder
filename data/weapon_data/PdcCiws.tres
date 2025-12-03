@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://ddp2vl2j5b44k"]
+
+[ext_resource type="PackedScene" uid="uid://cg1y745ai0rlh" path="res://data/weapon_graphics/autocannon.tscn" id="1_ww7d8"]
+[ext_resource type="Script" uid="uid://cbwlu5j6nqt4p" path="res://data/weapon_data.gd" id="2_1146u"]
+[ext_resource type="PackedScene" uid="uid://ne86665bv3do" path="res://entities/projectiles/CiwsProjectile.tscn" id="2_ertvy"]
+
+[resource]
+script = ExtResource("2_1146u")
+id = "ciws_pdc"
+speed = 1200.0
+projectile_scene = ExtResource("2_ertvy")
+graphics = ExtResource("1_ww7d8")
+spread = 3.0
+mass_damage = 4.0
+energy_damage = 1.0
+impact = 10.0
+reload = 1.5
+lifetime = 15.0
+guidance_type = 2
+metadata/_custom_type_script = "uid://cbwlu5j6nqt4p"

@@ -92,7 +92,9 @@ func spawn_player(player_id: int):
 		
 func spawn_npc():
 	var npc_ent = preload("res://entities/Ship.tscn").instantiate()
+	var possible_ships = Data.ships.keys()
 	npc_ent.type = Util.random_select(Data.ships.keys())
+	
 	#npc_ent.type = "cruiser"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1

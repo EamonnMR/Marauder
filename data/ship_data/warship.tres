@@ -23,6 +23,8 @@ weapon_config = Dictionary[String, String]({
 "MidBL": "mass_driver_m",
 "MidBR": "mass_driver_m",
 "MidTL": "mass_driver_m",
-"MidTR": "mass_driver_m"
+"MidTR": "mass_driver_m",
+"SideL": "ciws_pdc",
+"SideR": "ciws_pdc"
 })
 faction = "terran"

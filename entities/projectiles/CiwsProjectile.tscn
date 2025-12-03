@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://ne86665bv3do"]
+
+[ext_resource type="PackedScene" uid="uid://c7tdtoyj82g47" path="res://entities/projectiles/Projectile.tscn" id="1_7sqnk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3tp8s"]
+albedo_color = Color(0.50928617, 0.50928617, 0.50928617, 1)
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.48
+emission_enabled = true
+emission = Color(0.450262, 0.367729, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m886y"]
+material = SubResource("StandardMaterial3D_3tp8s")
+top_radius = 0.01
+bottom_radius = 0.2
+height = 1.0
+
+[node name="Projectile" instance=ExtResource("1_7sqnk")]
+
+[node name="Graphics" parent="." index="0"]
+mesh = SubResource("CylinderMesh_m886y")

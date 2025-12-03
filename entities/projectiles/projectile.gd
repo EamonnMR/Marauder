@@ -109,7 +109,8 @@ func marshal_spawn_state() -> Dictionary:
 		"rotation": Util.flatten_rotation(self),
 		"velocity": velocity,
 		"#path": get_scene_file_path(),
-		"type": type
+		"type": type,
+		"iff": iff.marshal_spawn_state()
 	}
 
 func unmarshal_spawn_state(state):
@@ -117,6 +118,7 @@ func unmarshal_spawn_state(state):
 	type = state.type
 	transform.origin = state.origin
 	velocity = state.velocity
+	iff = IffProfile.unmarshal_spawn_state(state.iff)
 	rotate_y(state.rotation)
 
 
