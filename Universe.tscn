@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c3nv740euw7op"]
+[gd_scene load_steps=21 format=3 uid="uid://c3nv740euw7op"]
 
 [ext_resource type="Script" uid="uid://bs1m1n4bxbte8" path="res://universe.gd" id="1_2xk0u"]
 [ext_resource type="Script" uid="uid://my0cdymeumjy" path="res://system.gd" id="2_so72h"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://egqfvrhuys2u" path="res://npc_spawner.gd" id="9_kdak6"]
 [ext_resource type="Texture2D" uid="uid://c4agmxol13vq" path="res://assets/danc_cc_by/radar.png" id="10_p2t3q"]
 [ext_resource type="Script" uid="uid://d2yt47ybpohg1" path="res://RadarDisplay.gd" id="11_giygu"]
+[ext_resource type="Script" uid="uid://bdogxju0egbhu" path="res://asteroid_spawner.gd" id="12_igueq"]
 [ext_resource type="PackedScene" uid="uid://drbkeo1e43ckc" path="res://ui/TargetFollower.tscn" id="12_sxnkl"]
 [ext_resource type="Script" uid="uid://tntkcqw41t5d" path="res://ui/target_info.gd" id="15_08gru"]
 
@@ -116,6 +117,13 @@ script = ExtResource("9_kdak6")
 wait_time = 5.0
 autostart = true
 
+[node name="AsteroidSpawner" type="Node" parent="System"]
+script = ExtResource("12_igueq")
+
+[node name="Timer" type="Timer" parent="System/AsteroidSpawner"]
+wait_time = 5.0
+autostart = true
+
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3
 
@@ -163,3 +171,4 @@ offset_bottom = 55.0
 [node name="Node" type="Node" parent="."]
 
 [connection signal="timeout" from="System/NPCSpawner/Timer" to="System/NPCSpawner" method="_on_timer_timeout"]
+[connection signal="timeout" from="System/AsteroidSpawner/Timer" to="System/AsteroidSpawner" method="_on_timer_timeout"]

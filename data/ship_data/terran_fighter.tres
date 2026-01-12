@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://cy3ll5aicemjl"]
+
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_0nl06"]
+[ext_resource type="PackedScene" uid="uid://b3aoak1e0gnbc" path="res://data/ship_animations/terran_fighter.tscn" id="1_s0pw2"]
+
+[resource]
+script = ExtResource("1_0nl06")
+id = "terran_fighter"
+max_speed = 500.0
+accel = 800.0
+turn = 80.0
+name = "Fighter"
+make = "Terran"
+graphics = ExtResource("1_s0pw2")
+max_shields = 25.0
+max_health = 75.0
+mass = 12.0
+weapon_config = Dictionary[String, String]({
+"L": "ciws",
+"R": "ciws"
+})
+pdc_can_target = true
+faction = "terran"
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"
