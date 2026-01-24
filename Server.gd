@@ -104,6 +104,29 @@ func spawn_npc():
 	var state = npc_ent.marshal_spawn_state()
 	for player in get_rpc_player_ids():
 		Client.spawn_ship.rpc_id(player, state)
+		
+func spawn_asteroid(position: Vector2, group: String) -> Node3D:
+	var asteroid_ent = preload("res://entities/Asteroid.tscn").instantiate()
+	#npc_ent.type = "cruiser"
+	asteroid_ent.name = "asteroid_" + str(npc_counter)
+	asteroid_ent.group = group
+	npc_counter += 1
+	asteroid_ent.transform.origin = U25d.raise(position)
+	universe().get_node("System").add_child(asteroid_ent)
+	# Sync
+	var state = asteroid_ent.marshal_spawn_state()
+	var appointed_time = time()
+	for player in get_rpc_player_ids():
+		Client.spawn_asteroid.rpc_id(player, appointed_time, state)
+	
+	return asteroid_ent
+	
+func despawn_asteroid(asteroid: Node3D):
+	var appointed_time = time()
+	for player in get_rpc_player_ids():
+		Client.despawn_asteroid.rpc_id(player, asteroid.name, appointed_time)
+	
+	universe().get_node("System").remove_child(asteroid)
 
 func time() -> float:
 	return Util.system_time()

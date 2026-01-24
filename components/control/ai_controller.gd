@@ -245,9 +245,9 @@ func _physics_process(delta):
 func _find_target():
 	var valid_targets = []
 	var players = get_tree().get_nodes_in_group("players")
-	#for player in players:
-		#if Server.players[player.name].faction_status[parent.faction] < 0:
-			#valid_targets.append(player)
+	for player in players:
+		if Server.players[player.player_owner].faction_status[parent.faction] < 0:
+			valid_targets.append(player)
 	var npcs = get_tree().get_nodes_in_group("npcs")
 	for npc in npcs:
 		# TODO: if 'mothership' in npc

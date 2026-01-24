@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bvvt5kyhpiatf" path="res://data/projectile_graphics/autocannon.tscn" id="2_j1bw3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_j1bw3"]
-size = Vector3(1.9610596, 2.2189026, 77.7225)
+size = Vector3(7.2398376, 2.2189026, 77.7225)
 
 [node name="Projectile" type="CharacterBody3D"]
 collision_layer = 0

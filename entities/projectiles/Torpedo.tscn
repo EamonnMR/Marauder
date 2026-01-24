@@ -1,5 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://v8n1sia2i851"]
+[gd_scene load_steps=4 format=3 uid="uid://v8n1sia2i851"]
 
 [ext_resource type="PackedScene" uid="uid://06bl60lxh4eb" path="res://entities/projectiles/GuidedProjectile.tscn" id="1_mx7eh"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mx7eh"]
+albedo_color = Color(0.14108872, 0.37164092, 0.36141014, 1)
+metallic = 1.0
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mx7eh"]
+material = SubResource("StandardMaterial3D_mx7eh")
+radius = 1.0
+height = 8.0
+
 [node name="Projectile" instance=ExtResource("1_mx7eh")]
+
+[node name="Graphics" parent="." index="0"]
+mesh = SubResource("CapsuleMesh_mx7eh")
+
+[node name="CollisionShape3D2" parent="Area3D" index="0"]
+transform = Transform3D(1.0000002, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -0.18717968, 0, 0)

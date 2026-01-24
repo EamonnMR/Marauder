@@ -82,4 +82,4 @@ func get_frame_turn(delta: float) -> float:
 	return impulse[0]
 
 func _should_exclude_impact(body):
-	return not (body == target)
+	return not (body == target) and not body.is_in_group("cover") # and not data.exclude_asteroids

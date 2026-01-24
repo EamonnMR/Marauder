@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://ulmr7nbqg3ho"]
+
+[ext_resource type="Script" uid="uid://md4jtcfhnl2m" path="res://entities/asteroid.gd" id="1_11ekk"]
+[ext_resource type="Texture2D" uid="uid://c3y3ehefp2vvu" path="res://assets/misc_pd/moon_surface.jpeg" id="2_ilay8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tm4ig"]
+albedo_texture = ExtResource("2_ilay8")
+disable_receive_shadows = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_11ekk"]
+material = SubResource("StandardMaterial3D_tm4ig")
+radius = 19.0
+height = 38.0
+radial_segments = 8
+rings = 4
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ilay8"]
+points = PackedVector3Array(-3.4606879, -18.586222, 1.760774, 3.5054986, 18.576479, 1.7598624, 3.5062957, 18.580729, -1.7172607, 18.628448, -3.486071, -0.5576908, -3.4614847, -1.7396724, -18.568974, -12.090997, 2.3061094, 14.44372, 7.539091, -1.1562736, 17.37648, -17.91403, 3.4689372, -5.1837187, 11.529894, -4.604079, -14.363993, 5.18764, 12.631142, -13.185256, -15.515102, -10.358937, -3.4290757, -10.933732, 14.994793, -4.014448, 16.192904, 9.817189, 1.1758245, 1.7542534, -16.166338, -9.792615, 5.212593, -15.002116, 10.407301, 1.1757011, 15.015474, 11.57075, -7.993231, -10.307217, 13.765651, 11.572743, -15.018065, -1.1329011, -11.450576, 13.768647, 6.3289847, -11.501812, 4.610047, -14.38264, -17.912354, -2.3124084, 5.806145, 15.57541, -4.605892, 9.814435, 12.03423, 9.152898, 11.46083, -11.450457, -9.179003, -12.025493, 14.915743, 8.017768, -8.5669155, -1.7146666, 5.796906, 17.993362, -2.8627253, 12.689868, -13.824949, 6.359686, 4.6118884, -17.270374, -1.7146667, -5.7969065, 17.993364, -13.185256, -12.631142, 5.18764, 1.758321, -7.523809, -17.339462, -8.610192, -16.11321, -5.156073)
+
+[node name="Asteroid" type="StaticBody3D"]
+collision_mask = 0
+script = ExtResource("1_11ekk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_11ekk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_ilay8")

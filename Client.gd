@@ -59,6 +59,21 @@ func vanish_ship(player_id, appointed_time):
 	var ship = system().get_node(ship_name)
 	if ship:
 		system().remove_child(ship)
+		
+@rpc("reliable", "authority")
+func spawn_asteroid(appointed_time, state: Dictionary):
+	delay_until(appointed_time)
+	system().spawn_entity(state)
+
+@rpc("reliable", "authority")
+func despawn_asteroid(asteroid_name, appointed_time):
+	delay_until(appointed_time)
+	# https://github.com/godotengine/godot/issues/71319
+	# Why would anyone want to use a literal name as a node path I wonder?
+	var asteroid = system().get_node(NodePath(asteroid_name))
+	if asteroid:
+		system().remove_child(asteroid)
+
 
 # var latency = - 0.1
 var latency = 0.1
