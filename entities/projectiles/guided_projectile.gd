@@ -1,24 +1,27 @@
 extends Projectile
 
+class_name GuidedProjectile
+
 var target
 
 @onready var turn = data.guided_turn_rate * Util.TURN_FACTOR
 @onready var parent: StarSystem = get_node("../")
 
+func do_server_update(delta):
+	if is_instance_valid(target):
+		var turn = get_frame_turn(delta)
+		rotation.y += turn
+		velocity = U25d.raise(Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y))
+	else:
+		target = null
+	super._physics_process(delta)
+
 func _physics_process(delta):
 	if Util.is_server():
-		if is_instance_valid(target):
-			var turn = get_frame_turn(delta)
-			rotation.y += turn
-			velocity = U25d.raise(Vector2(data.speed * Util.SPEED_FACTOR, 0).rotated(-rotation.y))
-		else:
-			target = null
-		super(delta)
+		do_server_update(delta)
 	else:
 		do_lerp_update()
 	_camera_align_collider()
-
-
 
 
 func marshal_spawn_state() -> Dictionary:

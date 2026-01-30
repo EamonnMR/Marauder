@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://v8n1sia2i851"]
+[gd_scene load_steps=5 format=3 uid="uid://v8n1sia2i851"]
 
 [ext_resource type="PackedScene" uid="uid://06bl60lxh4eb" path="res://entities/projectiles/GuidedProjectile.tscn" id="1_mx7eh"]
+[ext_resource type="Script" uid="uid://cr068lcdfr1ta" path="res://entities/projectiles/distractable_guided.gd" id="2_hrdsc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mx7eh"]
 albedo_color = Color(0.14108872, 0.37164092, 0.36141014, 1)
@@ -15,6 +16,7 @@ radius = 1.0
 height = 8.0
 
 [node name="Projectile" instance=ExtResource("1_mx7eh")]
+script = ExtResource("2_hrdsc")
 
 [node name="Graphics" parent="." index="0"]
 mesh = SubResource("CapsuleMesh_mx7eh")

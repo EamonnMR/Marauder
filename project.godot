@@ -106,6 +106,7 @@ cycle_targets={
 3d_physics/layer_3="spob_landing"
 3d_physics/layer_4="spob_shooting"
 3d_physics/layer_5="point_defense_interaction"
+3d_physics/layer_6="guided_weapon_distractions"
 
 [rendering]
 
