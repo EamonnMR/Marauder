@@ -46,6 +46,7 @@ func _process_turret_aim():
 func _process_front_quadrant_aim():
 	if is_instance_valid(parent.target) and target_quadrant() == Util.QUADRANT.FRONT:
 		var aimpoint = U25d.flatten(parent.target.global_position)
+		_aim_turret_at_point(aimpoint)
 	else:
 		_zero_turret_aim()
 		

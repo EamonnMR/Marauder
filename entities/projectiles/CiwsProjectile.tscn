@@ -9,12 +9,12 @@ metallic_specular = 1.0
 roughness = 0.48
 emission_enabled = true
 emission = Color(0.450262, 0.367729, 0, 1)
+emission_energy_multiplier = 1.16
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_m886y"]
 material = SubResource("StandardMaterial3D_3tp8s")
 top_radius = 0.01
-bottom_radius = 0.2
-height = 1.0
+bottom_radius = 0.4
 
 [node name="Projectile" instance=ExtResource("1_7sqnk")]
 
