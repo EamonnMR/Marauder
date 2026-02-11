@@ -48,3 +48,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.151, -11.296, -6.645)
 
 [node name="ForeBR" parent="." index="10" instance=ExtResource("2_bua3w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.151, -11.296, 6.645)
+
+[node name="TorpTR" parent="." index="11" instance=ExtResource("2_bua3w")]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -12.429382, 17.227991, 9.754351)
+
+[node name="TorpBR" parent="." index="12" instance=ExtResource("2_bua3w")]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -12.429, -17.228, 9.754)
+
+[node name="TorpTL" parent="." index="13" instance=ExtResource("2_bua3w")]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -12.429, 17.228, -9.754)
+
+[node name="TorpBL" parent="." index="14" instance=ExtResource("2_bua3w")]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -12.429, -17.228, -9.754)
