@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://c62kjqp78mq73"]
+
+[ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="1_wy03q"]
+[ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_183ao"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gm7gd"]
+size = Vector3(30, 20, 56)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_wy03q"]
+points = PackedVector3Array(-14.796295, -10, -27.253922, 14.370368, 10, 26.068968, 15, -9.987303, 27.22007, -14.796295, -10, 27.253922, 15, -9.987303, -27.22007, -14.148147, 10, -26.068968, 14.370368, 10, -26.068968, -14.148147, 10, 26.068968)
+
+[node name="MeshGraphics" instance=ExtResource("1_wy03q")]
+mesh = SubResource("BoxMesh_gm7gd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
+shape = SubResource("ConvexPolygonShape3D_wy03q")
+
+[node name="GunL" parent="." index="1" instance=ExtResource("2_183ao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.7364235, 0, -8.547182)
+
+[node name="MissileInnerL" parent="." index="2" instance=ExtResource("2_183ao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.356, 0, -15)
+
+[node name="MissileOuterL" parent="." index="3" instance=ExtResource("2_183ao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.356, 0, -22.216524)
+
+[node name="MissileInnerR" parent="." index="4" instance=ExtResource("2_183ao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.356, 0, 15)
+
+[node name="MissileOuterR" parent="." index="5" instance=ExtResource("2_183ao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.356, 0, 22.217)
+
+[node name="GunR" parent="." index="6" instance=ExtResource("2_183ao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.736, 0, 8.547)

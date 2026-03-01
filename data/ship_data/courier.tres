@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://b5pwh77pq0nev"]
+
+[ext_resource type="PackedScene" uid="uid://bixvhqnmm0r6n" path="res://data/ship_animations/Courier.tscn" id="1_b31hg"]
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="2_wb12b"]
+
+[resource]
+script = ExtResource("2_wb12b")
+id = "courier"
+max_speed = 175.0
+accel = 250.0
+turn = 35.0
+name = "courier"
+make = "Pellan"
+graphics = ExtResource("1_b31hg")
+max_shields = 225.0
+max_health = 75.0
+mass = 175.0
+weapon_config = Dictionary[String, String]({
+"WeaponSlot": "disruptor_l"
+})
+faction = "trader"
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

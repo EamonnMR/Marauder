@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://bixvhqnmm0r6n"]
+
+[ext_resource type="PackedScene" uid="uid://be43jijlowemf" path="res://components/MeshGraphics.tscn" id="1_ous56"]
+[ext_resource type="PackedScene" uid="uid://883jrcdkyb8h" path="res://components/WeaponSlot.tscn" id="2_3gq6d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ous56"]
+size = Vector3(35, 40, 40)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3gq6d"]
+points = PackedVector3Array(-17.5, -19.94683, -19.94683, 17.466738, 20, 20, 17.466738, 20, -20, 17.466738, -20, 20, -17.5, 19.94683, 19.94683, 17.466738, -20, -20, -17.5, 19.94683, -19.94683, -17.5, -19.94683, 19.94683)
+
+[node name="MeshGraphics" instance=ExtResource("1_ous56")]
+mesh = SubResource("BoxMesh_ous56")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0"]
+shape = SubResource("ConvexPolygonShape3D_3gq6d")
+
+[node name="WeaponSlot" parent="." index="1" instance=ExtResource("2_3gq6d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.369904, 7.522003, 0)

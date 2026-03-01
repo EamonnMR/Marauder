@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://d3ljh7abqdb3d"]
+
+[ext_resource type="PackedScene" uid="uid://c62kjqp78mq73" path="res://data/ship_animations/terran_gunship.tscn" id="1_astpj"]
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="1_l0dpn"]
+
+[resource]
+script = ExtResource("1_l0dpn")
+id = "terran_gunship"
+max_speed = 320.0
+accel = 430.0
+turn = 40.0
+name = "Gunship"
+make = "Terran"
+graphics = ExtResource("1_astpj")
+max_shields = 185.0
+max_health = 400.0
+mass = 50.0
+weapon_config = Dictionary[String, String]({
+"GunL": "plasma_multi",
+"GunR": "plasma_multi",
+"MissileInnerL": "med_torpedo",
+"MissileInnerR": "med_torpedo",
+"MissileOuterL": "med_torpedo",
+"MissileOuterR": "med_torpedo"
+})
+faction = "terran"
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"

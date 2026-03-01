@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3 uid="uid://bhaw238bok0wg"]
+
+[ext_resource type="PackedScene" uid="uid://dws4wiwneirbk" path="res://data/ship_animations/terran_bomber.tscn" id="1_mkwol"]
+[ext_resource type="Script" uid="uid://bc7wqtfs6t8xl" path="res://data/ship_data.gd" id="2_s4e4g"]
+
+[resource]
+script = ExtResource("2_s4e4g")
+id = "terran_bomber"
+max_speed = 440.0
+accel = 650.0
+turn = 60.0
+name = "Bomber"
+make = "Terran"
+graphics = ExtResource("1_mkwol")
+max_shields = 30.0
+max_health = 120.0
+weapon_config = Dictionary[String, String]({
+"GunL": "plasma",
+"GunR": "plasma",
+"MissileL": "med_torpedo",
+"MissileR": "med_torpedo"
+})
+pdc_can_target = true
+faction = "terran"
+metadata/_custom_type_script = "uid://bc7wqtfs6t8xl"
