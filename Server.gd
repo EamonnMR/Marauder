@@ -90,15 +90,19 @@ func spawn_player(player_id: int):
 	for player in get_rpc_player_ids():
 		Client.spawn_ship.rpc_id(player, player_state)
 		
-func spawn_npc():
+func spawn_npc(type=null, position=null):
 	var npc_ent = preload("res://entities/Ship.tscn").instantiate()
 	var possible_ships = Data.ships.keys()
-	npc_ent.type = Util.random_select(Data.ships.keys())
+	if not type:
+		type = Util.random_select(Data.ships.keys())
+	npc_ent.type = type
 	
 	#npc_ent.type = "cruiser"
 	npc_ent.name = "npc_" + str(npc_counter)
 	npc_counter += 1
-	npc_ent.transform.origin = U25d.raise(Vector2(randf_range(-5000,5000), randf_range(-5000,5000)))
+	if not position:
+		position = U25d.raise(Vector2(randf_range(-5000,5000), randf_range(-5000,5000)))
+	npc_ent.transform.origin = position
 	universe().get_node("System").add_child(npc_ent)
 	# Sync
 	var state = npc_ent.marshal_spawn_state()

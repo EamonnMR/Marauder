@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c3nv740euw7op"]
+[gd_scene load_steps=25 format=3 uid="uid://c3nv740euw7op"]
 
 [ext_resource type="Script" uid="uid://bs1m1n4bxbte8" path="res://universe.gd" id="1_2xk0u"]
 [ext_resource type="Script" uid="uid://my0cdymeumjy" path="res://system.gd" id="2_so72h"]
@@ -10,7 +10,9 @@
 [ext_resource type="Script" uid="uid://c6fqj5eudc7g" path="res://entities/planet.gd" id="7_giygu"]
 [ext_resource type="Shader" uid="uid://c8u4mbpn6mjgm" path="res://vfx/Sharpen.gdshader" id="7_q5esy"]
 [ext_resource type="Script" uid="uid://bjw8ll1r54r5w" path="res://color_rect.gd" id="8_ur3f7"]
+[ext_resource type="Script" uid="uid://n0q3b5r3welr" path="res://StationSpawner.gd" id="9_5dnn0"]
 [ext_resource type="Script" uid="uid://egqfvrhuys2u" path="res://npc_spawner.gd" id="9_kdak6"]
+[ext_resource type="Script" uid="uid://ss61lrd70lhh" path="res://calderan_station.gd" id="10_blyqt"]
 [ext_resource type="Texture2D" uid="uid://c4agmxol13vq" path="res://assets/danc_cc_by/radar.png" id="10_p2t3q"]
 [ext_resource type="Script" uid="uid://d2yt47ybpohg1" path="res://RadarDisplay.gd" id="11_giygu"]
 [ext_resource type="Script" uid="uid://bdogxju0egbhu" path="res://asteroid_spawner.gd" id="12_igueq"]
@@ -35,6 +37,12 @@ ambient_light_energy = 0.05
 [sub_resource type="SphereMesh" id="SphereMesh_kdak6"]
 radius = 46.0
 height = 92.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_igueq"]
+size = Vector3(100, 100, 100)
+
+[sub_resource type="PrismMesh" id="PrismMesh_ffm1q"]
+size = Vector3(100, 100, 100)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_imuld"]
 shader = ExtResource("7_q5esy")
@@ -92,6 +100,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 100)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="System/Node3D/NewProvidence"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, -63.5, -45)
 mesh = SubResource("SphereMesh_kdak6")
+
+[node name="TerranStation" type="Node3D" parent="System/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -997.9525)
+script = ExtResource("9_5dnn0")
+faction = "terran"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="System/Node3D/TerranStation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, -63.5, -45)
+mesh = SubResource("BoxMesh_igueq")
+
+[node name="Timer" type="Timer" parent="System/Node3D/TerranStation"]
+wait_time = 5.0
+
+[node name="CalderanStation" type="Node3D" parent="System/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 684.4032)
+script = ExtResource("10_blyqt")
+faction = "calderan"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="System/Node3D/CalderanStation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, -63.5, -45)
+mesh = SubResource("PrismMesh_ffm1q")
+
+[node name="Timer" type="Timer" parent="System/Node3D/CalderanStation"]
+wait_time = 5.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="System"]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 0, 0, 0)
@@ -170,5 +202,7 @@ offset_bottom = 55.0
 
 [node name="Node" type="Node" parent="."]
 
+[connection signal="timeout" from="System/Node3D/TerranStation/Timer" to="System/Node3D/TerranStation" method="_on_timer_timeout"]
+[connection signal="timeout" from="System/Node3D/CalderanStation/Timer" to="System/Node3D/CalderanStation" method="_on_timer_timeout"]
 [connection signal="timeout" from="System/NPCSpawner/Timer" to="System/NPCSpawner" method="_on_timer_timeout"]
 [connection signal="timeout" from="System/AsteroidSpawner/Timer" to="System/AsteroidSpawner" method="_on_timer_timeout"]

@@ -131,7 +131,6 @@ func _on_area_3d_body_entered(body):
 		detonate()
 		queue_free()
 		
-		
 func _should_exclude_impact(body):
 	return iff.should_exclude(body)
 	

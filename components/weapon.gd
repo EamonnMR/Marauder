@@ -125,7 +125,14 @@ func shoot_remote(appointed_time: float, state: Dictionary):
 	Client.delay_until(appointed_time)
 	cooldown = true
 	$Cooldown.start()
-	var new_projectile = Client.system().spawn_entity(state)
+	var new_projectile: Projectile
+	
+	if data.is_beam():
+		new_projectile = Client.system().unmarshal_entity(state)
+		add_child(new_projectile)
+	else:
+		new_projectile = Client.system().spawn_entity(state)
+	
 	new_projectile.iff = iff
 	_effects()
 	

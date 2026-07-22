@@ -7,7 +7,10 @@ enum GUIDANCE_TYPE {
 	PDC,
 	FRONT_QUADRANT,
 	GUIDED,
-	MINE
+	MINE,
+	BEAM,
+	BEAM_TURRET,
+	PD_BEAM,
 }
 
 @export var id: String
@@ -47,7 +50,16 @@ func effective_range():
 	# TODO: calculate decay to 50%
 	return (Util.TIME_FACTOR * lifetime) * (Util.SPEED_FACTOR * speed)
 
+func is_beam():
+	return guidance_type in [
+		GUIDANCE_TYPE.BEAM,
+		GUIDANCE_TYPE.BEAM_TURRET,
+		GUIDANCE_TYPE.PD_BEAM
+	]
+
 func lead_position(position: Vector2, target_position: Vector2, target_velocity: Vector2):
+	if is_beam():
+		return target_position
 	var travel_time = (target_position - position).length() / (Util.SPEED_FACTOR * speed)
 	var lead_position = target_velocity * travel_time + target_position
 	return lead_position
